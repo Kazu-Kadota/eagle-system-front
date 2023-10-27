@@ -6,6 +6,7 @@ import { LoginSchema, schema } from './schema'
 export function LoginPage() {
   const { control, handleSubmit } = useForm<LoginSchema>({
     resolver: zodResolver(schema),
+    defaultValues: { email: '', password: '' },
   })
 
   return <LoginUI control={control} onSubmit={handleSubmit(() => undefined)} />

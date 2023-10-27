@@ -14,18 +14,22 @@ export function LoginUI({ control, onSubmit }: LoginUIProps) {
       <p className="text-primary text-center text-base font-semibold">
         Bem vindo(a) de volta!
       </p>
-      <form onSubmit={onSubmit} className="mt-4 flex flex-col gap-6">
+      <form className="mt-4 flex flex-col gap-6" onSubmit={onSubmit}>
         <ControlledInput
           control={control}
           name="email"
           label="E-mail"
           placeholder="Insira o seu e-mail"
+          type="email"
+          labelVariants={{ size: '2xl' }}
         />
         <ControlledInput
           control={control}
           name="password"
           label="Senha"
           placeholder="Insira a senha"
+          type="password"
+          labelVariants={{ size: '2xl' }}
         />
         <Button type="submit">Entrar</Button>
       </form>

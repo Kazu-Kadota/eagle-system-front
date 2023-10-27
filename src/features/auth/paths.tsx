@@ -1,4 +1,4 @@
 export const AuthRoutePaths = {
-  LOGIN: '/login',
-  FORGOT_PASSWORD: '/forgot-password',
+  LOGIN: '/entrar',
+  FORGOT_PASSWORD: '/esqueci-minha-senha',
 }

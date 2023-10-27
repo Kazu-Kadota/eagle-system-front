@@ -1,4 +1,4 @@
-import { emailValidator, passwordValidator } from 'src/utils/validators'
+import { emailValidator, passwordValidator } from 'src/utils/zod'
 import { z } from 'zod'
 
 export const schema = z.object({
