@@ -7,8 +7,17 @@ export default {
       placeholder: '#594F3F',
       dark: '#010101',
       light: '#F8F8F8',
+      error: '#A01818',
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        inter: ['Inter', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
+      },
+      fontSize: {
+        md: '1.0625rem',
+      },
+    },
   },
   plugins: [],
 }
