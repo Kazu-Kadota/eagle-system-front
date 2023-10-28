@@ -15,7 +15,7 @@ export function ForgotPasswordUI({
   onSubmit,
 }: ForgotPasswordUIProps) {
   const renderDefault = () => (
-    <form className="flex flex-col gap-4" onSubmit={onSubmit}>
+    <form className="flex flex-col gap-5" onSubmit={onSubmit}>
       <ControlledInput
         control={control}
         name="email"
@@ -37,7 +37,7 @@ export function ForgotPasswordUI({
   const renderSuccess = () => {
     return (
       <>
-        <p className="text-center text-md font-bold">
+        <p className="text-center text-lg font-bold">
           Acesse seu e-mail para redefinir a senha!
         </p>
         <img
