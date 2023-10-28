@@ -1,7 +1,8 @@
 import { VariantProps, tv } from 'tailwind-variants'
+import { Spinner } from '..'
 
 const style = tv({
-  base: 'text-light block text-center font-bold transition-opacity hover:opacity-80',
+  base: 'flex items-center justify-center text-center font-bold text-light transition-opacity hover:opacity-80',
   variants: {
     theme: {
       primary: 'bg-primary',
@@ -20,14 +21,26 @@ const style = tv({
 
 interface ButtonProps
   extends VariantProps<typeof style>,
-    React.ComponentProps<'button'> {}
+    React.ComponentProps<'button'> {
+  loading?: boolean
+}
 
-export function Button({ className, type, theme, size, ...rest }: ButtonProps) {
+export function Button({
+  className,
+  type,
+  theme,
+  size,
+  loading,
+  children,
+  ...rest
+}: ButtonProps) {
   return (
     <button
       className={style({ theme, size, className })}
       type={type ?? 'button'}
       {...rest}
-    />
+    >
+      {loading ? <Spinner className="w-5 fill-light" /> : children}
+    </button>
   )
 }
