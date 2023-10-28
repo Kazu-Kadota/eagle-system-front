@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      './runtimeConfig': './runtimeConfig.browser',
       src: '/src',
     },
   },
