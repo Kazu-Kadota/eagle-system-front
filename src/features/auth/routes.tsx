@@ -3,6 +3,7 @@ import { AuthLayout } from './layouts/AuthLayout'
 import { ForgotPasswordPage } from './pages/ForgotPassword'
 import { LoginPage } from './pages/Login'
 import { AuthRoutePaths } from './paths'
+import { ResetPasswordPage } from './pages/ResetPassword'
 
 export const authRoutes: RouteObject[] = [
   {
@@ -15,6 +16,10 @@ export const authRoutes: RouteObject[] = [
       {
         path: AuthRoutePaths.FORGOT_PASSWORD,
         element: <ForgotPasswordPage />,
+      },
+      {
+        path: AuthRoutePaths.RESET_PASSWORD,
+        element: <ResetPasswordPage />,
       },
     ],
   },

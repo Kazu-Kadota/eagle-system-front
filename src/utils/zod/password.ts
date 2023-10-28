@@ -7,13 +7,13 @@ export const passwordValidator = requiredValidator.regex(
 )
 
 export const confirmationPasswordValidator = (
-  value: Record<'password' | 'password_confirmation', string>,
+  value: Record<'password' | 'confirm_password', string>,
   ctx: z.RefinementCtx,
 ) => {
-  if (value.password_confirmation !== value.password) {
+  if (value.confirm_password !== value.password) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      path: ['password_confirmation'],
+      path: ['confirm_password'],
       message: 'Senhas devem ser iguais',
     })
   }
