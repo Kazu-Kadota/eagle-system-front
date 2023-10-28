@@ -15,6 +15,9 @@ export function ResetPasswordUI({
 }: ResetPasswordUIProps) {
   return (
     <Box>
+      <p className="mb-7 text-center text-base font-semibold text-primary">
+        Preencha os campos abaixo para redefinir sua senha
+      </p>
       <form className="flex flex-col gap-4" onSubmit={onSubmit}>
         <ControlledInput
           control={control}
@@ -32,7 +35,13 @@ export function ResetPasswordUI({
           placeholder="Repita sua senha"
           type="password"
         />
-        <Button type="submit" size="sm" theme="primary" loading={loading}>
+        <Button
+          type="submit"
+          size="sm"
+          theme="primary"
+          className="mt-2 w-36 self-center"
+          loading={loading}
+        >
           Salvar
         </Button>
       </form>
