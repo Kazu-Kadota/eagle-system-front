@@ -1,14 +1,12 @@
 import { Stringifiable } from 'query-string'
 import ApiError from './ApiError'
-import { constructUrl, contructHeaders, prepareBody } from './helpers'
+import { constructUrl, constructHeaders, prepareBody } from './helpers'
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
 export interface RequestOptions {
   body?: Record<string, unknown>
-  token?: string
   query?: Record<string, Stringifiable>
-  cache?: RequestCache
 }
 
 const requestCreator =
@@ -21,8 +19,7 @@ const requestCreator =
     const res = await fetch(constructUrl(hostname, endpoint, options), {
       method,
       body: prepareBody(options),
-      headers: contructHeaders(options),
-      cache: options.cache,
+      headers: constructHeaders(options),
     })
 
     const data = await res.json()

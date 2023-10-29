@@ -1,17 +1,17 @@
 import { Control } from 'react-hook-form'
 import { Box, Button, ControlledInput } from 'src/components'
+import { MutationStatus } from 'src/types/mutation'
 import { ForgotPasswordSchema } from '../schema'
-import { StatesEnum } from './types'
 
 interface ForgotPasswordUIProps {
   control: Control<ForgotPasswordSchema>
-  state: StatesEnum
+  status: MutationStatus
   onSubmit: () => void
 }
 
 export function ForgotPasswordUI({
   control,
-  state,
+  status,
   onSubmit,
 }: ForgotPasswordUIProps) {
   const renderDefault = () => (
@@ -27,7 +27,7 @@ export function ForgotPasswordUI({
         type="submit"
         size="sm"
         theme="primary"
-        loading={state === StatesEnum.LOADING}
+        loading={status === MutationStatus.PENDING}
       >
         Enviar
       </Button>
@@ -52,10 +52,11 @@ export function ForgotPasswordUI({
     <Box>
       {
         {
-          [StatesEnum.DEFAULT]: renderDefault(),
-          [StatesEnum.LOADING]: renderDefault(),
-          [StatesEnum.SUCCESS]: renderSuccess(),
-        }[state]
+          [MutationStatus.IDLE]: renderDefault(),
+          [MutationStatus.PENDING]: renderDefault(),
+          [MutationStatus.ERROR]: renderDefault(),
+          [MutationStatus.SUCCESS]: renderSuccess(),
+        }[status]
       }
     </Box>
   )

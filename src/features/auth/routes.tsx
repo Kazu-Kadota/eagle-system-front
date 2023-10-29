@@ -10,7 +10,7 @@ export const authRoutes: RouteObject[] = [
     element: <AuthLayout />,
     children: [
       {
-        path: AuthRoutePaths.LOGIN,
+        path: AuthRoutePaths.login(),
         element: <LoginPage />,
       },
       {

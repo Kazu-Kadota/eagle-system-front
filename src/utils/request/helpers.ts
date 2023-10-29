@@ -1,14 +1,17 @@
 import queryString from 'query-string'
 import { RequestOptions } from './requestCreator'
+import { useAuthStore } from 'src/store/auth'
 
-export const contructHeaders = (options: RequestOptions) => {
+export const constructHeaders = (options: RequestOptions) => {
   const headers: Record<string, string> = {}
+
+  const token = useAuthStore.getState().jwtToken
 
   if (options.body) {
     headers['Content-Type'] = 'application/json'
   }
-  if (options.token) {
-    headers['Authorization'] = `Bearer ${options.token}`
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`
   }
 
   return headers
