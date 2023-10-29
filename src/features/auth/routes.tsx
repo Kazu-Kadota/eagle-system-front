@@ -1,16 +1,16 @@
 import { RouteObject } from 'react-router-dom'
-import { AuthLayout } from './layouts/AuthLayout'
+import { AuthLayout } from 'src/routes/layouts/AuthLayout'
 import { ForgotPasswordPage } from './pages/ForgotPassword'
 import { LoginPage } from './pages/Login'
-import { AuthRoutePaths } from './paths'
 import { ResetPasswordPage } from './pages/ResetPassword'
+import { AuthRoutePaths } from './paths'
 
 export const authRoutes: RouteObject[] = [
   {
     element: <AuthLayout />,
     children: [
       {
-        path: AuthRoutePaths.LOGIN,
+        path: AuthRoutePaths.login(),
         element: <LoginPage />,
       },
       {

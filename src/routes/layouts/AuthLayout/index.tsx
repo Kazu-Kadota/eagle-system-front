@@ -1,8 +1,16 @@
 import { memo } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 import { LogoTriangle } from 'src/assets/icons'
+import { RoutePaths } from 'src/routes/paths'
+import { useAuthStore } from 'src/store/auth'
 
 export const AuthLayout = memo(() => {
+  const jwtToken = useAuthStore((state) => state.jwtToken)
+
+  if (jwtToken) {
+    return <Navigate to={RoutePaths.Common.HOME} />
+  }
+
   return (
     <>
       <img

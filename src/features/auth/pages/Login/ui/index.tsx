@@ -1,17 +1,20 @@
 import { Control } from 'react-hook-form'
 import { Box, Button, ControlledInput, Link } from 'src/components'
-import { LoginSchema } from '../schema'
 import { RoutePaths } from 'src/routes/paths'
+import { getErrorMsg } from 'src/utils/errors'
+import { LoginSchema } from '../schema'
 
 interface LoginUIProps {
+  isLoading: boolean
+  error: Error | null
   control: Control<LoginSchema>
   onSubmit: () => void
 }
 
-export function LoginUI({ control, onSubmit }: LoginUIProps) {
+export function LoginUI({ isLoading, error, control, onSubmit }: LoginUIProps) {
   return (
     <Box className="pb-10">
-      <p className="text-primary text-center text-base font-semibold">
+      <p className="text-center text-base font-semibold text-primary">
         Bem vindo(a) de volta!
       </p>
       <form className="mt-4 flex flex-col gap-6" onSubmit={onSubmit}>
@@ -31,11 +34,18 @@ export function LoginUI({ control, onSubmit }: LoginUIProps) {
           type="password"
           labelVariants={{ size: '2xl' }}
         />
-        <Button type="submit">Entrar</Button>
+        {error && (
+          <p className="-mb-1 -mt-2 text-center text-sm text-error">
+            {getErrorMsg(error)}
+          </p>
+        )}
+        <Button type="submit" loading={isLoading}>
+          Entrar
+        </Button>
       </form>
       <Link
         to={RoutePaths.Auth.FORGOT_PASSWORD}
-        className="text-dark mt-4 self-center text-center text-sm underline"
+        className="mt-4 self-center text-center text-sm text-dark underline"
       >
         Esqueci minha senha
       </Link>
