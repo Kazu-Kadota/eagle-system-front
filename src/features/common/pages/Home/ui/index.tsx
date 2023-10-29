@@ -1,3 +1,3 @@
 export function HomeUI() {
-  return <h1 className="text-5xl text-light">Home Page</h1>
+  return <h1 className="text-5xl">Home Page</h1>
 }

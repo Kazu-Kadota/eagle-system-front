@@ -52,15 +52,15 @@ export function Input({
       <label htmlFor={name} className={labelStyle(labelVariants)}>
         {label}
       </label>
-      <div className="border-placeholder flex h-11 flex-row border">
+      <div className="flex h-11 flex-row border border-placeholder">
         <InputComponent
           {...rest}
           id={name}
           type={type}
-          className="text-placeholder bg-light remove-auto-fill font-poppings text-md min-w-0 flex-1 p-3 font-light"
+          className="remove-auto-fill font-poppings min-w-0 flex-1 bg-light p-3 text-md font-light text-dark placeholder:text-placeholder"
         />
       </div>
-      {!!error && <p className="text-error -mb-1 mt-1 text-xs">{error}</p>}
+      {!!error && <p className="-mb-1 mt-1 text-xs text-error">{error}</p>}
     </div>
   )
 }

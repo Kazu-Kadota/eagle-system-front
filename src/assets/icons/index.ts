@@ -1,3 +1,6 @@
 export * from './EyeHiddenIcon'
 export * from './EyeIcon'
+export * from './Logo'
 export * from './LogoTriangle'
+export * from './LogoutIcon'
+export * from './MenuIcon'

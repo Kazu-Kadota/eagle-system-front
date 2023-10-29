@@ -15,6 +15,7 @@ export default {
         poppins: ['Poppins', 'sans-serif'],
       },
       fontSize: {
+        smx: '0.9375rem',
         md: '1.0625rem',
       },
     },
