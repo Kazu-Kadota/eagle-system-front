@@ -8,6 +8,7 @@ export default {
       dark: '#010101',
       light: '#F8F8F8',
       error: '#A01818',
+      link: '#33A2E0',
     },
     extend: {
       fontFamily: {

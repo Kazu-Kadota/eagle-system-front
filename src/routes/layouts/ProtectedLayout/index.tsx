@@ -19,7 +19,7 @@ export const ProtectedLayout = memo(() => {
         className="absolute h-full w-full object-cover"
       />
       <Navbar />
-      <div className="relative flex-1">
+      <div className="relative flex-1 px-5 py-7 md:px-8 md:py-16 lg:px-12 xl:px-16">
         <Outlet />
       </div>
     </main>
