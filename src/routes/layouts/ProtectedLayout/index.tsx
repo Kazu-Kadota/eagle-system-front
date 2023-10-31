@@ -6,9 +6,9 @@ import { useAuthStore } from 'src/store/auth'
 
 export const ProtectedLayout = memo(() => {
   const { pathname } = useLocation()
-  const jwtToken = useAuthStore((state) => state.jwtToken)
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
-  if (!jwtToken) {
+  if (!isLoggedIn) {
     return <Navigate to={RoutePaths.Auth.login({ navigateTo: pathname })} />
   }
 

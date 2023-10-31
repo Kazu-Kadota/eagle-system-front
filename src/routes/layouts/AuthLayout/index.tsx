@@ -5,9 +5,9 @@ import { RoutePaths } from 'src/routes/paths'
 import { useAuthStore } from 'src/store/auth'
 
 export const AuthLayout = memo(() => {
-  const jwtToken = useAuthStore((state) => state.jwtToken)
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
-  if (jwtToken) {
+  if (isLoggedIn) {
     return <Navigate to={RoutePaths.Common.HOME} />
   }
 

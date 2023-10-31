@@ -1,6 +1,12 @@
 import { Stringifiable } from 'query-string'
+import { clearStorage } from '../logout'
 import ApiError from './ApiError'
-import { constructUrl, constructHeaders, prepareBody } from './helpers'
+import {
+  constructHeaders,
+  constructUrl,
+  hasTokenExpired,
+  prepareBody,
+} from './helpers'
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
@@ -24,11 +30,16 @@ const requestCreator =
 
     const data = await res.json()
 
-    if (!res.ok) {
-      throw new ApiError(data)
+    if (res.ok) {
+      return { data: data as T, status: res.status }
     }
 
-    return { data: data as T, status: res.status }
+    if (hasTokenExpired(res.status)) {
+      clearStorage()
+      throw new Error('Seu token expirou, faça login novamente.')
+    }
+
+    throw new ApiError(data)
   }
 
 export default requestCreator

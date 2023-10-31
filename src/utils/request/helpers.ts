@@ -44,3 +44,7 @@ export const isBlobFile = (blob: Blob) => {
 
   return fileTypes.includes(blob.type)
 }
+
+export const hasTokenExpired = (status: number) => {
+  return status === 401 && useAuthStore.getState().isLoggedIn
+}
