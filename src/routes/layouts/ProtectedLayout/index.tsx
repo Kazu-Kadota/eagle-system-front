@@ -13,13 +13,13 @@ export const ProtectedLayout = memo(() => {
   }
 
   return (
-    <main className="flex flex-col md:flex-row">
+    <main className="flex h-full flex-col md:flex-row">
       <img
         src="/images/bg-protected.jpg"
         className="absolute h-full w-full object-cover"
       />
       <Navbar />
-      <div className="relative flex-1 px-5 py-7 md:px-8 md:py-16 lg:px-12 xl:px-16">
+      <div className="relative flex flex-1 flex-col overflow-x-auto px-4 py-7 md:px-8 md:py-16 xl:px-12">
         <Outlet />
       </div>
     </main>

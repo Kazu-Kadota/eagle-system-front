@@ -57,7 +57,7 @@ export function Input({
           {...rest}
           id={name}
           type={type}
-          className="remove-auto-fill font-poppings min-w-0 flex-1 bg-light p-3 text-md font-light text-dark placeholder:text-placeholder"
+          className="remove-auto-fill font-poppings min-w-0 flex-1 bg-light p-3 text-base font-light text-dark placeholder:text-placeholder"
         />
       </div>
       {!!error && <p className="-mb-1 mt-1 text-xs text-error">{error}</p>}
