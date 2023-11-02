@@ -10,7 +10,7 @@ import { NavbarItem, NavbarItemProps } from './NavbarItem'
 
 const navlinks: NavbarItemProps[] = [
   { label: 'Home', path: RoutePaths.Common.HOME },
-  { label: 'Análises', path: '/analises' },
+  { label: 'Análises', path: RoutePaths.Analysis.ANALYSIS_HOME },
   { label: 'Relatórios', path: '/relatorios' },
   { label: 'Gerenciamento\nde Usuários', path: '/gerenciamento-de-usuarios' },
   { label: 'Minha Conta', path: 'minha-conta' },

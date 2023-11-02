@@ -3,7 +3,10 @@ import { toast } from 'react-toastify'
 import { getErrorMsg } from 'src/utils/errors'
 
 const queryCache = new QueryCache({
-  onError: (error) => toast.error(getErrorMsg(error)),
+  onError: (error) => {
+    const message = getErrorMsg(error)
+    return toast.error(message, { toastId: message })
+  },
 })
 
 export const queryClient = new QueryClient({ queryCache })

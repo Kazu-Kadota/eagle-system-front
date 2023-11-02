@@ -1,15 +1,22 @@
 import queryString from 'query-string'
-import { RequestOptions } from './requestCreator'
 import { useAuthStore } from 'src/store/auth'
+import { RequestOptions } from './types'
 
 export const constructHeaders = (options: RequestOptions) => {
   const headers: Record<string, string> = {}
 
-  const token = useAuthStore.getState().jwtToken
-
   if (options.body) {
     headers['Content-Type'] = 'application/json'
   }
+
+  return headers
+}
+
+export const constructAuthHeaders = (options: RequestOptions) => {
+  const headers: Record<string, string> = constructHeaders(options)
+
+  const token = useAuthStore.getState().jwtToken
+
   if (token) {
     headers['Authorization'] = `Bearer ${token}`
   }
@@ -45,6 +52,4 @@ export const isBlobFile = (blob: Blob) => {
   return fileTypes.includes(blob.type)
 }
 
-export const hasTokenExpired = (status: number) => {
-  return status === 401 && useAuthStore.getState().isLoggedIn
-}
+export const isTokenNotAuthorized = (status: number) => status === 403

@@ -9,15 +9,16 @@ export default {
       light: '#F8F8F8',
       error: '#A01818',
       link: '#33A2E0',
+      'light-gray': '#E8E8E8',
+      'line-light': '#D2D1D0',
     },
     extend: {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif'],
       },
-      fontSize: {
-        smx: '0.9375rem',
-        md: '1.0625rem',
+      boxShadow: {
+        button: '1px 2px 4px 0px rgba(0, 0, 0, 0.25)',
       },
     },
   },

@@ -11,7 +11,7 @@ export const NavbarItem = ({ path, label }: NavbarItemProps) => (
     to={path}
     className={({ isActive }) =>
       cn(
-        'text-smx ml-4 whitespace-pre-line rounded-l-md px-3 py-0.5 font-extrabold transition-colors hover:bg-dark hover:text-light',
+        'ml-4 whitespace-pre-line rounded-l-md px-3 py-0.5 text-base font-extrabold transition-colors hover:bg-dark hover:text-light',
         isActive ? 'bg-dark text-light' : 'text-dark',
       )
     }

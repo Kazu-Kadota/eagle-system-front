@@ -1,14 +1,18 @@
 import { AuthResponse, User } from 'src/models'
 import { createPersist } from 'src/utils/zustand'
 
-export interface AuthStore extends AuthResponse {
+interface AuthState extends AuthResponse {
   isLoggedIn: boolean
+}
+
+export interface AuthStore extends AuthState {
   setState: (state: Partial<AuthResponse>) => void
   clearState: () => void
 }
 
-const initialState: AuthResponse = {
+const initialState: AuthState = {
   user: {} as User,
+  isLoggedIn: false,
   jwtToken: '',
   expires_date: '',
 }
@@ -16,7 +20,6 @@ const initialState: AuthResponse = {
 export const useAuthStore = createPersist<AuthStore>(
   (set) => ({
     ...initialState,
-    isLoggedIn: false,
     setState: (state) => set({ ...state, isLoggedIn: !!state.jwtToken }),
     clearState: () => set(initialState),
   }),
