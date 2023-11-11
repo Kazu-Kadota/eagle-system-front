@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { queryClient } from './config/query'
 import { router } from './routes'
+import { Modal } from './store/modal'
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
       </QueryClientProvider>
+      <Modal />
       <ToastContainer autoClose={2500} />
     </>
   )

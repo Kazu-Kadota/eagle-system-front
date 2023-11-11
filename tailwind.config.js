@@ -9,6 +9,7 @@ export default {
       light: '#F8F8F8',
       error: '#A01818',
       link: '#33A2E0',
+      'light-primary': '#F8E1B5',
       'light-gray': '#E8E8E8',
       'line-light': '#D2D1D0',
     },

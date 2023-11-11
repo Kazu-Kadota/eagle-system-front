@@ -1,8 +1,8 @@
 import { UserType } from 'src/models'
 
 export function hasUserType(
-  userType: UserType,
+  userType: UserType | undefined,
   ...allowedUserTypes: UserType[]
 ) {
-  return allowedUserTypes.includes(userType)
+  return userType && allowedUserTypes.includes(userType)
 }

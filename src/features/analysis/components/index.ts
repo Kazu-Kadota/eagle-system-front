@@ -1,3 +1,6 @@
 export * from './AnalysisResponseTimer'
 export * from './AnalysisTable'
 export * from './AnalysisTableActions'
+export * from './AnalysisTypeSelect'
+export * from './PersonForm'
+export * from './VehiclesForm'

@@ -22,9 +22,10 @@ export enum PersonAnalysisType {
 export enum PersonRegionType {
   STATES = 'states',
   NATIONAL = 'national',
+  CNH_STATUS = 'cnh-status',
 }
 
-export interface Analysis {
+export type Analysis = {
   created_at: string
   analysis_type: AnalysisType
   status: AnalysisStatus
@@ -37,7 +38,7 @@ export interface Analysis {
   company_name: string
 }
 
-export interface PersonAnalysis extends Analysis {
+export type PersonAnalysis = Analysis & {
   father_name: string
   birth_date: string
   expire_at_cnh: string
@@ -56,7 +57,7 @@ export interface PersonAnalysis extends Analysis {
   region?: State
 }
 
-export interface VehicleAnalysis extends Analysis {
+export type VehicleAnalysis = Analysis & {
   owner_name: string
   plate: string
   driver_name: string
@@ -66,4 +67,16 @@ export interface VehicleAnalysis extends Analysis {
   chassis: string
   vehicle_id: string
   owner_document: string
+}
+
+export interface RegionPersonAnalysis {
+  region_type: PersonRegionType
+  analysis_type: PersonAnalysisType[]
+  regions: State[]
+}
+
+export interface BackRegionPersonAnalysis {
+  region_types?: PersonRegionType[]
+  type: PersonAnalysisType
+  regions?: State[]
 }

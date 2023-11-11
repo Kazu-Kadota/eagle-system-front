@@ -46,7 +46,7 @@ function getTableActions(analysisType: AnalysisType, userType: UserType) {
       children: `Solicitar Análise ${label}`,
       theme: 'primary',
       size: 'xs',
-      to: RoutePaths.Analysis.ANALYSIS_HOME,
+      to: RoutePaths.Analysis.requestAnalysis({ analysisType }),
     })
   }
 
