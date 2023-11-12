@@ -45,7 +45,6 @@ export const analysisVehiclesSchema = z
     renavam: z.string().optional(),
     chassis: z.string().optional(),
     company_name: z.string().optional(),
-    vehicle_modal: z.string().optional(),
     userType: z.nativeEnum(UserType).optional(),
     analysisType: z.nativeEnum(AnalysisType).optional(),
   })

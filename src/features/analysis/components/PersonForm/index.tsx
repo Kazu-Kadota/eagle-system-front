@@ -3,7 +3,7 @@ import { AnalysisType, UserType } from 'src/models'
 import { AnalysisPersonSchema } from '../../pages/RequestAnalysis/schema'
 import { SelectItem } from 'src/types/select'
 import { hasUserType } from 'src/utils/userType'
-import { Box, Button, ControlledInput } from 'src/components'
+import { Box, Button, ControlledInput, InputRow } from 'src/components'
 import { estadosSelectItems } from '../../constants/estados'
 import { cnhTypesSelectItems } from '../../constants/cnh'
 
@@ -33,8 +33,11 @@ export const PersonForm: React.FC<PersonFormProps> = ({
     <small className="mt-0.5 block text-placeholder/80">
       Campos com * são obrigatórios para a solicitação
     </small>
-    <form className="mt-4 flex flex-col gap-4" onSubmit={onRequestAnalysis}>
-      <fieldset className="flex flex-row gap-4 xl:flex-row">
+    <form
+      className="mt-4 flex flex-col gap-3 sm:gap-4"
+      onSubmit={onRequestAnalysis}
+    >
+      <InputRow>
         {hasUserType(userType, UserType.ADMIN) && (
           <ControlledInput
             control={control}
@@ -61,9 +64,9 @@ export const PersonForm: React.FC<PersonFormProps> = ({
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-[3]"
         />
-      </fieldset>
+      </InputRow>
 
-      <fieldset className="flex flex-row gap-4 xl:flex-row">
+      <InputRow>
         <ControlledInput
           control={control}
           label="Data de Nascimento:"
@@ -99,9 +102,9 @@ export const PersonForm: React.FC<PersonFormProps> = ({
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-1"
         />
-      </fieldset>
+      </InputRow>
 
-      <fieldset className="flex flex-row gap-4 xl:flex-row">
+      <InputRow>
         <ControlledInput
           control={control}
           label="Estado de Emissão:"
@@ -124,9 +127,9 @@ export const PersonForm: React.FC<PersonFormProps> = ({
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-[3]"
         />
-      </fieldset>
+      </InputRow>
 
-      <fieldset className="flex flex-row gap-4 xl:flex-row">
+      <InputRow>
         <ControlledInput
           control={control}
           label="Nome do pai:"
@@ -157,9 +160,9 @@ export const PersonForm: React.FC<PersonFormProps> = ({
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-1"
         />
-      </fieldset>
+      </InputRow>
 
-      <fieldset className="flex flex-row gap-4 xl:flex-row">
+      <InputRow>
         <ControlledInput
           control={control}
           label="Número de segurança da CNH:"
@@ -191,7 +194,7 @@ export const PersonForm: React.FC<PersonFormProps> = ({
           containerClassName="flex-1"
           placeholder="dd/mm/aaaa"
         />
-      </fieldset>
+      </InputRow>
 
       {analysisType !== AnalysisType.COMBO && (
         <Button

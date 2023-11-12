@@ -24,9 +24,9 @@ const copyToClipboardFn = {
 const detailRouteFn = {
   [AnalysisType.PERSON]: RoutePaths.Analysis.peopleAnalysisDetail,
   [AnalysisType.COMBO]: RoutePaths.Analysis.peopleAnalysisDetail,
-  [AnalysisType.VEHICLE]: RoutePaths.Analysis.peopleAnalysisDetail,
+  [AnalysisType.VEHICLE]: RoutePaths.Analysis.vehicleAnalysisDetail,
   [AnalysisType.VEHICLE_PLATE_HISTORY]:
-    RoutePaths.Analysis.peopleAnalysisDetail,
+    RoutePaths.Analysis.vehicleAnalysisDetail,
 }
 
 export const AnalysisTableActions: React.FC<AnalysisTableActionsProps> = ({
@@ -54,7 +54,7 @@ export const AnalysisTableActions: React.FC<AnalysisTableActionsProps> = ({
         <CopyIcon className="w-5 stroke-primary" />
       </Clickable>
       <Link
-        to={detailRouteFn[type](item)}
+        to={detailRouteFn[type](item as never)}
         target="_blank"
         title="Detalhes da análise"
       >

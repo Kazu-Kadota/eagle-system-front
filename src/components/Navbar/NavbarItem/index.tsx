@@ -4,9 +4,10 @@ import { cn } from 'src/utils/classNames'
 export interface NavbarItemProps {
   label: string
   path: string
+  closeNavbar?: () => void
 }
 
-export const NavbarItem = ({ path, label }: NavbarItemProps) => (
+export const NavbarItem = ({ path, label, closeNavbar }: NavbarItemProps) => (
   <NavLink
     to={path}
     className={({ isActive }) =>
@@ -15,6 +16,7 @@ export const NavbarItem = ({ path, label }: NavbarItemProps) => (
         isActive ? 'bg-dark text-light' : 'text-dark',
       )
     }
+    onClick={closeNavbar}
   >
     {label}
   </NavLink>

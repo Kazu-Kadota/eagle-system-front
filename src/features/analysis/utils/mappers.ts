@@ -1,9 +1,11 @@
 import dayjs from 'dayjs'
 import {
   AnalysisStatus,
+  AnalysisType,
   PersonAnalysis,
   PersonAnalysisType,
   PersonRegionType,
+  VehicleAnalysis,
 } from 'src/models'
 
 export const analysisStatus: { [key in AnalysisStatus]: string } = {
@@ -53,3 +55,10 @@ export const preparePersonDataFromApi = (
     ? dayjs(person.expire_at_cnh).format('YYYY-MM-DD')
     : '',
 })
+
+export const getVehicleAnalysisType = (analysis: VehicleAnalysis) => {
+  if (analysis.analysis_type === AnalysisType.VEHICLE_PLATE_HISTORY) {
+    return 'Histórico de placa'
+  }
+  return analysis.vehicle_type
+}

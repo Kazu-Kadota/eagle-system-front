@@ -5,7 +5,7 @@ const style = tv({
     container: 'w-full bg-light',
     box: 'flex flex-col',
     title:
-      'border-b border-b-line-light bg-light-gray px-4 py-2 text-3xl font-extrabold text-dark',
+      'border-b border-b-line-light bg-light-gray px-4 py-2 text-2xl font-extrabold text-dark sm:text-3xl',
   },
   variants: {
     radius: {

@@ -3,32 +3,32 @@ import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { usePersonAnalysisDetail } from 'src/features/analysis/hooks'
+import { useVehicleAnalysisDetail } from 'src/features/analysis/hooks'
 import { AnalysisResult, AnalysisType } from 'src/models'
 import { useAuthStore } from 'src/store/auth'
 import { useModal } from 'src/store/modal'
 import { getErrorMsg } from 'src/utils/errors'
 import { sendAnalysis } from '../../services/answer'
 import { AnalysisAnswerSchema, analysisAnswerSchema } from './schema'
-import { PersonAnalysisAnswerUI } from './ui'
+import { VehicleAnalysisAnswerUI } from './ui'
 
-export const PersonAnalysisAnswerPage = () => {
+export const VehicleAnalysisAnswerPage = () => {
   const modal = useModal()
   const { user } = useAuthStore()
 
   const { id } = useParams()
   const [searchParams] = useSearchParams()
 
-  const { person, isLoading } = usePersonAnalysisDetail({
+  const { vehicle, isLoading } = useVehicleAnalysisDetail({
     id: id ?? '',
-    personId: searchParams.get('personId') ?? '',
+    vehicleId: searchParams.get('vehicleId') ?? '',
   })
 
   const { control, handleSubmit } = useForm<AnalysisAnswerSchema>({
     resolver: zodResolver(analysisAnswerSchema),
     values: {
-      analysis_result: person?.analysis_result ?? AnalysisResult.APPROVED,
-      analysis_info: person?.analysis_info ?? '',
+      analysis_result: vehicle?.analysis_result ?? AnalysisResult.APPROVED,
+      analysis_info: vehicle?.analysis_info ?? '',
       confirmed: false,
     },
   })
@@ -36,9 +36,9 @@ export const PersonAnalysisAnswerPage = () => {
   const sendAnalysisMutation = useMutation({
     mutationFn: (data: AnalysisAnswerSchema) =>
       sendAnalysis({
-        id: person!.request_id,
-        person_id: person!.person_id,
-        analysisCategory: AnalysisType.PERSON,
+        id: vehicle!.request_id,
+        vehicle_id: vehicle!.vehicle_id,
+        analysisCategory: AnalysisType.VEHICLE,
         analysis_info: data.analysis_info || undefined,
         analysis_result: data.analysis_result,
       }),
@@ -64,9 +64,9 @@ export const PersonAnalysisAnswerPage = () => {
   })
 
   return (
-    <PersonAnalysisAnswerUI
+    <VehicleAnalysisAnswerUI
       control={control}
-      person={person}
+      vehicle={vehicle}
       userType={user.user_type}
       isLoading={isLoading}
       isSendAnalysisLoading={sendAnalysisMutation.isPending}

@@ -8,6 +8,7 @@ import {
 import {
   analysisStatus,
   getAnalysisTypeString,
+  getVehicleAnalysisType,
 } from 'src/features/analysis/utils/mappers'
 import {
   AnalysisStatus,
@@ -101,6 +102,11 @@ const createVehicleColumns = (userType: UserType) => {
       accessorKey: 'combo_number',
       header: 'Combo',
       cell: (props) => (props.getValue() ? 'Sim' : 'Não'),
+    },
+    {
+      accessorKey: 'vehicle_type',
+      header: 'Tipo',
+      cell: (props) => getVehicleAnalysisType(props.cell.row.original),
     },
     {
       accessorKey: 'created_at',

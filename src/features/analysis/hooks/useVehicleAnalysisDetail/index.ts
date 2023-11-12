@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { VehicleAnalysis } from 'src/models'
 import { getVehiclesDetailAnalysis } from '../../services/vehicle'
 
 interface UseVehicleAnalysisDetailProps {
@@ -17,7 +18,7 @@ export const useVehicleAnalysisDetail = ({
   })
 
   return {
-    person: data?.vehicle,
+    vehicle: data?.vehicle ?? ({} as VehicleAnalysis),
     isLoading,
     refetch,
   }

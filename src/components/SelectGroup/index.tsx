@@ -9,8 +9,8 @@ const style = tv({
   variants: {
     layout: {
       row: {
-        container: 'flex-row items-center gap-4',
-        title: '',
+        container: 'flex-col lg:flex-row lg:items-center lg:gap-4',
+        title: 'mb-1 lg:mb-0',
       },
       column: {
         container: 'flex-col',

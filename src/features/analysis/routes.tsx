@@ -1,8 +1,9 @@
 import { RouteObject } from 'react-router-dom'
 import { AnalysisHomePage } from './pages/AnalysisHome'
-import { RequestAnalysisPage } from './pages/RequestAnalysis'
-import { AnalysisRoutePaths } from './paths'
 import { PersonAnalysisAnswerPage } from './pages/PersonAnalysisAnwser'
+import { RequestAnalysisPage } from './pages/RequestAnalysis'
+import { VehicleAnalysisAnswerPage } from './pages/VehicleAnalysisAnwser'
+import { AnalysisRoutePaths } from './paths'
 
 export const analysisProtectedRoutes: RouteObject[] = [
   {
@@ -16,5 +17,9 @@ export const analysisProtectedRoutes: RouteObject[] = [
   {
     path: AnalysisRoutePaths.peopleAnalysisDetail(),
     element: <PersonAnalysisAnswerPage />,
+  },
+  {
+    path: AnalysisRoutePaths.vehicleAnalysisDetail(),
+    element: <VehicleAnalysisAnswerPage />,
   },
 ]

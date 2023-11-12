@@ -74,8 +74,22 @@ export const analysisStatusSelectItems: SelectItem<AnalysisStatus>[] = [
   { label: 'Finalizado', value: AnalysisStatus.FINISHED },
 ]
 
+export const analysisTypeButtonLabel = {
+  [AnalysisType.PERSON]: 'Análise de Pessoa',
+  [AnalysisType.VEHICLE]: 'Análise de Veículo',
+  [AnalysisType.VEHICLE_PLATE_HISTORY]: 'Análise de Histórico de placa',
+  [AnalysisType.COMBO]: 'Análise de Combo',
+} as const
+
 export const personRegionTypeButtonTheme = {
   [PersonRegionType.NATIONAL]: 'blue',
   [PersonRegionType.STATES]: 'brown',
   [PersonRegionType.CNH_STATUS]: 'placeholder',
+} as const
+
+export const analysisTypeButtonTheme = {
+  [AnalysisType.PERSON]: 'blue',
+  [AnalysisType.VEHICLE]: 'blue',
+  [AnalysisType.VEHICLE_PLATE_HISTORY]: 'brown',
+  [AnalysisType.COMBO]: 'brown',
 } as const

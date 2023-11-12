@@ -19,7 +19,9 @@ const navlinks: NavbarItemProps[] = [
 export function Navbar() {
   const navigate = useNavigate()
 
-  const [isNavbarOpen, toggleNavbarOpen] = useToggle(false)
+  const [isNavbarOpen, toggleNavbarOpen, setNavbarOpen] = useToggle(false)
+
+  const closeNavbar = () => setNavbarOpen(false)
 
   const handleLogout = () => {
     clearStorage()
@@ -42,7 +44,11 @@ export function Navbar() {
         <Logo className="mb-5 self-center" />
 
         {navlinks.map((navlink) => (
-          <NavbarItem key={navlink.label} {...navlink} />
+          <NavbarItem
+            key={navlink.label}
+            closeNavbar={closeNavbar}
+            {...navlink}
+          />
         ))}
 
         <div className="flex-1" />

@@ -15,17 +15,17 @@ import {
 import {
   analysisResultsSelectItems,
   analysisStatusSelectItems,
-  personRegionTypeButtonTheme,
+  analysisTypeButtonLabel,
+  analysisTypeButtonTheme,
+  vehiclesTypesSelectItems,
 } from 'src/features/analysis/constants/analysis'
-import { cnhTypesSelectItems } from 'src/features/analysis/constants/cnh'
-import { estadosSelectItems } from 'src/features/analysis/constants/estados'
-import { getAnalysisTypeString } from 'src/features/analysis/utils/mappers'
-import { PersonAnalysis, UserType } from 'src/models'
+import { estadosVehiclesSelectItems } from 'src/features/analysis/constants/estados'
+import { UserType, VehicleAnalysis } from 'src/models'
 import { hasUserType } from 'src/utils/userType'
 import { AnalysisAnswerSchema } from '../schema'
 
-interface AnalysisAnswerUIProps {
-  person: PersonAnalysis
+interface VehicleAnalysisAnswerUIProps {
+  vehicle: VehicleAnalysis
   isLoading: boolean
   isSendAnalysisLoading: boolean
   userType?: UserType
@@ -33,15 +33,17 @@ interface AnalysisAnswerUIProps {
   onSubmit: () => void
 }
 
-export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
+export const VehicleAnalysisAnswerUI: React.FC<
+  VehicleAnalysisAnswerUIProps
+> = ({
   isLoading,
-  person,
+  vehicle,
   isSendAnalysisLoading,
   userType,
   control,
   onSubmit,
 }) => {
-  const isAnswered = !!(person.analysis_result || person.finished_at)
+  const isAnswered = !!(vehicle.analysis_result || vehicle.finished_at)
   const isAdminOrOperator = hasUserType(
     userType,
     UserType.ADMIN,
@@ -54,36 +56,32 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
       className="flex flex-col gap-3 sm:gap-4"
       title={
         shouldAnswer
-          ? 'Responder Análise de Pessoa'
-          : 'Status da Análise de Pessoas'
+          ? 'Responder Análise de Veículo'
+          : 'Status da Análise de Veículo'
       }
     >
       <div className="mb-2 flex flex-col-reverse items-center gap-3 sm:mb-0 sm:flex-row">
         <Button theme="opaque" size="xxs" disabled shadow="base">
           Solicitada em{' '}
-          {dayjs(person?.created_at).format('DD/MM/YYYY [às] HH:mm:ss')}
+          {dayjs(vehicle?.created_at).format('DD/MM/YYYY [às] HH:mm:ss')}
         </Button>
         <Button
-          theme={
-            personRegionTypeButtonTheme[
-              person.region_type ?? person.person_analysis_type
-            ]
-          }
+          theme={analysisTypeButtonTheme[vehicle.analysis_type]}
           size="xxs"
           disabled
           shadow="base"
         >
-          Análise {getAnalysisTypeString(person)}
+          {analysisTypeButtonLabel[vehicle.analysis_type]}
         </Button>
       </div>
 
       <Input
-        label="Nome:"
+        label="Nome do Proprietário"
         placeholder="Nome"
-        name="name"
-        value={person.name}
-        disabled
+        name="owner_name"
+        value={vehicle.owner_name}
         required
+        disabled
         inputVariants={{ size: 'sm' }}
         labelVariants={{ size: 'sm' }}
         containerVariants={{ layout: 'row' }}
@@ -91,41 +89,38 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
 
       <InputRow>
         <Input
-          label="CPF:"
-          placeholder="XXX.XXX.XXX-XX"
-          name="document"
-          disabled
+          label="CPF/CNPJ do Proprietário"
+          placeholder="XX.XXX.XXX/XXXX-XX"
+          name="owner_document"
+          type="cpfOrCnpj"
           required
-          value={person?.document}
+          disabled
+          value={vehicle.owner_document}
           inputVariants={{ size: 'sm' }}
           labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-1"
         />
         <Input
-          label="Data de Nascimento:"
-          name="birth_date"
-          placeholder="dd/mm/aaaa"
-          type="date"
-          disabled
+          label="Placa"
+          placeholder="XXXXXXX"
+          name="plate"
           required
-          value={
-            person?.birth_date
-              ? dayjs(person.birth_date).format('DD/MM/YYYY')
-              : ''
-          }
+          disabled
+          value={vehicle.plate}
+          type="plate"
           inputVariants={{ size: 'sm' }}
           labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-1"
         />
         <Input
-          label="RG:"
-          placeholder="XXXXXXXXX"
-          name="rg"
-          disabled
+          label="Estado da Placa do veículo"
+          name="plate_state"
           required
-          value={person?.rg}
+          disabled
+          value={vehicle.plate_state}
+          items={estadosVehiclesSelectItems}
           inputVariants={{ size: 'sm' }}
           labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
@@ -135,60 +130,23 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
 
       <InputRow>
         <Input
-          label="Estado de Emissão:"
-          name="state_rg"
-          items={estadosSelectItems}
-          disabled
+          label="Tipo de Veículo"
+          name="vehicle_type"
           required
-          value={person?.state_rg}
+          disabled
+          value={vehicle.vehicle_type}
+          items={vehiclesTypesSelectItems}
           inputVariants={{ size: 'sm' }}
           labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-[0_0_auto] min-w-[20rem]"
         />
         <Input
-          label="Nome da mãe:"
+          label="Nome do motorista"
           placeholder="Nome"
-          name="mother_name"
+          name="driver_name"
           disabled
-          required
-          value={person?.mother_name}
-          inputVariants={{ size: 'sm' }}
-          labelVariants={{ size: 'sm' }}
-          containerVariants={{ layout: 'row' }}
-          containerClassName="flex-[3]"
-        />
-      </InputRow>
-
-      <InputRow>
-        <Input
-          label="Nome do pai:"
-          placeholder="Nome"
-          name="father_name"
-          disabled
-          value={person?.father_name}
-          inputVariants={{ size: 'sm' }}
-          labelVariants={{ size: 'sm' }}
-          containerVariants={{ layout: 'row' }}
-          containerClassName="flex-[1.5]"
-        />
-        <Input
-          label="Naturalidade:"
-          placeholder="XXXXXXXXX"
-          name="naturalness"
-          disabled
-          value={person?.naturalness}
-          inputVariants={{ size: 'sm' }}
-          labelVariants={{ size: 'sm' }}
-          containerVariants={{ layout: 'row' }}
-          containerClassName="flex-1"
-        />
-        <Input
-          label="Número da CNH:"
-          placeholder="XXXXXXXXX"
-          name="cnh"
-          disabled
-          value={person?.cnh}
+          value={vehicle.driver_name}
           inputVariants={{ size: 'sm' }}
           labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
@@ -198,38 +156,22 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
 
       <InputRow>
         <Input
-          label="Número de segurança da CNH:"
-          placeholder="XXXXXXXXX"
-          name="security_number_cnh"
+          label="Renavam"
+          placeholder="XXXXXXXXXXXXXXXXXXXXXXX"
+          name="renavam"
           disabled
-          value={person?.security_number_cnh}
+          value={vehicle.renavam}
           inputVariants={{ size: 'sm' }}
           labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-1"
         />
         <Input
-          label="Categoria da CNH:"
-          name="category_cnh"
-          items={cnhTypesSelectItems}
+          label="Chassi"
+          placeholder="XXXXXXXXXXXXXXX"
+          name="chassi"
           disabled
-          value={person?.category_cnh}
-          inputVariants={{ size: 'sm' }}
-          labelVariants={{ size: 'sm' }}
-          containerVariants={{ layout: 'row' }}
-          containerClassName="flex-1"
-        />
-        <Input
-          label="Data de validade da CNH:"
-          name="expire_at_cnh"
-          type="date"
-          placeholder="dd/mm/aaaa"
-          disabled
-          value={
-            person?.expire_at_cnh
-              ? dayjs(person.expire_at_cnh).format('DD/MM/YYYY')
-              : ''
-          }
+          value={vehicle.chassis}
           inputVariants={{ size: 'sm' }}
           labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
@@ -272,7 +214,7 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
         <>
           <SelectGroup
             title="Status"
-            value={person.status}
+            value={vehicle.status}
             disabled
             required
             layout="row"
@@ -286,14 +228,14 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
                 required
                 disabled
                 layout="row"
-                value={person.analysis_result}
+                value={vehicle.analysis_result}
                 items={analysisResultsSelectItems}
               />
               <TextArea
                 label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
                 name="analysis_info"
                 disabled
-                value={person.analysis_info}
+                value={vehicle.analysis_info}
               />
             </>
           )}

@@ -9,13 +9,13 @@ export const Modal = memo(() => {
   return (
     <Fade
       isVisible={isOpen}
-      className="fixed inset-0 flex items-center justify-center pb-20"
+      className="fixed inset-0 flex items-center justify-center px-8 pb-20"
     >
       <div
         className="fixed inset-0 bg-dark/80"
         onClick={!disableOverlayClose ? actions.close : undefined}
       />
-      <div className="relative flex min-h-[14.25rem] w-[31.625rem] flex-col justify-center gap-12 bg-light">
+      <div className="relative flex min-h-[14.25rem] w-full flex-col justify-center gap-12 bg-light sm:w-[31.625rem]">
         <h2 className="text-center text-4xl font-semibold text-dark">
           {title}
         </h2>

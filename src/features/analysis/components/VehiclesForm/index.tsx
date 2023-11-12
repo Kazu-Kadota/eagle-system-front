@@ -1,5 +1,11 @@
 import { Control } from 'react-hook-form'
-import { Box, Button, ControlledInput, SelectGroup } from 'src/components'
+import {
+  Box,
+  Button,
+  ControlledInput,
+  InputRow,
+  SelectGroup,
+} from 'src/components'
 import { AnalysisType, UserType } from 'src/models'
 import { SelectItem } from 'src/types/select'
 import { hasUserType } from 'src/utils/userType'
@@ -54,12 +60,12 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
     <form
       key={AnalysisType.VEHICLE}
       className={cn(
-        'flex flex-col gap-4',
+        'flex flex-col gap-3 sm:gap-4',
         analysisType !== AnalysisType.COMBO && 'mt-4',
       )}
       onSubmit={onRequestAnalysis}
     >
-      <fieldset className="flex flex-col gap-4 xl:flex-row">
+      <InputRow>
         {hasUserType(userType, UserType.ADMIN) &&
           analysisType !== AnalysisType.COMBO && (
             <ControlledInput
@@ -87,9 +93,9 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-[3]"
         />
-      </fieldset>
+      </InputRow>
 
-      <fieldset className="flex flex-col gap-4 xl:flex-row">
+      <InputRow>
         <ControlledInput
           control={controlVehicle}
           label="CPF/CNPJ do Proprietário"
@@ -125,9 +131,9 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-1"
         />
-      </fieldset>
+      </InputRow>
 
-      <fieldset className="flex flex-col gap-4 xl:flex-row">
+      <InputRow>
         <ControlledInput
           control={controlVehicle}
           label="Tipo de Veículo"
@@ -149,19 +155,9 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-1"
         />
-        <ControlledInput
-          control={controlVehicle}
-          label="Modelo do Véiculo"
-          placeholder="XXXXXXXXXX"
-          name={`vehicles.${index}.vehicle_modal`}
-          inputVariants={{ size: 'sm' }}
-          labelVariants={{ size: 'sm' }}
-          containerVariants={{ layout: 'row' }}
-          containerClassName="flex-[0_0_auto] min-w-[30rem]"
-        />
-      </fieldset>
+      </InputRow>
 
-      <fieldset className="flex flex-col gap-4 xl:flex-row">
+      <InputRow>
         <ControlledInput
           control={controlVehicle}
           label="Renavam"
@@ -182,7 +178,7 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-1"
         />
-      </fieldset>
+      </InputRow>
       <div className="mt-2 flex items-center justify-center gap-3">
         {analysisType === AnalysisType.COMBO ? (
           <>
@@ -229,12 +225,12 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
     <form
       key={AnalysisType.VEHICLE_PLATE_HISTORY}
       className={cn(
-        'flex flex-col gap-4',
+        'flex flex-col gap-3 sm:gap-4',
         analysisType !== AnalysisType.COMBO && 'mt-4',
       )}
       onSubmit={onRequestPlateHistoryAnalysis}
     >
-      <fieldset className="flex flex-col gap-4 xl:flex-row">
+      <InputRow>
         {hasUserType(userType, UserType.ADMIN) &&
           analysisType !== AnalysisType.COMBO && (
             <ControlledInput
@@ -262,9 +258,9 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-[3]"
         />
-      </fieldset>
+      </InputRow>
 
-      <fieldset className="flex flex-col gap-4 xl:flex-row">
+      <InputRow>
         <ControlledInput
           control={controlPlateHistory}
           label="CPF/CNPJ do Proprietário"
@@ -300,7 +296,7 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           containerVariants={{ layout: 'row' }}
           containerClassName="flex-1"
         />
-      </fieldset>
+      </InputRow>
 
       <Button
         theme="success"
@@ -340,7 +336,7 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           value={vehicleAnalysisType}
           onChange={onChangeVehicleAnalysisType}
           items={vehicleAnalysisSelectItems}
-          containerClassName="mb-2"
+          containerClassName="sm:mb-2"
         />
       )}
 

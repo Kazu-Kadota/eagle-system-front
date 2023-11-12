@@ -25,7 +25,7 @@ export function TextArea({
         disabled={disabled}
         id={`textarea-${name}`}
         placeholder={!disabled ? 'Insira o texto aqui' : undefined}
-        className="h-80 resize-none rounded-[1px] border border-placeholder bg-light px-3 py-3 text-sm text-dark outline-none"
+        className="h-48 resize-none rounded-[1px] border border-placeholder bg-light px-3 py-3 text-sm text-dark outline-none md:h-80"
       />
       {!!error && <p className="-mb-1 mt-1 text-xs text-error">{error}</p>}
     </div>

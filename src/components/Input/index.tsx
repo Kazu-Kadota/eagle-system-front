@@ -28,7 +28,7 @@ const containerStyle = tv({
   base: 'flex gap-1',
   variants: {
     layout: {
-      row: 'items-center',
+      row: 'flex-col sm:flex-row sm:items-center',
       column: 'flex-col',
     },
   },
@@ -46,7 +46,7 @@ const inputStyleSlots = tv({
   variants: {
     size: {
       sm: {
-        containerInput: 'h-6',
+        containerInput: 'h-6 min-h-[1.5rem]',
         input: 'px-2 text-sm',
       },
       base: {
@@ -132,7 +132,12 @@ export function Input({
     id: name,
     value,
     disabled: disabled || loading,
-    className: inputStyle(),
+    className: inputStyle({
+      className:
+        !value &&
+        disabled &&
+        'disabled:text-placeholder/50 disabled:placeholder:text-placeholder/50',
+    }),
     onChange,
   }
 
