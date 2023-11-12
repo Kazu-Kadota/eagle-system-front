@@ -4,6 +4,7 @@ import { create } from 'zustand'
 interface ModalState {
   title: string
   buttons: Omit<ButtonProps, 'to'>[]
+  disableOverlayClose?: boolean
 }
 
 interface ModalActions {
@@ -19,6 +20,7 @@ interface ModalStore extends ModalState {
 const initialState: ModalState = {
   title: '',
   buttons: [],
+  disableOverlayClose: false,
 }
 
 export const useModalStore = create<ModalStore>((set) => ({

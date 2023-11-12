@@ -1,5 +1,11 @@
 import { RadioGroupItem } from 'src/components'
-import { AnalysisType, PersonAnalysisType, PersonRegionType } from 'src/models'
+import {
+  AnalysisResult,
+  AnalysisStatus,
+  AnalysisType,
+  PersonAnalysisType,
+  PersonRegionType,
+} from 'src/models'
 import { SelectItem } from 'src/types/select'
 
 export const analysisTypesItems: RadioGroupItem<AnalysisType>[] = [
@@ -56,3 +62,20 @@ export const vehicleAnalysisSelectItems: SelectItem<AnalysisType>[] = [
   { label: 'Veículo', value: AnalysisType.VEHICLE },
   { label: 'Histórico de placa', value: AnalysisType.VEHICLE_PLATE_HISTORY },
 ]
+
+export const analysisResultsSelectItems: SelectItem<AnalysisResult>[] = [
+  { label: 'Nada consta', value: AnalysisResult.APPROVED },
+  { label: 'Possui informações substanciais', value: AnalysisResult.REJECTED },
+]
+
+export const analysisStatusSelectItems: SelectItem<AnalysisStatus>[] = [
+  { label: 'Processando', value: AnalysisStatus.PROCESSING },
+  { label: 'Aguardando', value: AnalysisStatus.WAITING },
+  { label: 'Finalizado', value: AnalysisStatus.FINISHED },
+]
+
+export const personRegionTypeButtonTheme = {
+  [PersonRegionType.NATIONAL]: 'blue',
+  [PersonRegionType.STATES]: 'brown',
+  [PersonRegionType.CNH_STATUS]: 'placeholder',
+} as const

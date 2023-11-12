@@ -39,10 +39,9 @@ const containerStyle = tv({
 
 const inputStyleSlots = tv({
   slots: {
-    containerInput:
-      'relative flex flex-1 flex-row border border-placeholder bg-light',
+    containerInput: 'relative flex flex-1 flex-row',
     input:
-      'remove-auto-fill font-poppings min-w-0 flex-1 font-light text-dark placeholder:text-placeholder',
+      'remove-auto-fill font-poppings min-w-0 flex-1 !bg-[transparent] font-light text-dark placeholder:text-placeholder disabled:opacity-100',
   },
   variants: {
     size: {
@@ -55,9 +54,18 @@ const inputStyleSlots = tv({
         input: 'px-3 text-base',
       },
     },
+    disabled: {
+      true: {
+        containerInput: 'rounded bg-light-primary',
+      },
+      false: {
+        containerInput: 'rounded-[1px] border border-placeholder bg-light',
+      },
+    },
   },
   defaultVariants: {
     size: 'base',
+    disabled: false,
   },
 })
 
@@ -110,23 +118,26 @@ export function Input({
   items,
   placeholder,
   loading,
-  disabled,
   required,
+  disabled = false,
+  value,
   type = 'text',
   onChange,
   ...rest
 }: InputProps) {
   const { input: inputStyle, containerInput: containerInputStyle } =
-    inputStyleSlots(inputVariants)
+    inputStyleSlots({ ...inputVariants, disabled })
 
   const commonProps = {
     id: name,
+    value,
     disabled: disabled || loading,
     className: inputStyle(),
+    onChange,
   }
 
   const renderSelect = () => (
-    <select {...commonProps} onChange={onChange}>
+    <select {...commonProps}>
       <option key="" value="">
         {placeholder ?? 'Selecione um item'}
       </option>
@@ -147,7 +158,6 @@ export function Input({
         {...rest}
         type={type}
         placeholder={placeholder}
-        onChange={onChange}
       />
     )
   }

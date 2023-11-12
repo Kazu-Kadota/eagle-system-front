@@ -23,13 +23,15 @@ const style = tv({
   },
 })
 
-interface SelectGroupProps<T> extends VariantProps<typeof style> {
+export interface SelectGroupProps<T> extends VariantProps<typeof style> {
   title: string
   error?: string
   items: SelectItem<T>[]
   value: T | undefined
   containerClassName?: string
-  onChange: (value: T) => void
+  disabled?: boolean
+  required?: boolean
+  onChange?: (value: T) => void
 }
 
 export const SelectGroup = <T extends string>({
@@ -39,20 +41,25 @@ export const SelectGroup = <T extends string>({
   value,
   layout,
   containerClassName,
+  disabled,
+  required,
   onChange,
 }: SelectGroupProps<T>) => {
   const { container: containerStyle, title: titleStyle } = style({ layout })
 
   return (
     <div className={containerStyle({ className: containerClassName })}>
-      <h2 className={titleStyle()}>{title}</h2>
+      <h2 className={titleStyle()}>
+        {required && <span className="text-error">*</span>}
+        {title}
+      </h2>
       {items.map((item) => (
         <button
           key={item.value}
           role="radio"
           type="button"
           className="flex items-center gap-2 py-1"
-          onClick={() => onChange(item.value)}
+          onClick={onChange ? () => onChange(item.value) : undefined}
         >
           {item.value === value ? (
             <span className="h-4 w-4 bg-link" />
@@ -65,6 +72,7 @@ export const SelectGroup = <T extends string>({
         </button>
       ))}
       {!!error && <p className="-mb-1 mt-1 text-xs text-error">{error}</p>}
+      {disabled && <span className="absolute inset-0 bg-[transparent]" />}
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { CopyIcon, EditIcon } from 'src/assets/icons'
 import { Clickable, Link } from 'src/components'
-import { Analysis, AnalysisType } from 'src/models'
+import { AnalysisType, PersonAnalysis } from 'src/models'
 import { RoutePaths } from 'src/routes/paths'
 import {
   copyPersonToClipboard,
@@ -10,7 +10,7 @@ import {
 
 interface AnalysisTableActionsProps {
   id: string
-  item: Analysis
+  item: PersonAnalysis
   type: AnalysisType
 }
 
@@ -19,6 +19,14 @@ const copyToClipboardFn = {
   [AnalysisType.COMBO]: copyPersonToClipboard,
   [AnalysisType.VEHICLE]: copyVehicleToClipboard,
   [AnalysisType.VEHICLE_PLATE_HISTORY]: copyVehicleToClipboard,
+}
+
+const detailRouteFn = {
+  [AnalysisType.PERSON]: RoutePaths.Analysis.peopleAnalysisDetail,
+  [AnalysisType.COMBO]: RoutePaths.Analysis.peopleAnalysisDetail,
+  [AnalysisType.VEHICLE]: RoutePaths.Analysis.peopleAnalysisDetail,
+  [AnalysisType.VEHICLE_PLATE_HISTORY]:
+    RoutePaths.Analysis.peopleAnalysisDetail,
 }
 
 export const AnalysisTableActions: React.FC<AnalysisTableActionsProps> = ({
@@ -46,7 +54,7 @@ export const AnalysisTableActions: React.FC<AnalysisTableActionsProps> = ({
         <CopyIcon className="w-5 stroke-primary" />
       </Clickable>
       <Link
-        to={RoutePaths.Analysis.ANALYSIS_HOME}
+        to={detailRouteFn[type](item)}
         target="_blank"
         title="Detalhes da análise"
       >

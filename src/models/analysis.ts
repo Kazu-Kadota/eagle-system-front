@@ -25,6 +25,11 @@ export enum PersonRegionType {
   CNH_STATUS = 'cnh-status',
 }
 
+export enum AnalysisResult {
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
 export type Analysis = {
   created_at: string
   analysis_type: AnalysisType
@@ -33,7 +38,7 @@ export type Analysis = {
   combo_number?: number
   finished_at?: string
   analysis_info: string
-  analysis_result: string
+  analysis_result: AnalysisResult
   user_id: string
   company_name: string
 }

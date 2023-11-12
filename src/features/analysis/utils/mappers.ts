@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import {
   AnalysisStatus,
   PersonAnalysis,
@@ -40,3 +41,15 @@ export const getAnalysisTypeString = (analysis: PersonAnalysis) => {
 
   return string
 }
+
+export const preparePersonDataFromApi = (
+  person: PersonAnalysis,
+): PersonAnalysis => ({
+  ...person,
+  birth_date: person.birth_date
+    ? dayjs(person.birth_date).format('YYYY-MM-DD')
+    : '',
+  expire_at_cnh: person.expire_at_cnh
+    ? dayjs(person.expire_at_cnh).format('YYYY-MM-DD')
+    : '',
+})

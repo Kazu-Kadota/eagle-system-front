@@ -5,21 +5,24 @@ import {
   PathValue,
   useController,
 } from 'react-hook-form'
-import { Input, InputProps } from 'src/components/Input'
+import { SelectGroup, SelectGroupProps } from '..'
 
-interface ControlledInputProps<T extends FieldValues>
-  extends Omit<InputProps, 'error' | 'value' | 'onChange'> {
+interface ControlledSelectGroupProps<T extends FieldValues, I extends string>
+  extends Omit<
+    SelectGroupProps<I>,
+    'error' | 'value' | 'onChangeText' | 'onChange'
+  > {
   name: Path<T>
   control: Control<T>
   defaultValue?: PathValue<T, Path<T>>
 }
 
-export function ControlledInput<T extends FieldValues>({
+export function ControlledSelectGroup<T extends FieldValues, I extends string>({
   name,
   control,
   defaultValue,
   ...rest
-}: ControlledInputProps<T>) {
+}: ControlledSelectGroupProps<T, I>) {
   const { field, fieldState } = useController({
     control,
     name,
@@ -27,12 +30,10 @@ export function ControlledInput<T extends FieldValues>({
   })
 
   return (
-    <Input
+    <SelectGroup
       {...rest}
-      name={name}
       value={field.value}
       error={fieldState.error?.message}
-      onBlur={field.onBlur}
       onChange={field.onChange}
     />
   )

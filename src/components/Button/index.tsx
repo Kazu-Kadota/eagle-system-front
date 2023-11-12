@@ -3,7 +3,7 @@ import { VariantProps, tv } from 'tailwind-variants'
 import { Spinner } from '..'
 
 const style = tv({
-  base: 'flex min-w-0 max-w-full items-center justify-center rounded-sm text-center text-light transition-opacity hover:opacity-80',
+  base: 'flex min-w-0 max-w-full items-center justify-center rounded-[0.1875rem] px-3 text-center text-light transition-opacity hover:opacity-80 disabled:opacity-100',
   variants: {
     theme: {
       primary: 'bg-primary ',
@@ -12,8 +12,12 @@ const style = tv({
       success: 'bg-success',
       accent: 'bg-accent',
       error: 'bg-error',
+      blue: 'bg-blue',
+      opaque: 'bg-opaque',
+      brown: 'bg-brown',
     },
     size: {
+      xxs: 'h-7 text-xs font-semibold',
       xs: 'h-7 text-sm font-medium',
       xsStrong: 'h-8 text-sm font-bold',
       sm: 'h-9 text-base font-bold',

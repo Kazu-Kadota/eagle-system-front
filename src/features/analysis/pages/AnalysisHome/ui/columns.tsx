@@ -13,6 +13,7 @@ import {
   AnalysisStatus,
   AnalysisType,
   PersonAnalysis,
+  PersonRegionType,
   UserType,
   VehicleAnalysis,
 } from 'src/models'
@@ -34,7 +35,11 @@ const createPersonColumns = (userType: UserType) => {
       accessorKey: 'region_type',
       header: 'Tipo',
       cell: (props) => (
-        <span className={props.getValue() === 'states' ? 'text-error' : ''}>
+        <span
+          className={
+            props.getValue() === PersonRegionType.STATES ? 'text-brown' : ''
+          }
+        >
           {getAnalysisTypeString(props.row.original)}
         </span>
       ),
@@ -122,7 +127,7 @@ const createVehicleColumns = (userType: UserType) => {
     cell: ({ row }) => (
       <AnalysisTableActions
         id={row.original.request_id}
-        item={row.original}
+        item={row.original as never}
         type={AnalysisType.VEHICLE}
       />
     ),
