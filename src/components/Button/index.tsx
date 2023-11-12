@@ -9,9 +9,13 @@ const style = tv({
       primary: 'bg-primary ',
       dark: 'bg-dark',
       placeholder: 'bg-placeholder',
+      success: 'bg-success',
+      accent: 'bg-accent',
+      error: 'bg-error',
     },
     size: {
       xs: 'h-7 text-sm font-medium',
+      xsStrong: 'h-8 text-sm font-bold',
       sm: 'h-9 text-base font-bold',
       md: 'h-11 text-xl font-bold',
     },

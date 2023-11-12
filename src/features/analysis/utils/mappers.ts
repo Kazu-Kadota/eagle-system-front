@@ -14,6 +14,7 @@ export const analysisStatus: { [key in AnalysisStatus]: string } = {
 export const regionTypes: { [key in PersonRegionType]: string } = {
   [PersonRegionType.NATIONAL]: 'Nacional',
   [PersonRegionType.STATES]: 'Estadual',
+  [PersonRegionType.CNH_STATUS]: 'Status da CNH',
 }
 
 export const personAnalysis: {

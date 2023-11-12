@@ -29,7 +29,7 @@ export const analysisPersonSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['company_name'],
-        message: 'Campo não deve ser vazio',
+        message: 'Campo não deve ser preenchido',
       })
     }
   })
@@ -58,7 +58,7 @@ export const analysisVehiclesSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['company_name'],
-        message: 'Campo não deve ser vazio',
+        message: 'Campo não deve ser preenchido',
       })
     }
   })
@@ -86,7 +86,7 @@ export const plateHistorySchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['company_name'],
-        message: 'Campo não deve ser vazio',
+        message: 'Campo não deve ser preenchido',
       })
     }
   })

@@ -5,7 +5,7 @@ import { Spinner } from '..'
 import { MaskInput } from './MaskInput'
 
 const labelStyle = tv({
-  base: 'mb-1 block font-semibold',
+  base: 'block font-semibold',
   variants: {
     theme: {
       dark: 'text-dark',
@@ -13,6 +13,7 @@ const labelStyle = tv({
     },
     size: {
       xs: 'text-xs',
+      sm: 'text-sm',
       base: 'text-base',
       '2xl': 'text-2xl',
     },
@@ -24,10 +25,10 @@ const labelStyle = tv({
 })
 
 const containerStyle = tv({
-  base: '',
+  base: 'flex gap-1',
   variants: {
     layout: {
-      row: 'flex items-center gap-2',
+      row: 'items-center',
       column: 'flex-col',
     },
   },
@@ -38,25 +39,20 @@ const containerStyle = tv({
 
 const inputStyleSlots = tv({
   slots: {
-    containerInput: 'flex flex-row border border-placeholder',
+    containerInput:
+      'relative flex flex-1 flex-row border border-placeholder bg-light',
     input:
-      'remove-auto-fill font-poppings min-w-0 flex-1 p-3 text-base font-light text-dark placeholder:text-placeholder',
+      'remove-auto-fill font-poppings min-w-0 flex-1 font-light text-dark placeholder:text-placeholder',
   },
   variants: {
     size: {
       sm: {
         containerInput: 'h-6',
+        input: 'px-2 text-sm',
       },
       base: {
         containerInput: 'h-11',
-      },
-    },
-    theme: {
-      light: {
-        input: 'bg-light',
-      },
-      primaryLight: {
-        input: 'bg-light-primary',
+        input: 'px-3 text-base',
       },
     },
   },
@@ -74,7 +70,7 @@ export type InputType =
   | 'date'
   | 'plate'
 
-export interface InputProps extends React.ComponentProps<'input'> {
+export interface InputProps {
   label: string
   containerClassName?: string
   error?: string
@@ -84,6 +80,13 @@ export interface InputProps extends React.ComponentProps<'input'> {
   inputVariants?: VariantProps<typeof inputStyleSlots>
   items?: SelectItem[]
   loading?: boolean
+  name: string
+  disabled?: boolean
+  required?: boolean
+  placeholder?: string
+  value?: string
+  onChange?: React.ChangeEventHandler<HTMLElement>
+  onBlur?: React.FocusEventHandler<HTMLElement>
 }
 
 const inputComponentByType: { [key in InputType]: React.ElementType } = {
@@ -110,6 +113,7 @@ export function Input({
   disabled,
   required,
   type = 'text',
+  onChange,
   ...rest
 }: InputProps) {
   const { input: inputStyle, containerInput: containerInputStyle } =
@@ -122,7 +126,7 @@ export function Input({
   }
 
   const renderSelect = () => (
-    <select {...commonProps}>
+    <select {...commonProps} onChange={onChange}>
       <option key="" value="">
         {placeholder ?? 'Selecione um item'}
       </option>
@@ -143,28 +147,26 @@ export function Input({
         {...rest}
         type={type}
         placeholder={placeholder}
+        onChange={onChange}
       />
     )
   }
 
   return (
-    <div
-      className={containerStyle({
-        ...containerVariants,
-        className: containerClassName,
-      })}
-    >
-      <label htmlFor={name} className={labelStyle(labelVariants)}>
-        {required && <span className="text-error">*</span>}
-        {label}
-      </label>
-      <div className={containerInputStyle()}>
-        {items ? renderSelect() : renderInput()}
-        {loading && (
-          <div className="bg-white absolute right-0 flex h-full w-3 items-center">
-            <Spinner className="w-2 fill-dark" />
-          </div>
-        )}
+    <div className={containerClassName}>
+      <div className={containerStyle(containerVariants)}>
+        <label htmlFor={name} className={labelStyle(labelVariants)}>
+          {required && <span className="text-error">*</span>}
+          {label}
+        </label>
+        <div className={containerInputStyle()}>
+          {items ? renderSelect() : renderInput()}
+          {loading && (
+            <div className="absolute right-0 flex h-full w-4 items-center bg-light">
+              <Spinner className="w-3 fill-placeholder" />
+            </div>
+          )}
+        </div>
       </div>
       {!!error && <p className="-mb-1 mt-1 text-xs text-error">{error}</p>}
     </div>

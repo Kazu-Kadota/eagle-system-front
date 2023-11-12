@@ -1,8 +1,7 @@
 import { Control } from 'react-hook-form'
-import { Button, ControlledInput, SelectGroup } from 'src/components'
+import { Box, Button, ControlledInput, SelectGroup } from 'src/components'
 import { AnalysisType, UserType } from 'src/models'
 import { SelectItem } from 'src/types/select'
-import { cn } from 'src/utils/classNames'
 import { hasUserType } from 'src/utils/userType'
 import { returnNull } from 'src/utils/utils'
 import {
@@ -14,6 +13,7 @@ import {
   AnalysisArrayVehicleSchema,
   PlateHistorySchema,
 } from '../../pages/RequestAnalysis/schema'
+import { cn } from 'src/utils/classNames'
 
 interface VehiclesFormProps {
   analysisTypeLoading: AnalysisType | null
@@ -51,11 +51,15 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
   onRequestPlateHistoryAnalysis,
 }) => {
   const renderVehicleForm = () => (
-    <div
+    <form
       key={AnalysisType.VEHICLE}
-      className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-8"
+      className={cn(
+        'flex flex-col gap-4',
+        analysisType !== AnalysisType.COMBO && 'mt-4',
+      )}
+      onSubmit={onRequestAnalysis}
     >
-      <fieldset className="mt-3 flex-[2] lg:px-2">
+      <fieldset className="flex flex-col gap-4 xl:flex-row">
         {hasUserType(userType, UserType.ADMIN) &&
           analysisType !== AnalysisType.COMBO && (
             <ControlledInput
@@ -66,8 +70,10 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
               required
               items={companiesSelectItems}
               loading={companiesLoading}
-              inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+              inputVariants={{ size: 'sm' }}
+              labelVariants={{ size: 'sm' }}
               containerVariants={{ layout: 'row' }}
+              containerClassName="flex-1"
             />
           )}
         <ControlledInput
@@ -76,9 +82,14 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           placeholder="Nome"
           name={`vehicles.${index}.owner_name`}
           required
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
+          containerClassName="flex-[3]"
         />
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-4 xl:flex-row">
         <ControlledInput
           control={controlVehicle}
           label="CPF/CNPJ do Proprietário"
@@ -86,8 +97,10 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           name={`vehicles.${index}.owner_document`}
           type="cpfOrCnpj"
           required
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
         />
         <ControlledInput
           control={controlVehicle}
@@ -96,8 +109,10 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           name={`vehicles.${index}.plate`}
           required
           type="plate"
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
         />
         <ControlledInput
           control={controlVehicle}
@@ -105,92 +120,121 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           name={`vehicles.${index}.plate_state`}
           required
           items={estadosVehiclesSelectItems}
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
         />
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-4 xl:flex-row">
         <ControlledInput
           control={controlVehicle}
           label="Tipo de Veículo"
           name={`vehicles.${index}.vehicle_type`}
           required
           items={vehiclesTypesSelectItems}
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
-        />
-        <ControlledInput
-          control={controlVehicle}
-          label="Modelo do Véiculo"
-          placeholder="XXXXXXXXXX"
-          name={`vehicles.${index}.vehicle_modal`}
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
-          containerVariants={{ layout: 'row' }}
+          containerClassName="flex-[0_0_auto] min-w-[20rem]"
         />
         <ControlledInput
           control={controlVehicle}
           label="Nome do motorista"
           placeholder="Nome"
           name={`vehicles.${index}.driver_name`}
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
         />
+        <ControlledInput
+          control={controlVehicle}
+          label="Modelo do Véiculo"
+          placeholder="XXXXXXXXXX"
+          name={`vehicles.${index}.vehicle_modal`}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
+          containerVariants={{ layout: 'row' }}
+          containerClassName="flex-[0_0_auto] min-w-[30rem]"
+        />
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-4 xl:flex-row">
         <ControlledInput
           control={controlVehicle}
           label="Renavam"
           placeholder="XXXXXXXXXXXXXXXXXXXXXXX"
           name={`vehicles.${index}.renavam`}
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
         />
         <ControlledInput
           control={controlVehicle}
           label="Chassi"
           placeholder="XXXXXXXXXXXXXXX"
           name={`vehicles.${index}.chassis`}
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
         />
       </fieldset>
-      <div className="flex-1">
-        <div className="xs:gap-5 mb-1 flex flex-wrap justify-center gap-4 sm:flex-nowrap lg:mb-0 lg:w-max lg:flex-col lg:items-start">
-          {analysisType === AnalysisType.COMBO ? (
-            <>
-              {index === vehiclesLength - 1 && (
-                <Button
-                  onClick={addVehicleForm}
-                  className="shadow-3xl rounded-[0.2rem] lg:w-full"
-                >
-                  Adicionar veículo
-                </Button>
-              )}
-              {vehiclesLength > 1 && (
-                <Button
-                  onClick={() => removeVehicleForm(index)}
-                  className="shadow-3xl rounded-[0.2rem] lg:w-full"
-                >
-                  Remover veículo
-                </Button>
-              )}
-            </>
-          ) : (
-            <Button
-              onClick={onRequestAnalysis}
-              className="shadow-3xl rounded-[0.2rem] lg:w-full"
-              loading={analysisTypeLoading === AnalysisType.VEHICLE}
-            >
-              Solicitar análise de veículo
-            </Button>
-          )}
-        </div>
+      <div className="mt-2 flex items-center justify-center gap-3">
+        {analysisType === AnalysisType.COMBO ? (
+          <>
+            {vehiclesLength > 1 && (
+              <Button
+                theme="error"
+                size="xsStrong"
+                shadow="base"
+                className="min-w-[10rem] self-center"
+                onClick={() => removeVehicleForm(index)}
+              >
+                Remover veículo
+              </Button>
+            )}
+            {index === vehiclesLength - 1 && (
+              <Button
+                theme="placeholder"
+                size="xsStrong"
+                shadow="base"
+                className="min-w-[10rem] self-center"
+                onClick={addVehicleForm}
+              >
+                Adicionar veículo
+              </Button>
+            )}
+          </>
+        ) : (
+          <Button
+            type="submit"
+            theme="success"
+            size="xsStrong"
+            shadow="base"
+            className="min-w-[10rem] self-center"
+            loading={analysisTypeLoading === AnalysisType.VEHICLE}
+          >
+            Solicitar
+          </Button>
+        )}
       </div>
-    </div>
+    </form>
   )
 
   const renderPlateHistoryForm = () => (
-    <div
+    <form
       key={AnalysisType.VEHICLE_PLATE_HISTORY}
-      className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-8"
+      className={cn(
+        'flex flex-col gap-4',
+        analysisType !== AnalysisType.COMBO && 'mt-4',
+      )}
+      onSubmit={onRequestPlateHistoryAnalysis}
     >
-      <fieldset className="mt-3 flex-[2] lg:px-2">
+      <fieldset className="flex flex-col gap-4 xl:flex-row">
         {hasUserType(userType, UserType.ADMIN) &&
           analysisType !== AnalysisType.COMBO && (
             <ControlledInput
@@ -201,8 +245,10 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
               required
               items={companiesSelectItems}
               loading={companiesLoading}
-              inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+              inputVariants={{ size: 'sm' }}
+              labelVariants={{ size: 'sm' }}
               containerVariants={{ layout: 'row' }}
+              containerClassName="flex-1"
             />
           )}
         <ControlledInput
@@ -211,9 +257,14 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           placeholder="Nome"
           name="owner_name"
           required
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
+          containerClassName="flex-[3]"
         />
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-4 xl:flex-row">
         <ControlledInput
           control={controlPlateHistory}
           label="CPF/CNPJ do Proprietário"
@@ -221,8 +272,10 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           name="owner_document"
           type="cpfOrCnpj"
           required
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
         />
         <ControlledInput
           control={controlPlateHistory}
@@ -231,8 +284,10 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           name="plate"
           required
           type="plate"
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
         />
         <ControlledInput
           control={controlPlateHistory}
@@ -240,60 +295,61 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           name="plate_state"
           required
           items={estadosVehiclesSelectItems}
-          inputVariants={{ size: 'sm', theme: 'primaryLight' }}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
         />
       </fieldset>
-      <div className="flex-1">
-        <div className="xs:gap-5 mb-1 flex flex-wrap justify-center gap-4 sm:flex-nowrap lg:mb-0 lg:w-max lg:flex-col lg:items-start">
-          <Button
-            title=""
-            onClick={onRequestPlateHistoryAnalysis}
-            className="shadow-3xl rounded-[0.2rem] lg:w-full"
-            loading={analysisTypeLoading === AnalysisType.VEHICLE_PLATE_HISTORY}
-          >
-            Solicitar análise de veículo
-          </Button>
-        </div>
-      </div>
-    </div>
+
+      <Button
+        theme="success"
+        size="xsStrong"
+        shadow="base"
+        className="mt-2 min-w-[10rem] self-center"
+        loading={analysisTypeLoading === AnalysisType.VEHICLE_PLATE_HISTORY}
+        onClick={onRequestPlateHistoryAnalysis}
+      >
+        Solicitar
+      </Button>
+    </form>
   )
 
   return (
-    <div
-      className={cn(
-        'bg-modal relative px-4 pb-5 lg:px-6',
-        index === 0
-          ? 'mt-6 rounded-xl pt-5'
-          : 'z before:bg-modal rounded-b-xl before:absolute before:inset-x-0 before:-top-2 before:block before:h-2 after:absolute after:inset-0 after:-top-[0.2rem] after:block after:h-[1px] after:bg-primary',
-      )}
+    <Box
+      spacing="sm"
+      containerClassName={
+        analysisType !== AnalysisType.COMBO ? 'mb-2' : '-mb-4'
+      }
     >
       {index === 0 && (
-        <h2 className="mb-1 flex items-center gap-2 text-base font-bold text-primary">
-          Insira os dados do veículo nos campos abaixo
-        </h2>
+        <>
+          <h2 className="text-sm font-bold text-dark">
+            Insira os dados do veículo nos campos abaixo
+          </h2>
+          <small className="mb-4 mt-0.5 block text-placeholder/80">
+            Campos com * são obrigatórios para a solicitação
+          </small>
+        </>
       )}
+
       {analysisType !== AnalysisType.COMBO && (
         <SelectGroup
           title="Tipo da análise:"
+          layout="row"
           value={vehicleAnalysisType}
           onChange={onChangeVehicleAnalysisType}
           items={vehicleAnalysisSelectItems}
-          styleType="row"
-          className="mb-4 mt-5"
+          containerClassName="mb-2"
         />
       )}
-      {index === 0 && (
-        <small className=" text-primary/60">
-          Campos com * são obrigatórios para a solicitação
-        </small>
-      )}
+
       {{
         [AnalysisType.VEHICLE]: renderVehicleForm,
         [AnalysisType.VEHICLE_PLATE_HISTORY]: renderPlateHistoryForm,
         [AnalysisType.COMBO]: returnNull,
         [AnalysisType.PERSON]: returnNull,
       }[vehicleAnalysisType]()}
-    </div>
+    </Box>
   )
 }

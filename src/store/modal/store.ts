@@ -3,7 +3,7 @@ import { create } from 'zustand'
 
 interface ModalState {
   title: string
-  buttons: ButtonProps[]
+  buttons: Omit<ButtonProps, 'to'>[]
 }
 
 interface ModalActions {

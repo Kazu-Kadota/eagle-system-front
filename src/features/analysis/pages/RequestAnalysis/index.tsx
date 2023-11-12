@@ -1,11 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useCompanies } from 'src/features/auth'
 import { AnalysisType, RegionPersonAnalysis, UserType } from 'src/models'
+import { RoutePaths } from 'src/routes/paths'
 import { useAuthStore } from 'src/store/auth'
+import { useModal } from 'src/store/modal'
 import { getErrorMsg } from 'src/utils/errors'
 import { submitFormPromise } from 'src/utils/form'
 import { hasUserType } from 'src/utils/userType'
@@ -32,20 +34,22 @@ import {
   preparePersonData,
   prepareVehicleData,
 } from './utils'
-import { useModal } from 'src/store/modal'
 
 export type RequestAnalysisParams = {
   analysisType: AnalysisType
 }
 
 export function RequestAnalysisPage() {
+  const navigate = useNavigate()
+
   const modal = useModal()
   const { user } = useAuthStore()
 
   const [searchParams] = useSearchParams()
+  const analysisTypeFromUrl = searchParams.get('analysisType') as AnalysisType
 
   const [analysisType, setAnalysisType] = useState(
-    (searchParams.get('analysisType') as AnalysisType) ?? AnalysisType.PERSON,
+    analysisTypeFromUrl ?? AnalysisType.PERSON,
   )
   const [personAnalysis, setPersonAnalysis] = useState<RegionPersonAnalysis[]>(
     [],
@@ -66,19 +70,25 @@ export function RequestAnalysisPage() {
     enabled: hasUserType(user.user_type, UserType.ADMIN),
   })
 
-  const { control: controlPerson, handleSubmit: handleSubmitPerson } =
-    useForm<AnalysisPersonSchema>({
-      resolver: zodResolver(analysisPersonSchema),
-      values: { ...defaultPerson, ...formValuesOnlyForValidation },
-    })
+  const {
+    control: controlPerson,
+    reset: resetPerson,
+    handleSubmit: handleSubmitPerson,
+  } = useForm<AnalysisPersonSchema>({
+    resolver: zodResolver(analysisPersonSchema),
+    values: { ...defaultPerson, ...formValuesOnlyForValidation },
+  })
 
-  const { control: controlVehicle, handleSubmit: handleSubmitVehicle } =
-    useForm<AnalysisArrayVehicleSchema>({
-      resolver: zodResolver(analysisArrayVehicleSchema),
-      values: {
-        vehicles: [{ ...defaultVehicle, ...formValuesOnlyForValidation }],
-      },
-    })
+  const {
+    control: controlVehicle,
+    reset: resetVehicle,
+    handleSubmit: handleSubmitVehicle,
+  } = useForm<AnalysisArrayVehicleSchema>({
+    resolver: zodResolver(analysisArrayVehicleSchema),
+    values: {
+      vehicles: [{ ...defaultVehicle, ...formValuesOnlyForValidation }],
+    },
+  })
 
   const {
     fields: fieldsVehicle,
@@ -91,18 +101,32 @@ export function RequestAnalysisPage() {
 
   const {
     control: controlPlateHistory,
+    reset: resetPlateHistory,
     handleSubmit: handleSubmitPlateHistory,
   } = useForm<PlateHistorySchema>({
     resolver: zodResolver(plateHistorySchema),
     values: { ...defaultPlateHistory, ...formValuesOnlyForValidation },
   })
 
+  const handleClear = () => {
+    resetPerson()
+    resetVehicle()
+    resetPlateHistory()
+    setPersonAnalysis([])
+    setVehicleAnalysisType(AnalysisType.VEHICLE)
+    setAnalysisType(analysisTypeFromUrl ?? AnalysisType.PERSON)
+  }
+
   const onSuccessRequestAnalysis = () => {
     modal.open({
       title: 'Solicitação enviada!',
       buttons: [
-        { children: 'Fazer outra solicitação' },
-        { children: 'Ir para página inicial' },
+        { children: 'Fazer outra solicitação', onClick: handleClear },
+        {
+          children: 'Ir para página inicial',
+          theme: 'dark',
+          onClick: () => navigate(RoutePaths.Analysis.ANALYSIS_HOME),
+        },
       ],
     })
   }

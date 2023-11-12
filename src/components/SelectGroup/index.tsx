@@ -1,16 +1,34 @@
 import { SelectItem } from 'src/types/select'
-import { cn } from 'src/utils/classNames'
+import { VariantProps, tv } from 'tailwind-variants'
 
-type SelectGroupStyleType = 'col' | 'row'
+const style = tv({
+  slots: {
+    container: 'flex',
+    title: 'text-sm font-bold text-dark',
+  },
+  variants: {
+    layout: {
+      row: {
+        container: 'flex-row items-center gap-4',
+        title: '',
+      },
+      column: {
+        container: 'flex-col',
+        title: 'mb-1',
+      },
+    },
+  },
+  defaultVariants: {
+    layout: 'column',
+  },
+})
 
-interface SelectGroupProps<T> {
+interface SelectGroupProps<T> extends VariantProps<typeof style> {
   title: string
   error?: string
   items: SelectItem<T>[]
-  disabled?: boolean
-  styleType?: SelectGroupStyleType
-  className?: string
   value: T | undefined
+  containerClassName?: string
   onChange: (value: T) => void
 }
 
@@ -18,55 +36,35 @@ export const SelectGroup = <T extends string>({
   title,
   error,
   items,
-  disabled,
-  styleType = 'col',
-  className,
   value,
+  layout,
+  containerClassName,
   onChange,
 }: SelectGroupProps<T>) => {
+  const { container: containerStyle, title: titleStyle } = style({ layout })
+
   return (
-    <div
-      className={cn(
-        'flex flex-col',
-        styleType === 'row' ? 'gap-2 md:flex-row md:items-center md:gap-6' : '',
-        className,
-      )}
-      role="radiogroup"
-    >
-      <h2
-        className={
-          styleType === 'row'
-            ? 'mb-0 text-sm font-semibold'
-            : 'mb-2 text-base font-bold text-primary'
-        }
-      >
-        {title}
-      </h2>
+    <div className={containerStyle({ className: containerClassName })}>
+      <h2 className={titleStyle()}>{title}</h2>
       {items.map((item) => (
-        <div
+        <button
           key={item.value}
-          className={cn(
-            'relative flex items-center gap-[0.4rem]',
-            styleType === 'row' ? 'my-0' : ' my-2',
-          )}
+          role="radio"
+          type="button"
+          className="flex items-center gap-2 py-1"
+          onClick={() => onChange(item.value)}
         >
-          <input
-            id={item.value}
-            value={item.value}
-            checked={item.value === value}
-            onChange={() => onChange(item.value)}
-            type="radio"
-            className="h-4 w-4"
-          />
-          <label
-            htmlFor={item.value}
-            className={cn('text-sm', error ? 'text-error' : 'text-primary')}
-          >
+          {item.value === value ? (
+            <span className="h-4 w-4 bg-link" />
+          ) : (
+            <span className="h-4 w-4 border border-placeholder" />
+          )}
+          <span className="text-sm font-medium text-placeholder">
             {item.label}
-          </label>
-          {disabled && <span className="absolute inset-0 bg-[transparent]" />}
-        </div>
+          </span>
+        </button>
       ))}
+      {!!error && <p className="-mb-1 mt-1 text-xs text-error">{error}</p>}
     </div>
   )
 }

@@ -2,17 +2,16 @@ import dayjs from 'dayjs'
 import {
   AnalysisType,
   BackRegionPersonAnalysis,
-  PersonAnalysis,
   PersonAnalysisType,
   PersonRegionType,
   RegionPersonAnalysis,
 } from 'src/models'
+import { PersonAnalysisBody, VehicleAnalysisBody } from '../../services/request'
 import {
   AnalysisPersonSchema,
   AnalysisVehiclesSchema,
   PlateHistorySchema,
 } from './schema'
-import { PersonAnalysisBody, VehicleAnalysisBody } from '../../services/request'
 
 export const defaultVehicle: AnalysisVehiclesSchema = {
   owner_document: '',
@@ -63,9 +62,11 @@ export const preparePersonData = (
   rg: data.rg,
   security_number_cnh: data.security_number_cnh ?? '',
   state_rg: data.state_rg,
-  birth_date: data.birth_date ? dayjs(data.birth_date).toISOString() : '',
+  birth_date: data.birth_date
+    ? dayjs(data.birth_date, 'DD/MM/YYYY').toISOString()
+    : '',
   expire_at_cnh: data.expire_at_cnh
-    ? dayjs(data.expire_at_cnh).toISOString()
+    ? dayjs(data.expire_at_cnh, 'DD/MM/YYYY').toISOString()
     : '',
 })
 

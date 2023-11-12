@@ -1,7 +1,5 @@
 import React, { memo } from 'react'
-import ReactSelect from 'react-select'
-import { TimesIcon } from 'src/assets/icons'
-import { RadioGroupItem } from 'src/components'
+import { Box, MultiSelect, RadioGroupItem } from 'src/components'
 import {
   PersonAnalysisType,
   PersonRegionType,
@@ -90,20 +88,20 @@ export const AnalysisTypeSelectItem: React.FC<AnalysisTypeSelectItemProps> =
           type="button"
           key={item.value}
           onClick={() => onChangePersonAnalysis(setRegionType)}
-          className="flex items-center gap-2 transition-opacity hover:opacity-80"
+          className="flex items-center gap-2 py-1"
         >
-          <span className="flex h-[1.7rem] w-[1.7rem] items-center justify-center rounded-sm border-[1px] border-primary">
-            {personAnalysis?.region_type && (
-              <TimesIcon className="w-4 stroke-placeholder" />
-            )}
-          </span>
-          <span className="border-border flex flex-1 items-center gap-2 rounded-md border-[1px] px-2 py-[0.4rem] sm:flex-none">
-            <span className="text-sm font-bold text-primary">{item.label}</span>
+          {personAnalysis?.region_type ? (
+            <span className="h-4 w-4 bg-link" />
+          ) : (
+            <span className="h-4 w-4 border border-placeholder" />
+          )}
+          <span className="text-sm font-medium text-placeholder">
+            {item.label}
           </span>
         </button>
         {personAnalysis?.region_type &&
           personAnalysis.region_type !== PersonRegionType.CNH_STATUS && (
-            <div className="mt-2 flex flex-col gap-2">
+            <div className="mt-1 flex flex-col">
               {personAnalysisItems.map((radioItem) => (
                 <button
                   type="button"
@@ -113,34 +111,32 @@ export const AnalysisTypeSelectItem: React.FC<AnalysisTypeSelectItemProps> =
                       setAnalysisType(radioItem.value as PersonAnalysisType),
                     )
                   }
-                  className="flex items-center gap-2 transition-opacity hover:opacity-80"
+                  className="flex items-center gap-2 py-1"
                 >
-                  <span className="flex h-[1.7rem] w-[1.7rem] items-center justify-center rounded-sm border-[1px] border-primary">
-                    {personAnalysis.analysis_type.includes(
-                      radioItem.value as PersonAnalysisType,
-                    ) && <TimesIcon className="w-4 stroke-placeholder" />}
-                  </span>
-                  <span className="border-border flex flex-1 items-center gap-2 rounded-md border-[1px] px-2 py-[0.4rem] sm:flex-none">
-                    <span className="text-sm font-bold text-primary">
-                      {radioItem.label}
-                    </span>
+                  {personAnalysis.analysis_type.includes(
+                    radioItem.value as PersonAnalysisType,
+                  ) ? (
+                    <span className="h-4 w-4 bg-link" />
+                  ) : (
+                    <span className="h-4 w-4 border border-placeholder" />
+                  )}
+                  <span className="text-sm font-medium text-placeholder">
+                    {radioItem.label}
                   </span>
                 </button>
               ))}
             </div>
           )}
         {personAnalysis?.region_type === PersonRegionType.STATES && (
-          <div className="mt-4">
+          <div className="mt-3 max-w-[15rem]">
             <label
-              className="mb-2 block text-sm font-semibold"
+              className="mb-1 block text-sm font-semibold"
               htmlFor="region_states"
             >
               <span className="text-error">*</span>
               Estados da ánalise estadual
             </label>
-            <ReactSelect
-              isMulti
-              inputId="region_states"
+            <MultiSelect
               placeholder="Selecione os estados"
               options={estadosSelectItems as never}
               value={personAnalysis.regions.map((region) => ({
@@ -169,14 +165,14 @@ export const AnalysisTypeSelect: React.FC<AnalysisTypeSelectProps> = ({
   const items = showCNHStatus ? regionAnalysisItemsWithCNH : regionAnalysisItems
 
   return (
-    <div>
-      <h2 className="flex items-center gap-2 text-base font-bold text-primary">
+    <Box spacing="sm" containerClassName="mb-2">
+      <h2 className="text-sm font-bold text-dark">
         Selecione o tipo de análise de pessoa
       </h2>
-      <small className="mt-2 block text-primary/60">
+      <small className="mt-0.5 block text-placeholder/80">
         Você deve selecionar ao menos uma opção abaixo
       </small>
-      <div className="mt-4 flex max-w-3xl flex-col gap-[0.65rem] md:flex-row">
+      <div className="mt-3 flex max-w-3xl flex-col gap-[0.65rem] md:flex-row">
         {items.map((item) => (
           <AnalysisTypeSelectItem
             key={item.value}
@@ -188,6 +184,6 @@ export const AnalysisTypeSelect: React.FC<AnalysisTypeSelectProps> = ({
           />
         ))}
       </div>
-    </div>
+    </Box>
   )
 }

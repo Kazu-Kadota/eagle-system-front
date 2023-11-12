@@ -66,7 +66,7 @@ export const AnalysisTable = <T extends Analysis>({
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
-                      className="xs:text-sm h-[2.375rem] w-28 p-1 text-base font-bold text-dark"
+                      className="xs:text-sm h-[2.375rem] w-28 p-0.5 text-base font-bold text-dark"
                     >
                       {!header.isPlaceholder &&
                         flexRender(
@@ -92,7 +92,7 @@ export const AnalysisTable = <T extends Analysis>({
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className="h-[2.375rem] w-28 border-b border-line-light p-[0.36rem] text-xs font-medium uppercase"
+                      className="h-[2.375rem] w-28 border-b border-line-light p-0.5 text-xs font-medium uppercase"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

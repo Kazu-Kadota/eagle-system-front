@@ -12,7 +12,7 @@ export const analysisTypesItems: RadioGroupItem<AnalysisType>[] = [
     value: AnalysisType.VEHICLE,
   },
   {
-    label: 'Combo',
+    label: 'Combo (pessoa+frota)',
     value: AnalysisType.COMBO,
   },
 ]

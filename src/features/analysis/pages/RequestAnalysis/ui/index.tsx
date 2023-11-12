@@ -79,15 +79,14 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
 
   const renderPersonForm = () => (
     <>
-      <div className="bg-modal mt-5 rounded-xl px-4 pb-5 pt-4 lg:px-6">
-        <AnalysisTypeSelect
-          personAnalysis={personAnalysis}
-          showCNHStatus
-          onChangePersonAnalysis={onChangePersonAnalysis as never}
-        />
-      </div>
+      <AnalysisTypeSelect
+        personAnalysis={personAnalysis}
+        showCNHStatus
+        onChangePersonAnalysis={onChangePersonAnalysis as never}
+      />
       {showPersonForm() && (
         <PersonForm
+          key={analysisType}
           control={controlPerson}
           userType={userType}
           analysisTypeLoading={analysisTypeLoading}
@@ -102,7 +101,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
   const renderVehicleForm = () =>
     fieldsVehicle.map((field: VehicleField, index: number) => (
       <VehiclesForm
-        key={field.id}
+        key={field.id + analysisType}
         controlVehicle={controlVehicle}
         controlPlateHistory={controlPlateHistory}
         userType={userType}
@@ -123,15 +122,14 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
 
   const renderComboForm = () => (
     <>
-      <div className="bg-modal mt-5 rounded-xl px-4 pb-5 pt-4 lg:px-6">
-        <AnalysisTypeSelect
-          personAnalysis={personAnalysis}
-          onChangePersonAnalysis={onChangePersonAnalysis as never}
-        />
-      </div>
+      <AnalysisTypeSelect
+        personAnalysis={personAnalysis}
+        onChangePersonAnalysis={onChangePersonAnalysis as never}
+      />
       {showPersonForm() && (
         <>
           <PersonForm
+            key={analysisType}
             control={controlPerson}
             userType={userType}
             analysisTypeLoading={analysisTypeLoading}
@@ -142,7 +140,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
           />
           {fieldsVehicle.map((field: VehicleField, index: number) => (
             <VehiclesForm
-              key={field.id}
+              key={field.id + analysisType}
               controlVehicle={controlVehicle}
               userType={userType}
               analysisTypeLoading={analysisTypeLoading}
@@ -160,33 +158,32 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
               index={index}
             />
           ))}
-          <div className="mb-2 mt-7 flex w-full justify-center">
-            <Button
-              className="shadow-3xl rounded-[0.2rem]"
-              onClick={onRequestComboAnalysis}
-              loading={analysisTypeLoading === 'combo'}
-            >
-              Solicitar combo
-            </Button>
-          </div>
+          <Button
+            theme="success"
+            size="xsStrong"
+            shadow="base"
+            className="mt-10 min-h-[2rem] min-w-[10rem] self-center"
+            loading={analysisTypeLoading === AnalysisType.COMBO}
+            onClick={onRequestComboAnalysis}
+          >
+            Solicitar
+          </Button>
         </>
       )}
     </>
   )
 
   return (
-    <Box title="Solicitação de Análise" radius="sm">
-      <h1 className="xs:text-xl text-lg font-bold text-primary">
-        Solicitação de Análise
-      </h1>
-      <div className="bg-modal mt-5 rounded-xl px-4 pb-5 pt-4 lg:px-6">
+    <>
+      <Box title="Solicitação de Análise" radius="sm" containerClassName="mb-2">
         <SelectGroup
-          title="Escolha a categoria da análise"
+          title="Selecione a categoria da análise"
           items={analysisTypesItems}
           value={analysisType}
           onChange={onChangeAnalysisType}
         />
-      </div>
+      </Box>
+
       {!!analysisType &&
         {
           [AnalysisType.PERSON]: renderPersonForm,
@@ -194,6 +191,6 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
           [AnalysisType.VEHICLE_PLATE_HISTORY]: renderVehicleForm,
           [AnalysisType.COMBO]: renderComboForm,
         }[analysisType]()}
-    </Box>
+    </>
   )
 }

@@ -1,5 +1,5 @@
 import { env } from 'src/config/env'
-import { BackRegionPersonAnalysis, VehicleAnalysis } from 'src/models'
+import { BackRegionPersonAnalysis } from 'src/models'
 import { requestAuth } from 'src/utils/request'
 
 export type PersonAnalysisBody = {
