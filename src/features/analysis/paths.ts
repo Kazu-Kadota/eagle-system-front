@@ -4,6 +4,8 @@ import { PersonAnalysis, VehicleAnalysis } from 'src/models'
 
 export const AnalysisRoutePaths = {
   ANALYSIS_HOME: '/analises',
+  SEARCH_PEOPLE_ANALYSIS: '/analises/pessoas/consultar',
+  SEARCH_VEHICLE_ANALYSIS: '/analises/veiculos/consultar',
   requestAnalysis: (params?: RequestAnalysisParams) =>
     queryString.stringifyUrl({
       url: '/analises/solicitar',

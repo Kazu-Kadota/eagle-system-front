@@ -58,11 +58,17 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
           : 'Status da Análise de Pessoas'
       }
     >
-      <div className="mb-2 flex flex-col-reverse items-center gap-3 sm:mb-0 sm:flex-row">
+      <div className="mb-2 flex flex-col-reverse flex-wrap items-center gap-3 sm:mb-0 sm:flex-row">
         <Button theme="opaque" size="xxs" disabled shadow="base">
           Solicitada em{' '}
           {dayjs(person?.created_at).format('DD/MM/YYYY [às] HH:mm:ss')}
         </Button>
+        {!!person.finished_at && (
+          <Button theme="success" size="xxs" disabled shadow="base">
+            Respondida em{' '}
+            {dayjs(person.finished_at).format('DD/MM/YYYY [às] HH:mm:ss')}
+          </Button>
+        )}
         <Button
           theme={
             personRegionTypeButtonTheme[

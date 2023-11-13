@@ -29,6 +29,14 @@ const analysisTypeLabel = {
   [AnalysisType.COMBO]: 'Combo',
 }
 
+const analysisSearchRoute = {
+  [AnalysisType.PERSON]: RoutePaths.Analysis.SEARCH_PEOPLE_ANALYSIS,
+  [AnalysisType.VEHICLE]: RoutePaths.Analysis.SEARCH_VEHICLE_ANALYSIS,
+  [AnalysisType.VEHICLE_PLATE_HISTORY]:
+    RoutePaths.Analysis.SEARCH_VEHICLE_ANALYSIS,
+  [AnalysisType.COMBO]: RoutePaths.Analysis.SEARCH_PEOPLE_ANALYSIS,
+}
+
 function getTableActions(analysisType: AnalysisType, userType: UserType) {
   const label = analysisTypeLabel[analysisType]
 
@@ -37,7 +45,7 @@ function getTableActions(analysisType: AnalysisType, userType: UserType) {
       children: `Consultar Análise ${label}`,
       theme: 'placeholder',
       size: 'xs',
-      to: RoutePaths.Analysis.ANALYSIS_HOME,
+      to: analysisSearchRoute[analysisType],
     },
   ]
 

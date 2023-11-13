@@ -12,7 +12,7 @@ import { Analysis } from 'src/models'
 import { ValueOf } from 'src/types/utils'
 
 export interface TableProps<T> {
-  title: string
+  title?: string
   data: T[]
   columns: ColumnDef<T, ValueOf<T>>[]
   actions?: ButtonProps[]
@@ -46,16 +46,23 @@ export const AnalysisTable = <T extends Analysis>({
 
   return (
     <div className={className}>
-      <div className="flex flex-col flex-wrap items-center justify-center gap-x-5 gap-y-2 rounded-t-sm border-b border-line-light bg-light-gray px-4 py-2 md:flex-row md:justify-start">
-        <h3 className="text-white text-3xl font-extrabold">{title}</h3>
-        {actions && actions.length > 0 && (
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            {actions.map((action, index) => (
-              <Button key={index} className="px-3" shadow="base" {...action} />
-            ))}
-          </div>
-        )}
-      </div>
+      {!!title && (
+        <div className="flex flex-col flex-wrap items-center justify-center gap-x-5 gap-y-2 rounded-t-sm border-b border-line-light bg-light-gray px-4 py-2 md:flex-row md:justify-start">
+          <h3 className="text-white text-3xl font-extrabold">{title}</h3>
+          {actions && actions.length > 0 && (
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+              {actions.map((action, index) => (
+                <Button
+                  key={index}
+                  className="px-3"
+                  shadow="base"
+                  {...action}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="max-w-full overflow-x-auto">
         {data.length > 0 && (

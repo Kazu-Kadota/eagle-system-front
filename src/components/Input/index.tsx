@@ -39,9 +39,9 @@ const containerStyle = tv({
 
 const inputStyleSlots = tv({
   slots: {
-    containerInput: 'relative flex flex-1 flex-row',
+    containerInput: 'relative flex flex-1 flex-row overflow-hidden',
     input:
-      'remove-auto-fill font-poppings min-w-0 flex-1 !bg-[transparent] font-light text-dark placeholder:text-placeholder disabled:opacity-100',
+      'remove-auto-fill font-poppings w-full min-w-0 flex-1 !bg-[transparent] font-light text-dark placeholder:text-placeholder disabled:opacity-100',
   },
   variants: {
     size: {
@@ -49,8 +49,12 @@ const inputStyleSlots = tv({
         containerInput: 'h-6 min-h-[1.5rem]',
         input: 'px-2 text-sm',
       },
+      md: {
+        containerInput: 'h-7 min-h-[1.75rem]',
+        input: 'px-2 text-sm',
+      },
       base: {
-        containerInput: 'h-11',
+        containerInput: 'h-11 min-h-[2.75rem]',
         input: 'px-3 text-base',
       },
     },
@@ -79,7 +83,7 @@ export type InputType =
   | 'plate'
 
 export interface InputProps {
-  label: string
+  label?: string
   containerClassName?: string
   error?: string
   type?: InputType
@@ -170,10 +174,12 @@ export function Input({
   return (
     <div className={containerClassName}>
       <div className={containerStyle(containerVariants)}>
-        <label htmlFor={name} className={labelStyle(labelVariants)}>
-          {required && <span className="text-error">*</span>}
-          {label}
-        </label>
+        {!!label && (
+          <label htmlFor={name} className={labelStyle(labelVariants)}>
+            {required && <span className="text-error">*</span>}
+            {label}
+          </label>
+        )}
         <div className={containerInputStyle()}>
           {items ? renderSelect() : renderInput()}
           {loading && (

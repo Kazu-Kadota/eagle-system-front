@@ -3,7 +3,7 @@ import { VariantProps, tv } from 'tailwind-variants'
 
 const style = tv({
   slots: {
-    container: 'flex',
+    container: 'relative flex',
     title: 'text-sm font-bold text-dark',
   },
   variants: {
