@@ -1,10 +1,56 @@
-import { StarIcon } from 'src/assets/icons/StartIcon'
-import { Box, Link } from 'src/components'
+import { LinkBoxItem, LinksBox } from 'src/features/common/components'
+import { AnalysisType, PersonRegionType } from 'src/models'
+import { RoutePaths } from 'src/routes/paths'
 
-const links = [
-  { label: 'Solicitar Análise de Frota', path: '' },
-  { label: 'Solicitar Análise de Combo', path: '' },
-  { label: 'Consultar Análise de Frota', path: '' },
+const linksVehicles: LinkBoxItem[] = [
+  {
+    label: 'Solicitar Análise de Frota',
+    path: RoutePaths.Analysis.requestAnalysis({
+      analysisType: AnalysisType.VEHICLE,
+    }),
+  },
+  {
+    label: 'Solicitar Análise de Combo',
+    path: RoutePaths.Analysis.requestAnalysis({
+      analysisType: AnalysisType.COMBO,
+    }),
+  },
+  {
+    label: 'Consultar Análise de Frota',
+    path: RoutePaths.Analysis.SEARCH_VEHICLE_ANALYSIS,
+  },
+]
+
+const linksPeople: LinkBoxItem[] = [
+  {
+    label: 'Solicitar Análise Nacional',
+    path: RoutePaths.Analysis.requestAnalysis({
+      analysisType: AnalysisType.PERSON,
+      regionType: PersonRegionType.NATIONAL,
+    }),
+  },
+  {
+    label: 'Solicitar Análise Estadual',
+    path: RoutePaths.Analysis.requestAnalysis({
+      analysisType: AnalysisType.PERSON,
+      regionType: PersonRegionType.STATES,
+    }),
+  },
+  {
+    label: 'Consultar Análise de Pessoa',
+    path: RoutePaths.Analysis.SEARCH_PEOPLE_ANALYSIS,
+  },
+]
+
+const linksRegister: LinkBoxItem[] = [
+  {
+    label: 'Cadastrar Usuários',
+    path: '',
+  },
+  {
+    label: 'Cadastrar Empresas',
+    path: '',
+  },
 ]
 
 export function HomeUI() {
@@ -13,27 +59,11 @@ export function HomeUI() {
       <h2 className="text-3xl font-bold tracking-wider text-light md:text-4xl lg:text-5xl">
         Seja bem vindo ao Eagle
       </h2>
-      <Box
-        className="pt-5"
-        containerClassName="mt-6 h-44 max-w-xl md:mt-10"
-        radius="sm"
-      >
-        <div className="mb-2 flex items-center gap-1">
-          <StarIcon className="w-3 fill-primary" />
-          <h3 className="text-base font-bold text-dark">
-            Acesso Rápido à Frota
-          </h3>
-        </div>
-        {links.map((link) => (
-          <Link
-            key={link.label}
-            to={link.path}
-            className="my-0.5 pl-3 text-sm text-link"
-          >
-            {link.label}
-          </Link>
-        ))}
-      </Box>
+      <div className="mt-6 flex flex-col gap-8 md:mt-10">
+        <LinksBox title="Acesso Rápido à Frota" links={linksVehicles} />
+        <LinksBox title="Acesso Rápido à Pessoas" links={linksPeople} />
+        <LinksBox title="Acesso Rápido à Cadastros" links={linksRegister} />
+      </div>
     </>
   )
 }

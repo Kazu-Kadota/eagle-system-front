@@ -4,7 +4,12 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useCompanies } from 'src/features/auth'
-import { AnalysisType, RegionPersonAnalysis, UserType } from 'src/models'
+import {
+  AnalysisType,
+  PersonRegionType,
+  RegionPersonAnalysis,
+  UserType,
+} from 'src/models'
 import { RoutePaths } from 'src/routes/paths'
 import { useAuthStore } from 'src/store/auth'
 import { useModal } from 'src/store/modal'
@@ -37,6 +42,7 @@ import {
 
 export type RequestAnalysisParams = {
   analysisType: AnalysisType
+  regionType?: PersonRegionType
 }
 
 export function RequestAnalysisPage() {
@@ -47,12 +53,15 @@ export function RequestAnalysisPage() {
 
   const [searchParams] = useSearchParams()
   const analysisTypeFromUrl = searchParams.get('analysisType') as AnalysisType
+  const regionTypeFromUrl = searchParams.get('regionType') as PersonRegionType
 
   const [analysisType, setAnalysisType] = useState(
     analysisTypeFromUrl ?? AnalysisType.PERSON,
   )
   const [personAnalysis, setPersonAnalysis] = useState<RegionPersonAnalysis[]>(
-    [],
+    regionTypeFromUrl
+      ? [{ region_type: regionTypeFromUrl, analysis_type: [], regions: [] }]
+      : [],
   )
   const [vehicleAnalysisType, setVehicleAnalysisType] = useState(
     AnalysisType.VEHICLE,

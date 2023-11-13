@@ -18,11 +18,11 @@ const style = tv({
       purple: 'bg-purple',
     },
     size: {
-      xxs: 'h-7 text-xs font-semibold',
-      xs: 'h-7 text-sm font-medium',
-      xsStrong: 'h-8 text-sm font-bold',
-      sm: 'h-9 text-base font-bold',
-      md: 'h-11 text-xl font-bold',
+      xxs: 'min-h-[1.75rem] text-xs font-semibold',
+      xs: 'min-h-[1.75rem] text-sm font-medium',
+      xsStrong: 'min-h-[2rem] text-sm font-bold',
+      sm: 'min-h-[2.25rem] text-base font-bold',
+      md: 'min-h-[2.75rem] text-xl font-bold',
     },
     shadow: {
       base: 'shadow-button',
