@@ -20,7 +20,7 @@ import {
   vehiclesTypesSelectItems,
 } from 'src/features/analysis/constants/analysis'
 import { estadosVehiclesSelectItems } from 'src/features/analysis/constants/estados'
-import { UserType, VehicleAnalysis } from 'src/models'
+import { AnalysisStatus, UserType, VehicleAnalysis } from 'src/models'
 import { hasUserType } from 'src/utils/userType'
 import { AnalysisAnswerSchema } from '../schema'
 
@@ -60,11 +60,17 @@ export const VehicleAnalysisAnswerUI: React.FC<
           : 'Status da Análise de Veículo'
       }
     >
-      <div className="mb-2 flex flex-col-reverse items-center gap-3 sm:mb-0 sm:flex-row">
+      <div className="mb-2 flex flex-col-reverse flex-wrap items-center gap-3 sm:mb-0 sm:flex-row">
         <Button theme="opaque" size="xxs" disabled shadow="base">
           Solicitada em{' '}
           {dayjs(vehicle?.created_at).format('DD/MM/YYYY [às] HH:mm:ss')}
         </Button>
+        {!!vehicle.finished_at && (
+          <Button theme="success" size="xxs" disabled shadow="base">
+            Respondida em{' '}
+            {dayjs(vehicle.finished_at).format('DD/MM/YYYY [às] HH:mm:ss')}
+          </Button>
+        )}
         <Button
           theme={analysisTypeButtonTheme[vehicle.analysis_type]}
           size="xxs"
@@ -210,36 +216,33 @@ export const VehicleAnalysisAnswerUI: React.FC<
             Enviar
           </Button>
         </form>
-      ) : (
+      ) : isAdminOrOperator && vehicle.status === AnalysisStatus.FINISHED ? (
         <>
           <SelectGroup
-            title="Status"
-            value={vehicle.status}
-            disabled
+            title="Resultado da análise"
             required
+            disabled
             layout="row"
-            items={analysisStatusSelectItems}
-            containerClassName="mt-2"
+            value={vehicle.analysis_result}
+            items={analysisResultsSelectItems}
           />
-          {isAdminOrOperator && (
-            <>
-              <SelectGroup
-                title="Resultado da análise"
-                required
-                disabled
-                layout="row"
-                value={vehicle.analysis_result}
-                items={analysisResultsSelectItems}
-              />
-              <TextArea
-                label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
-                name="analysis_info"
-                disabled
-                value={vehicle.analysis_info}
-              />
-            </>
-          )}
+          <TextArea
+            label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
+            name="analysis_info"
+            disabled
+            value={vehicle.analysis_info}
+          />
         </>
+      ) : (
+        <SelectGroup
+          title="Status"
+          value={vehicle.status}
+          disabled
+          required
+          layout="row"
+          items={analysisStatusSelectItems}
+          containerClassName="mt-2"
+        />
       )}
     </Box>
   )

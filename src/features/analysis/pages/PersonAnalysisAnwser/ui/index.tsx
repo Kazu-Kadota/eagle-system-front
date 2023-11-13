@@ -20,7 +20,7 @@ import {
 import { cnhTypesSelectItems } from 'src/features/analysis/constants/cnh'
 import { estadosSelectItems } from 'src/features/analysis/constants/estados'
 import { getAnalysisTypeString } from 'src/features/analysis/utils/mappers'
-import { PersonAnalysis, UserType } from 'src/models'
+import { AnalysisStatus, PersonAnalysis, UserType } from 'src/models'
 import { hasUserType } from 'src/utils/userType'
 import { AnalysisAnswerSchema } from '../schema'
 
@@ -274,36 +274,33 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
             Enviar
           </Button>
         </form>
-      ) : (
+      ) : isAdminOrOperator && person.status === AnalysisStatus.FINISHED ? (
         <>
           <SelectGroup
-            title="Status"
-            value={person.status}
-            disabled
+            title="Resultado da análise"
             required
+            disabled
             layout="row"
-            items={analysisStatusSelectItems}
-            containerClassName="mt-2"
+            value={person.analysis_result}
+            items={analysisResultsSelectItems}
           />
-          {isAdminOrOperator && (
-            <>
-              <SelectGroup
-                title="Resultado da análise"
-                required
-                disabled
-                layout="row"
-                value={person.analysis_result}
-                items={analysisResultsSelectItems}
-              />
-              <TextArea
-                label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
-                name="analysis_info"
-                disabled
-                value={person.analysis_info}
-              />
-            </>
-          )}
+          <TextArea
+            label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
+            name="analysis_info"
+            disabled
+            value={person.analysis_info}
+          />
         </>
+      ) : (
+        <SelectGroup
+          title="Status"
+          value={person.status}
+          disabled
+          required
+          layout="row"
+          items={analysisStatusSelectItems}
+          containerClassName="mt-2"
+        />
       )}
     </Box>
   )

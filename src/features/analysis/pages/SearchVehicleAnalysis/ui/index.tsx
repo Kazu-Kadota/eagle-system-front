@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { Control } from 'react-hook-form'
 import { SearchIcon } from 'src/assets/icons'
 import {
@@ -10,34 +11,33 @@ import {
   TextArea,
 } from 'src/components'
 import { AnalysisTable } from 'src/features/analysis/components'
-import { AnalysisStatus, PersonAnalysis, UserType } from 'src/models'
-import { SelectItem } from 'src/types/select'
-import { hasUserType } from 'src/utils/userType'
-import { AnalysisPersonSearchSchema } from '../schema'
-import { columns } from './columns'
-import dayjs from 'dayjs'
 import {
   analysisResultsSelectItems,
   analysisStatusSelectItems,
-  personRegionTypeButtonTheme,
+  analysisTypeButtonLabel,
+  analysisTypeButtonTheme,
+  vehiclesTypesSelectItems,
 } from 'src/features/analysis/constants/analysis'
-import { getAnalysisTypeString } from 'src/features/analysis/utils/mappers'
-import { estadosSelectItems } from 'src/features/analysis/constants/estados'
-import { cnhTypesSelectItems } from 'src/features/analysis/constants/cnh'
+import { estadosVehiclesSelectItems } from 'src/features/analysis/constants/estados'
+import { AnalysisStatus, UserType, VehicleAnalysis } from 'src/models'
+import { SelectItem } from 'src/types/select'
+import { hasUserType } from 'src/utils/userType'
+import { AnalysisVehicleSearchSchema } from '../schema'
+import { columns } from './columns'
 
-interface SearchPersonAnalysisUIProps {
+interface SearchVehicleAnalysisUIProps {
   userType: UserType
   isLoading: boolean
-  control: Control<AnalysisPersonSearchSchema>
+  control: Control<AnalysisVehicleSearchSchema>
   companiesSelectItems: SelectItem[]
   companiesLoading: boolean
-  items: PersonAnalysis[] | null
-  selectedItem: PersonAnalysis | null
-  setSelectedItem: (item: PersonAnalysis) => void
+  items: VehicleAnalysis[] | null
+  selectedItem: VehicleAnalysis | null
+  setSelectedItem: (item: VehicleAnalysis) => void
   onSearchSubmit: () => void
 }
 
-export function SearchPersonAnalysisUI({
+export function SearchVehicleAnalysisUI({
   control,
   isLoading,
   userType,
@@ -47,13 +47,13 @@ export function SearchPersonAnalysisUI({
   selectedItem,
   setSelectedItem,
   onSearchSubmit,
-}: SearchPersonAnalysisUIProps) {
+}: SearchVehicleAnalysisUIProps) {
   return (
     <>
       <Box title="Consulta de Análise de Pessoa">
         <h2 className="text-sm font-bold text-dark">
-          Preencha os campos abaixo para consultar uma análise. O campo “CPF” é
-          obrigatório.
+          Preencha os campos abaixo para consultar uma análise. O campo “placa”
+          é obrigatório.
         </h2>
         <form
           className="mt-4 flex flex-col gap-5 md:max-w-lg md:flex-row md:items-center"
@@ -61,12 +61,20 @@ export function SearchPersonAnalysisUI({
         >
           <fieldset className="flex flex-[4] flex-col gap-4">
             <ControlledInput
-              placeholder="CPF"
-              name="searchDocument"
-              type="cpf"
+              placeholder="Placa"
+              name="plateSearch"
+              type="plate"
+              control={control}
               inputVariants={{ size: 'md' }}
               labelVariants={{ size: 'sm' }}
+            />
+            <ControlledInput
+              placeholder="Selecione um estado"
+              name="plateStateSearch"
+              items={estadosVehiclesSelectItems}
               control={control}
+              inputVariants={{ size: 'md' }}
+              labelVariants={{ size: 'sm' }}
             />
             {hasUserType(userType, UserType.ADMIN, UserType.OPERATOR) && (
               <ControlledInput
@@ -118,7 +126,7 @@ export function SearchPersonAnalysisUI({
           containerClassName="mt-3"
           className="flex flex-col gap-3 sm:gap-4"
         >
-          <div className="mb-2 flex flex-col-reverse items-center gap-3 sm:mb-0 sm:flex-row">
+          <div className="mb-2 flex flex-col-reverse flex-wrap items-center gap-3 sm:mb-0 sm:flex-row">
             <Button theme="opaque" size="xxs" disabled shadow="base">
               Solicitada em{' '}
               {dayjs(selectedItem?.created_at).format(
@@ -134,26 +142,22 @@ export function SearchPersonAnalysisUI({
               </Button>
             )}
             <Button
-              theme={
-                personRegionTypeButtonTheme[
-                  selectedItem.region_type ?? selectedItem.person_analysis_type
-                ]
-              }
+              theme={analysisTypeButtonTheme[selectedItem.analysis_type]}
               size="xxs"
               disabled
               shadow="base"
             >
-              Análise {getAnalysisTypeString(selectedItem)}
+              {analysisTypeButtonLabel[selectedItem.analysis_type]}
             </Button>
           </div>
 
           <Input
-            label="Nome:"
+            label="Nome do Proprietário"
             placeholder="Nome"
-            name="name"
-            value={selectedItem.name}
-            disabled
+            name="owner_name"
+            value={selectedItem.owner_name}
             required
+            disabled
             inputVariants={{ size: 'sm' }}
             labelVariants={{ size: 'sm' }}
             containerVariants={{ layout: 'row' }}
@@ -161,41 +165,38 @@ export function SearchPersonAnalysisUI({
 
           <InputRow>
             <Input
-              label="CPF:"
-              placeholder="XXX.XXX.XXX-XX"
-              name="document"
-              disabled
+              label="CPF/CNPJ do Proprietário"
+              placeholder="XX.XXX.XXX/XXXX-XX"
+              name="owner_document"
+              type="cpfOrCnpj"
               required
-              value={selectedItem?.document}
+              disabled
+              value={selectedItem.owner_document}
               inputVariants={{ size: 'sm' }}
               labelVariants={{ size: 'sm' }}
               containerVariants={{ layout: 'row' }}
               containerClassName="flex-1"
             />
             <Input
-              label="Data de Nascimento:"
-              name="birth_date"
-              placeholder="dd/mm/aaaa"
-              type="date"
-              disabled
+              label="Placa"
+              placeholder="XXXXXXX"
+              name="plate"
               required
-              value={
-                selectedItem?.birth_date
-                  ? dayjs(selectedItem.birth_date).format('DD/MM/YYYY')
-                  : ''
-              }
+              disabled
+              value={selectedItem.plate}
+              type="plate"
               inputVariants={{ size: 'sm' }}
               labelVariants={{ size: 'sm' }}
               containerVariants={{ layout: 'row' }}
               containerClassName="flex-1"
             />
             <Input
-              label="RG:"
-              placeholder="XXXXXXXXX"
-              name="rg"
-              disabled
+              label="Estado da Placa do veículo"
+              name="plate_state"
               required
-              value={selectedItem?.rg}
+              disabled
+              value={selectedItem.plate_state}
+              items={estadosVehiclesSelectItems}
               inputVariants={{ size: 'sm' }}
               labelVariants={{ size: 'sm' }}
               containerVariants={{ layout: 'row' }}
@@ -205,60 +206,23 @@ export function SearchPersonAnalysisUI({
 
           <InputRow>
             <Input
-              label="Estado de Emissão:"
-              name="state_rg"
-              items={estadosSelectItems}
-              disabled
+              label="Tipo de Veículo"
+              name="vehicle_type"
               required
-              value={selectedItem?.state_rg}
+              disabled
+              value={selectedItem.vehicle_type}
+              items={vehiclesTypesSelectItems}
               inputVariants={{ size: 'sm' }}
               labelVariants={{ size: 'sm' }}
               containerVariants={{ layout: 'row' }}
               containerClassName="flex-[0_0_auto] min-w-[20rem]"
             />
             <Input
-              label="Nome da mãe:"
+              label="Nome do motorista"
               placeholder="Nome"
-              name="mother_name"
+              name="driver_name"
               disabled
-              required
-              value={selectedItem?.mother_name}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-[3]"
-            />
-          </InputRow>
-
-          <InputRow>
-            <Input
-              label="Nome do pai:"
-              placeholder="Nome"
-              name="father_name"
-              disabled
-              value={selectedItem?.father_name}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-[1.5]"
-            />
-            <Input
-              label="Naturalidade:"
-              placeholder="XXXXXXXXX"
-              name="naturalness"
-              disabled
-              value={selectedItem?.naturalness}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-            <Input
-              label="Número da CNH:"
-              placeholder="XXXXXXXXX"
-              name="cnh"
-              disabled
-              value={selectedItem?.cnh}
+              value={selectedItem.driver_name}
               inputVariants={{ size: 'sm' }}
               labelVariants={{ size: 'sm' }}
               containerVariants={{ layout: 'row' }}
@@ -268,38 +232,22 @@ export function SearchPersonAnalysisUI({
 
           <InputRow>
             <Input
-              label="Número de segurança da CNH:"
-              placeholder="XXXXXXXXX"
-              name="security_number_cnh"
+              label="Renavam"
+              placeholder="XXXXXXXXXXXXXXXXXXXXXXX"
+              name="renavam"
               disabled
-              value={selectedItem?.security_number_cnh}
+              value={selectedItem.renavam}
               inputVariants={{ size: 'sm' }}
               labelVariants={{ size: 'sm' }}
               containerVariants={{ layout: 'row' }}
               containerClassName="flex-1"
             />
             <Input
-              label="Categoria da CNH:"
-              name="category_cnh"
-              items={cnhTypesSelectItems}
+              label="Chassi"
+              placeholder="XXXXXXXXXXXXXXX"
+              name="chassi"
               disabled
-              value={selectedItem?.category_cnh}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-            <Input
-              label="Data de validade da CNH:"
-              name="expire_at_cnh"
-              type="date"
-              placeholder="dd/mm/aaaa"
-              disabled
-              value={
-                selectedItem?.expire_at_cnh
-                  ? dayjs(selectedItem.expire_at_cnh).format('DD/MM/YYYY')
-                  : ''
-              }
+              value={selectedItem.chassis}
               inputVariants={{ size: 'sm' }}
               labelVariants={{ size: 'sm' }}
               containerVariants={{ layout: 'row' }}

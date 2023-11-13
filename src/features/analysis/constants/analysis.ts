@@ -69,8 +69,8 @@ export const analysisResultsSelectItems: SelectItem<AnalysisResult>[] = [
 ]
 
 export const analysisStatusSelectItems: SelectItem<AnalysisStatus>[] = [
-  { label: 'Processando', value: AnalysisStatus.PROCESSING },
   { label: 'Aguardando', value: AnalysisStatus.WAITING },
+  { label: 'Processando', value: AnalysisStatus.PROCESSING },
   { label: 'Finalizado', value: AnalysisStatus.FINISHED },
 ]
 
