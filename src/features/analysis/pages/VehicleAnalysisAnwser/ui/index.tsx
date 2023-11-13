@@ -61,16 +61,16 @@ export const VehicleAnalysisAnswerUI: React.FC<
       }
     >
       <div className="mb-2 flex flex-col-reverse flex-wrap items-center gap-3 sm:mb-0 sm:flex-row">
-        <Button theme="opaque" size="xxs" disabled shadow="base">
-          Solicitada em{' '}
-          {dayjs(vehicle?.created_at).format('DD/MM/YYYY [às] HH:mm:ss')}
-        </Button>
         {!!vehicle.finished_at && (
-          <Button theme="success" size="xxs" disabled shadow="base">
+          <Button theme="purple" size="xxs" disabled shadow="base">
             Respondida em{' '}
             {dayjs(vehicle.finished_at).format('DD/MM/YYYY [às] HH:mm:ss')}
           </Button>
         )}
+        <Button theme="opaque" size="xxs" disabled shadow="base">
+          Solicitada em{' '}
+          {dayjs(vehicle?.created_at).format('DD/MM/YYYY [às] HH:mm:ss')}
+        </Button>
         <Button
           theme={analysisTypeButtonTheme[vehicle.analysis_type]}
           size="xxs"

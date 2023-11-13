@@ -15,6 +15,7 @@ const style = tv({
       blue: 'bg-blue',
       opaque: 'bg-opaque',
       brown: 'bg-brown',
+      purple: 'bg-purple',
     },
     size: {
       xxs: 'h-7 text-xs font-semibold',

@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import { Box, MultiSelect, RadioGroupItem } from 'src/components'
+import { Box, MultiSelect } from 'src/components'
 import {
   PersonAnalysisType,
   PersonRegionType,
@@ -12,6 +12,7 @@ import {
   regionAnalysisItemsWithCNH,
 } from '../../constants/analysis'
 import { estadosSelectItems } from '../../constants/estados'
+import { SelectItem } from 'src/types/select'
 
 interface AnalysisTypeSelectProps {
   personAnalysis: RegionPersonAnalysis[]
@@ -24,7 +25,7 @@ interface AnalysisTypeSelectProps {
 }
 
 interface AnalysisTypeSelectItemProps {
-  item: RadioGroupItem
+  item: SelectItem
   personAnalysis: RegionPersonAnalysis | undefined
   onChangePersonAnalysis: (
     items:

@@ -1,4 +1,3 @@
-import { RadioGroupItem } from 'src/components'
 import {
   AnalysisResult,
   AnalysisStatus,
@@ -8,7 +7,7 @@ import {
 } from 'src/models'
 import { SelectItem } from 'src/types/select'
 
-export const analysisTypesItems: RadioGroupItem<AnalysisType>[] = [
+export const analysisTypesItems: SelectItem<AnalysisType>[] = [
   {
     label: 'Pessoa',
     value: AnalysisType.PERSON,
@@ -23,7 +22,7 @@ export const analysisTypesItems: RadioGroupItem<AnalysisType>[] = [
   },
 ]
 
-export const personAnalysisItems: RadioGroupItem[] = [
+export const personAnalysisItems: SelectItem[] = [
   {
     label: 'Simples',
     value: PersonAnalysisType.SIMPLE,
@@ -34,7 +33,7 @@ export const personAnalysisItems: RadioGroupItem[] = [
   },
 ]
 
-export const regionAnalysisItems: RadioGroupItem[] = [
+export const regionAnalysisItems: SelectItem[] = [
   {
     label: 'Análise Estadual',
     value: PersonRegionType.STATES,
@@ -45,7 +44,7 @@ export const regionAnalysisItems: RadioGroupItem[] = [
   },
 ]
 
-export const regionAnalysisItemsWithCNH: RadioGroupItem[] = [
+export const regionAnalysisItemsWithCNH: SelectItem[] = [
   ...regionAnalysisItems,
   {
     label: 'Status da CNH',

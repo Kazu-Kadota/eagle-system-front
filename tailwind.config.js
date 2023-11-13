@@ -14,6 +14,7 @@ export default {
       accent: '#36448A',
       opaque: '#6A8D94',
       brown: '#7B4302',
+      purple: '#7F6A94',
       'light-primary': '#F8E1B5',
       'light-gray': '#E8E8E8',
       'line-light': '#D2D1D0',

@@ -119,20 +119,20 @@ export function SearchPersonAnalysisUI({
           className="flex flex-col gap-3 sm:gap-4"
         >
           <div className="mb-2 flex flex-col-reverse items-center gap-3 sm:mb-0 sm:flex-row">
-            <Button theme="opaque" size="xxs" disabled shadow="base">
-              Solicitada em{' '}
-              {dayjs(selectedItem?.created_at).format(
-                'DD/MM/YYYY [às] HH:mm:ss',
-              )}
-            </Button>
             {!!selectedItem.finished_at && (
-              <Button theme="success" size="xxs" disabled shadow="base">
+              <Button theme="purple" size="xxs" disabled shadow="base">
                 Respondida em{' '}
                 {dayjs(selectedItem.finished_at).format(
                   'DD/MM/YYYY [às] HH:mm:ss',
                 )}
               </Button>
             )}
+            <Button theme="opaque" size="xxs" disabled shadow="base">
+              Solicitada em{' '}
+              {dayjs(selectedItem?.created_at).format(
+                'DD/MM/YYYY [às] HH:mm:ss',
+              )}
+            </Button>
             <Button
               theme={
                 personRegionTypeButtonTheme[
