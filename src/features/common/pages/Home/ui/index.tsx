@@ -45,7 +45,7 @@ const linksPeople: LinkBoxItem[] = [
 const linksRegister: LinkBoxItem[] = [
   {
     label: 'Cadastrar Usuários',
-    path: '',
+    path: RoutePaths.Auth.REGISTER_USER,
   },
   {
     label: 'Cadastrar Empresas',

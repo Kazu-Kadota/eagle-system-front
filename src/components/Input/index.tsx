@@ -117,7 +117,7 @@ export function Input({
   error,
   labelVariants,
   containerVariants,
-  inputVariants,
+  inputVariants = {},
   containerClassName,
   items,
   placeholder,
@@ -166,6 +166,7 @@ export function Input({
         {...commonProps}
         {...rest}
         type={type}
+        size={inputVariants.size}
         placeholder={placeholder}
       />
     )

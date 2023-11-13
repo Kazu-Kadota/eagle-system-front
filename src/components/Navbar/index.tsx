@@ -12,7 +12,7 @@ const navlinks: NavbarItemProps[] = [
   { label: 'Home', path: RoutePaths.Common.HOME },
   { label: 'Análises', path: RoutePaths.Analysis.ANALYSIS_HOME },
   { label: 'Relatórios', path: '/relatorios' },
-  { label: 'Gerenciamento\nde Usuários', path: '/gerenciamento-de-usuarios' },
+  { label: 'Gerenciamento\nde Usuários', path: RoutePaths.Auth.REGISTER_HOME },
   { label: 'Minha Conta', path: 'minha-conta' },
 ]
 

@@ -1,8 +1,34 @@
 import { useState } from 'react'
 import { EyeHiddenIcon, EyeIcon } from 'src/assets/icons'
+import { VariantProps, tv } from 'tailwind-variants'
 
-export function PasswordInput(props: React.ComponentProps<'input'>) {
+const iconSlotsStyle = tv({
+  slots: {
+    containerIcon: 'outline-none hover:opacity-60',
+    icon: 'fill-dark',
+  },
+  variants: {
+    size: {
+      sm: { containerIcon: 'px-1', icon: 'w-5' },
+      md: { containerIcon: 'px-2', icon: 'w-6' },
+      base: { containerIcon: 'px-3', icon: 'w-7' },
+    },
+  },
+  defaultVariants: {
+    size: 'base',
+  },
+})
+
+interface PasswordInputProps
+  extends Omit<React.ComponentProps<'input'>, 'size'>,
+    VariantProps<typeof iconSlotsStyle> {}
+
+export function PasswordInput({ size, ...props }: PasswordInputProps) {
   const [passwordShown, setPasswordShown] = useState(false)
+
+  const { icon: iconStyle, containerIcon: containerIconStyle } = iconSlotsStyle(
+    { size },
+  )
 
   return (
     <>
@@ -10,12 +36,12 @@ export function PasswordInput(props: React.ComponentProps<'input'>) {
       <button
         onClick={() => setPasswordShown(!passwordShown)}
         type="button"
-        className="px-3 outline-none hover:opacity-60"
+        className={containerIconStyle()}
       >
         {passwordShown ? (
-          <EyeHiddenIcon className="fill-dark w-7" />
+          <EyeHiddenIcon className={iconStyle()} />
         ) : (
-          <EyeIcon className="fill-dark w-7" />
+          <EyeIcon className={iconStyle()} />
         )}
       </button>
     </>
