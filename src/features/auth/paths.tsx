@@ -6,6 +6,7 @@ export const AuthRoutePaths = {
   RESET_PASSWORD: '/redefinir-senha',
   REGISTER_HOME: '/gerenciamento-de-usuarios',
   REGISTER_USER: '/gerenciamento-de-usuarios/cadastrar-usuario',
+  REGISTER_COMPANY: '/gerenciamento-de-usuarios/cadastrar-empresa',
   login: (params?: LoginParams) =>
     qs.stringifyUrl({ url: '/login', query: params }),
 }

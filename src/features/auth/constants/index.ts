@@ -1,4 +1,4 @@
-import { UserType } from 'src/models'
+import { CompanyType, UserType } from 'src/models'
 import { SelectItem } from 'src/types/select'
 
 export const registerUserTypeSelectItems: SelectItem<UserType>[] = [
@@ -10,4 +10,9 @@ export const registerUserTypeSelectItems: SelectItem<UserType>[] = [
 export const userApiSelectItems: SelectItem[] = [
   { label: 'Sim', value: 'true' },
   { label: 'Não', value: 'false' },
+]
+
+export const companyTypeSelectItems: SelectItem<CompanyType>[] = [
+  { label: 'Cliente', value: CompanyType.CLIENT },
+  { label: 'Fonte', value: CompanyType.FONT },
 ]

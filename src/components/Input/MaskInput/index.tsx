@@ -1,4 +1,10 @@
-import { maskCpf, maskCpfOrCnpj, maskDate, maskPlate } from 'src/utils/masks'
+import {
+  maskCnpj,
+  maskCpf,
+  maskCpfOrCnpj,
+  maskDate,
+  maskPlate,
+} from 'src/utils/masks'
 import { identity } from 'src/utils/utils'
 import { InputType } from '..'
 
@@ -8,6 +14,7 @@ interface MaskInputProps extends React.ComponentProps<'input'> {
 
 const maskFnByType: { [key in InputType]: (value: string) => string } = {
   cpf: maskCpf,
+  cnpj: maskCnpj,
   cpfOrCnpj: maskCpfOrCnpj,
   date: maskDate,
   plate: maskPlate,

@@ -5,6 +5,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --toastify-color-success: theme(colors.success);
+  --toastify-color-error: theme(colors.error);
+}
+
 .remove-auto-fill {
   transition-delay: 9999s;
 }
@@ -19,6 +24,6 @@ body {
   background-color: theme(colors.dark);
 }
 
-input[type=checkbox] {
+input[type='checkbox'] {
   accent-color: theme(colors.blue);
 }

@@ -78,6 +78,7 @@ export type InputType =
   | 'password'
   | 'email'
   | 'cpf'
+  | 'cnpj'
   | 'cpfOrCnpj'
   | 'date'
   | 'plate'
@@ -106,6 +107,7 @@ const inputComponentByType: { [key in InputType]: React.ElementType } = {
   email: 'input',
   password: PasswordInput,
   cpf: MaskInput,
+  cnpj: MaskInput,
   cpfOrCnpj: MaskInput,
   date: MaskInput,
   plate: MaskInput,

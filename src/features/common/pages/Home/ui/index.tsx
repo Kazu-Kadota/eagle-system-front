@@ -49,7 +49,7 @@ const linksRegister: LinkBoxItem[] = [
   },
   {
     label: 'Cadastrar Empresas',
-    path: '',
+    path: RoutePaths.Auth.REGISTER_COMPANY,
   },
 ]
 

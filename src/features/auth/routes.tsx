@@ -6,6 +6,7 @@ import { ResetPasswordPage } from './pages/ResetPassword'
 import { AuthRoutePaths } from './paths'
 import { RegisterHomePage } from './pages/RegisterHome'
 import { RegisterUserPage } from './pages/RegisterUser'
+import { RegisterCompanyPage } from './pages/RegisterCompany'
 
 export const authRoutes: RouteObject[] = [
   {
@@ -35,5 +36,9 @@ export const authProtectedRoutes: RouteObject[] = [
   {
     path: AuthRoutePaths.REGISTER_USER,
     element: <RegisterUserPage />,
+  },
+  {
+    path: AuthRoutePaths.REGISTER_COMPANY,
+    element: <RegisterCompanyPage />,
   },
 ]
