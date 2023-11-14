@@ -1,9 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
-import { useNavigate, useSearchParams } from 'react-router-dom'
 import { login } from 'src/features/auth/services/login'
-import { RoutePaths } from 'src/routes/paths'
 import { useAuthStore } from 'src/store/auth'
 import { LoginSchema, schema } from './schema'
 import { LoginUI } from './ui'
@@ -13,9 +11,6 @@ export type LoginParams = {
 }
 
 export function LoginPage() {
-  const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
-
   const setAuthState = useAuthStore((state) => state.setState)
 
   const { control, handleSubmit } = useForm<LoginSchema>({
@@ -29,10 +24,7 @@ export function LoginPage() {
     mutate: loginMutate,
   } = useMutation({
     mutationFn: login,
-    onSuccess: (data) => {
-      setAuthState(data)
-      navigate(searchParams.get('navigateTo') || RoutePaths.Common.HOME)
-    },
+    onSuccess: (data) => setAuthState(data),
   })
 
   return (

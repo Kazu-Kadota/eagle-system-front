@@ -1,24 +1,41 @@
+import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Logo, LogoutIcon } from 'src/assets/icons'
 import { useToggle } from 'src/hooks'
+import { UserType } from 'src/models'
 import { RoutePaths } from 'src/routes/paths'
+import { useAuthStore } from 'src/store/auth'
 import { cn } from 'src/utils/classNames'
 import { clearStorage } from 'src/utils/logout'
+import { hasUserType } from 'src/utils/userType'
 import { MobileTopbar } from './MobileTopbar'
 import { NavButton } from './NavButton'
 import { NavbarItem, NavbarItemProps } from './NavbarItem'
 
-const navlinks: NavbarItemProps[] = [
+interface NavbarLinks extends NavbarItemProps {
+  userTypes?: UserType[]
+}
+
+const navlinks: NavbarLinks[] = [
   { label: 'Home', path: RoutePaths.Common.HOME },
   { label: 'Análises', path: RoutePaths.Analysis.ANALYSIS_HOME },
-  { label: 'Relatórios', path: '/relatorios' },
-  { label: 'Gerenciamento\nde Usuários', path: RoutePaths.Auth.REGISTER_HOME },
+  {
+    label: 'Relatórios',
+    path: '/relatorios',
+    userTypes: [UserType.ADMIN, UserType.CLIENT],
+  },
+  {
+    label: 'Gerenciamento\nde Usuários',
+    path: RoutePaths.Auth.REGISTER_HOME,
+    userTypes: [UserType.ADMIN],
+  },
   { label: 'Minha Conta', path: RoutePaths.Auth.ACCOUNT_HOME },
 ]
 
 export function Navbar() {
   const navigate = useNavigate()
 
+  const userType = useAuthStore((state) => state.user.user_type)
   const [isNavbarOpen, toggleNavbarOpen, setNavbarOpen] = useToggle(false)
 
   const closeNavbar = () => setNavbarOpen(false)
@@ -27,6 +44,23 @@ export function Navbar() {
     clearStorage()
     navigate(RoutePaths.Auth.login())
   }
+
+  const links = useMemo(
+    () =>
+      navlinks
+        .filter(
+          (navlink) =>
+            !navlink.userTypes || hasUserType(userType, ...navlink.userTypes),
+        )
+        .map((navlink) => (
+          <NavbarItem
+            key={navlink.label}
+            closeNavbar={closeNavbar}
+            {...navlink}
+          />
+        )),
+    [userType],
+  )
 
   return (
     <>
@@ -43,13 +77,7 @@ export function Navbar() {
       >
         <Logo className="mb-5 self-center" />
 
-        {navlinks.map((navlink) => (
-          <NavbarItem
-            key={navlink.label}
-            closeNavbar={closeNavbar}
-            {...navlink}
-          />
-        ))}
+        {links}
 
         <div className="flex-1" />
 

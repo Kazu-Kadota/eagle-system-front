@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { Analysis, PersonAnalysis, VehicleAnalysis } from 'src/models'
 
 export const personNameKeys: { [key in keyof PersonAnalysis]: string } = {
@@ -27,6 +28,7 @@ export const personNameKeys: { [key in keyof PersonAnalysis]: string } = {
   combo_number: 'Número de combo',
   finished_at: 'Data de finalização',
   region: 'Região',
+  updated_at: 'Data de atualização',
 }
 
 export const vehicleNameKeys: { [key in keyof VehicleAnalysis]: string } = {
@@ -47,10 +49,12 @@ export const vehicleNameKeys: { [key in keyof VehicleAnalysis]: string } = {
   user_id: 'ID do usuário',
   vehicle_id: 'ID da pessoa',
   vehicle_type: 'Tipo de veículo',
+  updated_at: 'Data de atualização',
 }
 
 export const keysToRemove = [
   'created_at',
+  'updated_at',
   'analysis_type',
   'status',
   'person_id',
@@ -64,6 +68,22 @@ export const keysToRemove = [
   'region',
 ]
 
+export const keysDateToFormat = [
+  'birth_date',
+  'expire_at_cnh',
+  'finished_at',
+  'created_at',
+  'updated_at',
+]
+
+const formatValue = (key: string, value: string) => {
+  if (keysDateToFormat.includes(key)) {
+    return dayjs(value).format('DD/MM/YYYY')
+  }
+
+  return value
+}
+
 const getClipboardString = <T extends Analysis>(
   item: T,
   nameKeys: Record<string, string>,
@@ -75,7 +95,11 @@ const getClipboardString = <T extends Analysis>(
 
     const name = nameKeys[key] ?? key
 
-    return `${string}${name.toUpperCase()}: ${String(value).toUpperCase()}\n`
+    const label = `${string}${name.toUpperCase()}`
+    const uppercaseValue = String(value).toUpperCase()
+    const formattedValue = formatValue(key, uppercaseValue)
+
+    return `${label}: ${formattedValue}\n`
   }, '')
 
 export const copyPersonToClipboard = (person: Analysis) =>

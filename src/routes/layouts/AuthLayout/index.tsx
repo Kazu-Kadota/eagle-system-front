@@ -1,14 +1,17 @@
 import { memo } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useSearchParams } from 'react-router-dom'
 import { LogoTriangle } from 'src/assets/icons'
 import { RoutePaths } from 'src/routes/paths'
 import { useAuthStore } from 'src/store/auth'
 
 export const AuthLayout = memo(() => {
+  const [searchParams] = useSearchParams()
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   if (isLoggedIn) {
-    return <Navigate to={RoutePaths.Common.HOME} />
+    return (
+      <Navigate to={searchParams.get('navigateTo') ?? RoutePaths.Common.HOME} />
+    )
   }
 
   return (

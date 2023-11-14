@@ -41,6 +41,7 @@ export type Analysis = {
   analysis_result: AnalysisResult
   user_id: string
   company_name: string
+  updated_at: string
 }
 
 export type PersonAnalysis = Analysis & {

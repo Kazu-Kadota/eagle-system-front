@@ -44,7 +44,7 @@ export const Modal = memo(() => {
   return (
     <Fade
       isVisible={isOpen}
-      className="fixed inset-0 flex items-center justify-center px-3 pb-[20vh] md:pl-56 xl:pl-8"
+      className="fixed inset-0 z-30 flex items-center justify-center px-3 pb-[20vh]"
     >
       <div
         className="fixed inset-0 bg-dark/80"

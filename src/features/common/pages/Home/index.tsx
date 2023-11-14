@@ -1,5 +1,8 @@
+import { useAuthStore } from 'src/store/auth'
 import { HomeUI } from './ui'
 
 export function HomePage() {
-  return <HomeUI />
+  const { user } = useAuthStore()
+
+  return <HomeUI userType={user.user_type} />
 }

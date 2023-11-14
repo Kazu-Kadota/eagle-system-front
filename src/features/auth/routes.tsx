@@ -1,4 +1,6 @@
 import { RouteObject } from 'react-router-dom'
+import { UserType } from 'src/models'
+import { AccessGuardLayout } from 'src/routes/layouts/AccessGuardLayout'
 import { AuthLayout } from 'src/routes/layouts/AuthLayout'
 import { AccountHomePage } from './pages/AccountHome'
 import { ForgotPasswordPage } from './pages/ForgotPassword'
@@ -31,16 +33,21 @@ export const authRoutes: RouteObject[] = [
 
 export const authProtectedRoutes: RouteObject[] = [
   {
-    path: AuthRoutePaths.REGISTER_HOME,
-    element: <RegisterHomePage />,
-  },
-  {
-    path: AuthRoutePaths.REGISTER_USER,
-    element: <RegisterUserPage />,
-  },
-  {
-    path: AuthRoutePaths.REGISTER_COMPANY,
-    element: <RegisterCompanyPage />,
+    element: <AccessGuardLayout userTypes={[UserType.ADMIN]} />,
+    children: [
+      {
+        path: AuthRoutePaths.REGISTER_HOME,
+        element: <RegisterHomePage />,
+      },
+      {
+        path: AuthRoutePaths.REGISTER_USER,
+        element: <RegisterUserPage />,
+      },
+      {
+        path: AuthRoutePaths.REGISTER_COMPANY,
+        element: <RegisterCompanyPage />,
+      },
+    ],
   },
   {
     path: AuthRoutePaths.ACCOUNT_HOME,
