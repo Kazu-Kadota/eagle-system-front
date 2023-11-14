@@ -9,10 +9,12 @@ import { getErrorMsg } from 'src/utils/errors'
 import { registerCompany } from '../../services/register'
 import { RegisterCompanySchema, registerCompanySchema } from './schema'
 import { RegisterCompanyUI } from './ui'
+import { useQueryClient } from '@tanstack/react-query'
 
 export function RegisterCompanyPage() {
   const modal = useModal()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const [isLoading, setLoading] = useState(false)
 
@@ -32,11 +34,13 @@ export function RegisterCompanyPage() {
       await registerCompany(data)
 
       modal.open({
-        title: 'Empresa criada!',
+        title: 'Empresa criada com\nsucesso!',
         buttons: [{ children: 'OK', onClick: () => navigate(-1) }],
       })
 
       reset()
+
+      queryClient.invalidateQueries({ queryKey: ['companies'] })
     } catch (error) {
       toast.error(getErrorMsg(error))
     } finally {

@@ -54,7 +54,7 @@ export function RegisterUserPage() {
       })
 
       modal.open({
-        title: 'Usuário criado!',
+        title: 'Usuário criado com\nsucesso!',
         buttons: [{ children: 'OK', onClick: () => navigate(-1) }],
       })
 

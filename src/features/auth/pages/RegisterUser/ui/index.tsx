@@ -32,7 +32,10 @@ export const RegisterUserUI: React.FC<RegisterUserUIProps> = ({
     <h2 className="mb-1 flex items-center gap-2 text-sm text-primary text-opacity-60">
       Preencha os campos abaixo para cadastrar um usuário
     </h2>
-    <form className="mt-4 flex flex-col gap-3 sm:gap-4" onSubmit={onSubmit}>
+    <form
+      className="mt-2 flex flex-col gap-3 sm:mt-4 sm:gap-4"
+      onSubmit={onSubmit}
+    >
       <InputRow>
         <ControlledInput
           control={control}
@@ -120,7 +123,7 @@ export const RegisterUserUI: React.FC<RegisterUserUIProps> = ({
         theme="primary"
         size="xsStrong"
         type="submit"
-        className="min-w-[10rem] self-center"
+        className="mt-3 min-w-[10rem] self-center sm:mt-0"
         loading={isLoading}
       >
         Salvar

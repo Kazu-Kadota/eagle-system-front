@@ -1,26 +1,27 @@
 import { memo } from 'react'
-import { Button, Fade } from 'src/components'
+import { Button, Clickable, Fade } from 'src/components'
 import { useModalStore } from '..'
+import { TimesIcon } from 'src/assets/icons'
 
 export const Modal = memo(() => {
-  const { title, isOpen, disableOverlayClose, buttons, actions } =
-    useModalStore()
+  const {
+    title,
+    isOpen,
+    disableOverlayClose,
+    buttons,
+    content,
+    showCloseIcon,
+    actions,
+  } = useModalStore()
 
-  return (
-    <Fade
-      isVisible={isOpen}
-      className="fixed inset-0 flex items-center justify-center px-8 pb-20"
-    >
-      <div
-        className="fixed inset-0 bg-dark/80"
-        onClick={!disableOverlayClose ? actions.close : undefined}
-      />
-      <div className="relative flex min-h-[14.25rem] w-full flex-col justify-center gap-12 bg-light sm:w-[31.625rem]">
-        <h2 className="text-center text-4xl font-semibold text-dark">
-          {title}
-        </h2>
-        <div className="flex items-center justify-center gap-3 px-7">
-          {buttons.map(({ children, onClick, ...rest }) => (
+  const renderDefaultContent = () => (
+    <>
+      <h2 className="whitespace-pre-line text-center text-4xl font-semibold leading-tight text-dark">
+        {title}
+      </h2>
+      <div className="flex items-center justify-center gap-3 px-7">
+        {!!buttons &&
+          buttons.map(({ children, onClick, ...rest }) => (
             <Button
               key={children as string}
               size="sm"
@@ -36,7 +37,29 @@ export const Modal = memo(() => {
               {children}
             </Button>
           ))}
-        </div>
+      </div>
+    </>
+  )
+
+  return (
+    <Fade
+      isVisible={isOpen}
+      className="fixed inset-0 flex items-center justify-center px-3 pb-[20vh] md:pl-56 xl:pl-8"
+    >
+      <div
+        className="fixed inset-0 bg-dark/80"
+        onClick={!disableOverlayClose ? actions.close : undefined}
+      />
+      <div className="relative flex min-h-[14.25rem] w-full flex-col justify-center gap-11 bg-light pb-1 sm:w-[31.625rem]">
+        {content || renderDefaultContent()}
+        {showCloseIcon && (
+          <Clickable
+            className="absolute right-0 top-1 z-20 self-end p-2"
+            onClick={actions.close}
+          >
+            <TimesIcon className="z-10 w-4 fill-dark" />
+          </Clickable>
+        )}
       </div>
     </Fade>
   )

@@ -51,7 +51,7 @@ export const VehicleAnalysisAnswerPage = () => {
       ),
     onSuccess: () => {
       modal.open({
-        title: 'Analise enviada!',
+        title: 'Analise enviada com\nsucesso!',
         buttons: [
           {
             children: 'Fechar',

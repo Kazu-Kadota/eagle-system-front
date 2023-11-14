@@ -11,7 +11,7 @@ export interface UseCompaniesOptions {
 const initialCompanies: Company[] = []
 
 export const useCompanies = ({ enabled }: UseCompaniesOptions = {}) => {
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isFetching, refetch } = useQuery({
     queryFn: getCompanies,
     queryKey: ['companies'],
     enabled,
@@ -33,7 +33,7 @@ export const useCompanies = ({ enabled }: UseCompaniesOptions = {}) => {
   return {
     companies,
     companiesSelectItems,
-    isLoading,
+    isLoading: isFetching,
     refetch,
   }
 }
