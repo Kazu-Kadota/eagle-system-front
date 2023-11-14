@@ -214,7 +214,7 @@ export function SearchPersonAnalysisUI({
               inputVariants={{ size: 'sm' }}
               labelVariants={{ size: 'sm' }}
               containerVariants={{ layout: 'row' }}
-              containerClassName="flex-[0_0_auto] min-w-[20rem]"
+              containerClassName="flex-[0_0_auto] sm:min-w-[20rem]"
             />
             <Input
               label="Nome da mãe:"

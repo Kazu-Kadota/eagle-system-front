@@ -13,7 +13,7 @@ const style = tv({
       md: { container: 'rounded-[0.3125rem]', title: 'rounded-t-[0.3125rem]' },
     },
     spacing: {
-      sm: { box: 'px-4 pb-5 pt-4' },
+      sm: { box: 'px-3 pb-5 pt-4 sm:px-4' },
       md: { box: 'px-5 pb-8 pt-6 sm:px-6' },
     },
   },
