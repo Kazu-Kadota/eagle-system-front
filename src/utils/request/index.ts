@@ -1,4 +1,7 @@
-import requestAuthCreator from './requestAuthCreator'
+import {
+  requestAuthCreator,
+  requestDownloadAuthCreator,
+} from './requestAuthCreator'
 import requestCreator from './requestCreator'
 
 export const request = {
@@ -13,4 +16,9 @@ export const requestAuth = {
   post: requestAuthCreator('POST'),
   put: requestAuthCreator('PUT'),
   delete: requestAuthCreator('DELETE'),
+}
+
+export const requestDownloadAuth = {
+  get: requestDownloadAuthCreator('GET'),
+  post: requestDownloadAuthCreator('POST'),
 }

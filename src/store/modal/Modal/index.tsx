@@ -16,7 +16,7 @@ export const Modal = memo(() => {
 
   const renderDefaultContent = () => (
     <>
-      <h2 className="whitespace-pre-line text-center text-4xl font-semibold leading-tight text-dark">
+      <h2 className="whitespace-pre-line text-center text-3xl font-semibold leading-tight text-dark">
         {title}
       </h2>
       <div className="flex items-center justify-center gap-3 px-7">

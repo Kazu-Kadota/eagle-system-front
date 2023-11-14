@@ -22,6 +22,17 @@ export const analysisTypesItems: SelectItem<AnalysisType>[] = [
   },
 ]
 
+export const simpleAnalysisTypesItems: SelectItem<AnalysisType>[] = [
+  {
+    label: 'Pessoa',
+    value: AnalysisType.PERSON,
+  },
+  {
+    label: 'Veículo',
+    value: AnalysisType.VEHICLE,
+  },
+]
+
 export const personAnalysisItems: SelectItem[] = [
   {
     label: 'Simples',

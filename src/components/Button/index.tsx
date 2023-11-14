@@ -21,6 +21,7 @@ const style = tv({
       xxs: 'min-h-[1.75rem] text-xs font-semibold',
       xs: 'min-h-[1.75rem] text-sm font-medium',
       xsStrong: 'min-h-[2rem] text-sm font-bold',
+      xsx: 'min-h-[2.2rem] text-base font-bold',
       sm: 'min-h-[2.25rem] text-base font-bold',
       md: 'min-h-[2.75rem] text-xl font-bold',
     },

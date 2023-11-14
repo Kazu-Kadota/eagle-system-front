@@ -1,3 +1,4 @@
+import { getFileName } from '../fileName'
 import { clearStorage } from '../logout'
 import ApiError from './ApiError'
 import { TokenExpiredError } from './TokenExpiredError'
@@ -7,9 +8,9 @@ import {
   isTokenNotAuthorized,
   prepareBody,
 } from './helpers'
-import { Method, RequestOptions } from './types'
+import { Method, RequestDownloadOptions, RequestOptions } from './types'
 
-const requestAuthCreator =
+export const requestAuthCreator =
   (method: Method) =>
   async <T>(
     hostname: string,
@@ -36,4 +37,42 @@ const requestAuthCreator =
     throw new ApiError(data)
   }
 
-export default requestAuthCreator
+export const requestDownloadAuthCreator =
+  (method: Method) =>
+  async (
+    hostname: string,
+    endpoint: string,
+    options: RequestDownloadOptions = {},
+  ) => {
+    const res = await fetch(constructUrl(hostname, endpoint, options), {
+      method,
+      headers: constructAuthHeaders(options),
+    })
+
+    if (isTokenNotAuthorized(res.status)) {
+      clearStorage()
+      throw new TokenExpiredError()
+    }
+
+    if (!res.ok) {
+      const data = await res.json()
+      throw new ApiError(data)
+    }
+
+    const blobFile = await res.blob()
+    const url = URL.createObjectURL(blobFile)
+
+    const a = document.createElement('a')
+    a.href = url
+    a.download = options.fileName || getFileName(url) || 'download'
+
+    const clickHandler = () => {
+      setTimeout(() => {
+        URL.revokeObjectURL(url)
+        removeEventListener('click', clickHandler)
+      }, 150)
+    }
+
+    a.addEventListener('click', clickHandler, false)
+    a.click()
+  }

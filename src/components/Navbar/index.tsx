@@ -21,7 +21,7 @@ const navlinks: NavbarLinks[] = [
   { label: 'Análises', path: RoutePaths.Analysis.ANALYSIS_HOME },
   {
     label: 'Relatórios',
-    path: '/relatorios',
+    path: RoutePaths.Report.REPORT_HOME,
     userTypes: [UserType.ADMIN, UserType.CLIENT],
   },
   {
