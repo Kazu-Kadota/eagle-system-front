@@ -27,7 +27,7 @@ const classNames: ClassNamesConfig<
   dropdownIndicator: () => 'cursor-pointer text-placeholder',
   menuList: () => 'rounded-b-sm bg-light shadow-md',
   option: ({ isFocused }) =>
-    cn('cursor-pointer px-3 py-1 text-dark', isFocused && 'bg-link/20'),
+    cn('cursor-pointer px-3 py-1 text-dark', isFocused && 'bg-light-gray'),
   valueContainer: () => 'flex flex-wrap gap-1',
   multiValue: () => 'rounded-sm text-dark bg-light-gray px-1',
 }

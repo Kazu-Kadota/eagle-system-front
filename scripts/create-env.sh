@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "VITE_API_USER_URL=$API_USER_URL" >> .env
+echo "VITE_API_REQUEST_URL=$API_REQUEST_URL" >> .env
+echo "VITE_API_REPORT_URL=$API_REPORT_URL" >> .env
