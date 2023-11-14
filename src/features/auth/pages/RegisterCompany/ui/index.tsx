@@ -28,7 +28,7 @@ export const RegisterCompanyUI: React.FC<RegisterCompanyUIProps> = ({
       <InputRow>
         <ControlledInput
           control={control}
-          label="Nome"
+          label="Nome:"
           name="name"
           type="text"
           placeholder="Nome"
@@ -39,7 +39,7 @@ export const RegisterCompanyUI: React.FC<RegisterCompanyUIProps> = ({
         />
         <ControlledInput
           control={control}
-          label="CNPJ"
+          label="CNPJ:"
           name="cnpj"
           type="cnpj"
           placeholder="XX.XXX.XXX/XXXX-XX"

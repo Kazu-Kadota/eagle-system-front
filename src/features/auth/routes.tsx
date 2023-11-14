@@ -1,12 +1,13 @@
 import { RouteObject } from 'react-router-dom'
 import { AuthLayout } from 'src/routes/layouts/AuthLayout'
+import { AccountHomePage } from './pages/AccountHome'
 import { ForgotPasswordPage } from './pages/ForgotPassword'
 import { LoginPage } from './pages/Login'
-import { ResetPasswordPage } from './pages/ResetPassword'
-import { AuthRoutePaths } from './paths'
+import { RegisterCompanyPage } from './pages/RegisterCompany'
 import { RegisterHomePage } from './pages/RegisterHome'
 import { RegisterUserPage } from './pages/RegisterUser'
-import { RegisterCompanyPage } from './pages/RegisterCompany'
+import { ResetPasswordPage } from './pages/ResetPassword'
+import { AuthRoutePaths } from './paths'
 
 export const authRoutes: RouteObject[] = [
   {
@@ -40,5 +41,9 @@ export const authProtectedRoutes: RouteObject[] = [
   {
     path: AuthRoutePaths.REGISTER_COMPANY,
     element: <RegisterCompanyPage />,
+  },
+  {
+    path: AuthRoutePaths.ACCOUNT_HOME,
+    element: <AccountHomePage />,
   },
 ]
