@@ -274,7 +274,7 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
             Enviar
           </Button>
         </form>
-      ) : isAdminOrOperator && person.status === AnalysisStatus.FINISHED ? (
+      ) : person.status === AnalysisStatus.FINISHED ? (
         <>
           <SelectGroup
             title="Resultado da análise"

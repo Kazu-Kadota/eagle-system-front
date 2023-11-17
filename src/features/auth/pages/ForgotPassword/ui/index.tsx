@@ -1,5 +1,6 @@
 import { Control } from 'react-hook-form'
 import { Box, Button, ControlledInput } from 'src/components'
+import { RoutePaths } from 'src/routes/paths'
 import { MutationStatus } from 'src/types/mutation'
 import { ForgotPasswordSchema } from '../schema'
 
@@ -44,6 +45,14 @@ export function ForgotPasswordUI({
           src="/images/forget-password-success.png"
           className="w-80 self-center"
         ></img>
+        <Button
+          size="xsx"
+          theme="accent"
+          className="mt-6 min-w-[12rem] self-center"
+          to={RoutePaths.Auth.login()}
+        >
+          Voltar para o login
+        </Button>
       </>
     )
   }

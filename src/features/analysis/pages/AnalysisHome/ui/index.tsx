@@ -50,9 +50,9 @@ function getTableActions(analysisType: AnalysisType, userType: UserType) {
   ]
 
   if (hasUserType(userType, UserType.ADMIN, UserType.CLIENT)) {
-    actions.push({
+    actions.unshift({
       children: `Solicitar Análise ${label}`,
-      theme: 'primary',
+      theme: 'darkPurple',
       size: 'xs',
       to: RoutePaths.Analysis.requestAnalysis({ analysisType }),
     })

@@ -307,8 +307,7 @@ export function SearchPersonAnalysisUI({
             />
           </InputRow>
 
-          {hasUserType(userType, UserType.ADMIN, UserType.OPERATOR) &&
-          selectedItem.status === AnalysisStatus.FINISHED ? (
+          {selectedItem.status === AnalysisStatus.FINISHED ? (
             <>
               <SelectGroup
                 title="Resultado da análise"

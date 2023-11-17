@@ -16,6 +16,7 @@ const style = tv({
       opaque: 'bg-opaque',
       brown: 'bg-brown',
       purple: 'bg-purple',
+      darkPurple: 'bg-dark-purple',
     },
     size: {
       xxs: 'min-h-[1.75rem] text-xs font-semibold',

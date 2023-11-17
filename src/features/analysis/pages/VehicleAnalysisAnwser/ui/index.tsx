@@ -216,7 +216,7 @@ export const VehicleAnalysisAnswerUI: React.FC<
             Enviar
           </Button>
         </form>
-      ) : isAdminOrOperator && vehicle.status === AnalysisStatus.FINISHED ? (
+      ) : vehicle.status === AnalysisStatus.FINISHED ? (
         <>
           <SelectGroup
             title="Resultado da análise"

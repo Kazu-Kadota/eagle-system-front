@@ -35,7 +35,7 @@ interface VehiclesFormProps {
   vehiclesLength: number
   index: number
   onChangeVehicleAnalysisType: (value: AnalysisType) => void
-  onRequestAnalysis: () => void
+  onRequestAnalysis: (e: React.FormEvent<HTMLFormElement>) => void
   onRequestPlateHistoryAnalysis: () => void
   addVehicleForm: () => void
   removeVehicleForm: (index: number) => void
@@ -61,7 +61,7 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
   const renderVehicleForm = () => (
     <div className="flex">
       <form
-        key={AnalysisType.VEHICLE}
+        key={analysisType}
         className={cn(
           'flex flex-1 flex-col gap-3 sm:gap-4',
           analysisType !== AnalysisType.COMBO && 'mt-4',
@@ -182,8 +182,9 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
             containerClassName="flex-1"
           />
         </InputRow>
-        <div className="mt-2 flex items-center justify-center gap-3">
-          {analysisType === AnalysisType.COMBO ? (
+
+        <div className="mt-4 flex items-center justify-center gap-3">
+          {analysisType === AnalysisType.COMBO &&
             index === vehiclesLength - 1 && (
               <Button
                 theme="placeholder"
@@ -194,15 +195,19 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
               >
                 Adicionar veículo
               </Button>
-            )
-          ) : (
+            )}
+
+          {index === vehiclesLength - 1 && (
             <Button
               type="submit"
               theme="success"
               size="xsStrong"
               shadow="base"
               className="min-w-[10rem] self-center"
-              loading={analysisTypeLoading === AnalysisType.VEHICLE}
+              loading={
+                analysisTypeLoading === AnalysisType.VEHICLE ||
+                analysisTypeLoading === AnalysisType.COMBO
+              }
             >
               Solicitar
             </Button>
@@ -317,7 +322,7 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
         analysisType !== AnalysisType.COMBO ? 'mb-2' : '-mb-5'
       }
     >
-      {index === 0 && (
+      {index === 0 ? (
         <>
           <h2 className="text-sm font-bold text-dark">
             Insira os dados do veículo nos campos abaixo
@@ -326,6 +331,8 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
             Campos com * são obrigatórios para a solicitação
           </small>
         </>
+      ) : (
+        <span className="-mt-5 mb-6 mr-8 border border-primary" />
       )}
 
       {analysisType !== AnalysisType.COMBO && (

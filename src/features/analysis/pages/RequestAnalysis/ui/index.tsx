@@ -1,23 +1,23 @@
 import { Control, FieldArrayWithId } from 'react-hook-form'
+import { Box, SelectGroup } from 'src/components'
+import {
+  AnalysisTypeSelect,
+  PersonForm,
+  VehiclesForm,
+} from 'src/features/analysis/components'
+import { analysisTypesItems } from 'src/features/analysis/constants/analysis'
 import {
   AnalysisType,
   PersonRegionType,
   RegionPersonAnalysis,
   UserType,
 } from 'src/models'
+import { SelectItem } from 'src/types/select'
 import {
   AnalysisArrayVehicleSchema,
   AnalysisPersonSchema,
   PlateHistorySchema,
 } from '../schema'
-import { SelectItem } from 'src/types/select'
-import {
-  AnalysisTypeSelect,
-  PersonForm,
-  VehiclesForm,
-} from 'src/features/analysis/components'
-import { Box, Button, SelectGroup } from 'src/components'
-import { analysisTypesItems } from 'src/features/analysis/constants/analysis'
 
 type VehicleField = FieldArrayWithId<
   AnalysisArrayVehicleSchema,
@@ -45,7 +45,7 @@ export interface RequestAnalysisUIProps {
   onRequestPersonAnalysis: () => void
   onRequestVehicleAnalysis: () => void
   onRequestPlateHistoryAnalysis: () => void
-  onRequestComboAnalysis: () => void
+  onRequestComboAnalysis: (e: React.FormEvent<HTMLFormElement>) => void
 }
 
 export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
@@ -146,7 +146,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
               analysisTypeLoading={analysisTypeLoading}
               companiesLoading={companiesLoading}
               companiesSelectItems={companiesSelectItems}
-              onRequestAnalysis={onRequestVehicleAnalysis}
+              onRequestAnalysis={onRequestComboAnalysis}
               analysisType={analysisType}
               addVehicleForm={addVehicleForm}
               removeVehicleForm={removeVehicleForm}
@@ -158,16 +158,6 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
               index={index}
             />
           ))}
-          <Button
-            theme="success"
-            size="xsStrong"
-            shadow="base"
-            className="mt-10 min-h-[2rem] min-w-[10rem] self-center"
-            loading={analysisTypeLoading === AnalysisType.COMBO}
-            onClick={onRequestComboAnalysis}
-          >
-            Solicitar
-          </Button>
         </>
       )}
     </>
