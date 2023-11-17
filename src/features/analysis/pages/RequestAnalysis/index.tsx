@@ -184,7 +184,11 @@ export function RequestAnalysisPage() {
     }
   }
 
-  const onRequestComboAnalysis = async () => {
+  const onRequestComboAnalysis = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
+    e.preventDefault()
+
     const [personData, vehiclesData] = await Promise.all([
       submitFormPromise(handleSubmitPerson),
       submitFormPromise(handleSubmitVehicle),

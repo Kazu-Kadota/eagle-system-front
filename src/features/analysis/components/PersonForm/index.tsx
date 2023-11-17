@@ -202,7 +202,7 @@ export const PersonForm: React.FC<PersonFormProps> = ({
           theme="success"
           size="xsStrong"
           shadow="base"
-          className="mt-2 min-w-[10rem] self-center"
+          className="mt-3 min-w-[10rem] self-center"
           loading={analysisTypeLoading === AnalysisType.PERSON}
         >
           Solicitar

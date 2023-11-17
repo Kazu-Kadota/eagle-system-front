@@ -50,7 +50,7 @@ export function SearchVehicleAnalysisUI({
 }: SearchVehicleAnalysisUIProps) {
   return (
     <>
-      <Box title="Consulta de Análise de Pessoa">
+      <Box title="Consulta de Análise de Veículo">
         <h2 className="text-sm font-bold text-dark">
           Preencha os campos abaixo para consultar uma análise. O campo “placa”
           é obrigatório.
@@ -255,8 +255,7 @@ export function SearchVehicleAnalysisUI({
             />
           </InputRow>
 
-          {hasUserType(userType, UserType.ADMIN, UserType.OPERATOR) &&
-          selectedItem.status === AnalysisStatus.FINISHED ? (
+          {selectedItem.status === AnalysisStatus.FINISHED ? (
             <>
               <SelectGroup
                 title="Resultado da análise"

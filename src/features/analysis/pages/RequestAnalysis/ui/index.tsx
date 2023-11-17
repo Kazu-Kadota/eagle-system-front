@@ -146,7 +146,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
               analysisTypeLoading={analysisTypeLoading}
               companiesLoading={companiesLoading}
               companiesSelectItems={companiesSelectItems}
-              onRequestAnalysis={onRequestVehicleAnalysis}
+              onRequestAnalysis={onRequestComboAnalysis}
               analysisType={analysisType}
               addVehicleForm={addVehicleForm}
               removeVehicleForm={removeVehicleForm}
@@ -158,16 +158,6 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
               index={index}
             />
           ))}
-          <Button
-            theme="success"
-            size="xsStrong"
-            shadow="base"
-            className="mt-10 min-h-[2rem] min-w-[10rem] self-center"
-            loading={analysisTypeLoading === AnalysisType.COMBO}
-            onClick={onRequestComboAnalysis}
-          >
-            Solicitar
-          </Button>
         </>
       )}
     </>
