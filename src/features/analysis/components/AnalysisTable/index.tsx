@@ -10,6 +10,7 @@ import { PageArrowLeftIcon, PageArrowRightIcon } from 'src/assets/icons'
 import { Button, ButtonProps } from 'src/components'
 import { Analysis } from 'src/models'
 import { ValueOf } from 'src/types/utils'
+import { cn } from 'src/utils/classNames'
 
 export interface TableProps<T> {
   title?: string
@@ -64,7 +65,12 @@ export const AnalysisTable = <T extends Analysis>({
         </div>
       )}
 
-      <div className="max-w-full overflow-x-auto rounded-t-[3px]">
+      <div
+        className={cn(
+          'max-w-full overflow-x-auto ',
+          !title && 'rounded-t-[3px]',
+        )}
+      >
         {data.length > 0 && (
           <table className="w-full table-fixed bg-light text-center">
             <thead className="border-b border-line-light bg-primary">
