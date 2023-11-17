@@ -35,7 +35,7 @@ interface VehiclesFormProps {
   vehiclesLength: number
   index: number
   onChangeVehicleAnalysisType: (value: AnalysisType) => void
-  onRequestAnalysis: () => void
+  onRequestAnalysis: (e: React.FormEvent<HTMLFormElement>) => void
   onRequestPlateHistoryAnalysis: () => void
   addVehicleForm: () => void
   removeVehicleForm: (index: number) => void

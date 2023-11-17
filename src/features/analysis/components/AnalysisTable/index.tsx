@@ -67,13 +67,13 @@ export const AnalysisTable = <T extends Analysis>({
       <div className="max-w-full overflow-x-auto">
         {data.length > 0 && (
           <table className="w-full table-fixed bg-light text-center">
-            <thead className="border-b border-line-light">
+            <thead className="border-b border-line-light bg-primary">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
-                      className="xs:text-sm h-[2.375rem] w-28 p-0.5 text-base font-bold text-dark"
+                      className="xs:text-sm h-10 w-28 p-0.5 text-base font-bold text-light"
                     >
                       {!header.isPlaceholder &&
                         flexRender(
@@ -99,7 +99,7 @@ export const AnalysisTable = <T extends Analysis>({
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className="h-[2.375rem] w-28 border-b border-line-light p-0.5 text-xs font-medium uppercase"
+                      className="w-28 border-b border-line-light px-0.5 py-[0.375rem] text-[0.8125rem] font-medium uppercase"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
