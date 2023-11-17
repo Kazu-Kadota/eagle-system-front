@@ -64,7 +64,7 @@ export const AnalysisTable = <T extends Analysis>({
         </div>
       )}
 
-      <div className="max-w-full overflow-x-auto">
+      <div className="max-w-full overflow-x-auto rounded-t-[3px]">
         {data.length > 0 && (
           <table className="w-full table-fixed bg-light text-center">
             <thead className="border-b border-line-light bg-primary">
@@ -114,7 +114,7 @@ export const AnalysisTable = <T extends Analysis>({
         )}
       </div>
 
-      <div className="flex flex-col items-center justify-between gap-2 rounded-b-lg bg-light px-4 pb-3 pt-4 sm:flex-row sm:py-[0.35rem]">
+      <div className="flex flex-col items-center justify-between gap-2 rounded-b-[3px] bg-light px-4 pb-3 pt-4 sm:flex-row sm:py-[0.35rem]">
         <p className="text-xs font-bold text-primary">
           Mostrando {numOfItemsSeen} de {data.length} solicitações
         </p>
