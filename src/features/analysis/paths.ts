@@ -8,17 +8,17 @@ export const AnalysisRoutePaths = {
   SEARCH_VEHICLE_ANALYSIS: '/analises/veiculos/consultar',
   requestAnalysis: (params?: RequestAnalysisParams) =>
     queryString.stringifyUrl({
-      url: '/analises/solicitar',
+      url: '/analises/solicitar/',
       query: params,
     }),
   peopleAnalysisDetail: (item?: PersonAnalysis) =>
     queryString.stringifyUrl({
-      url: `/analises/pessoas/${item?.request_id ?? ':id'}`,
+      url: `/analises/pessoas/${item?.request_id ?? ':id'}/`,
       query: { personId: item?.person_id },
     }),
   vehicleAnalysisDetail: (item?: VehicleAnalysis) =>
     queryString.stringifyUrl({
-      url: `/analises/veiculos/${item?.request_id ?? ':id'}`,
+      url: `/analises/veiculos/${item?.request_id ?? ':id'}/`,
       query: { vehicleId: item?.vehicle_id },
     }),
 }
