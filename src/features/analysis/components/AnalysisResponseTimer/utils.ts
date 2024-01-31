@@ -26,6 +26,7 @@ export function getPersonInitialTime(analysis: PersonAnalysis) {
 function getVehicleInitialTime(analysis: VehicleAnalysis) {
   switch (analysis.analysis_type) {
     case AnalysisType.VEHICLE_PLATE_HISTORY:
+    case AnalysisType.SECOND_DRIVER:
       return 240
     default:
       return 120

@@ -20,21 +20,25 @@ import {
   requestAnalysisCombo,
   requestAnalysisPerson,
   requestAnalysisPlateHistory,
+  requestAnalysisSecondDriver,
   requestAnalysisVehicle,
 } from '../../services/request'
 import {
   AnalysisArrayVehicleSchema,
   AnalysisPersonSchema,
   PlateHistorySchema,
+  SecondDriverSchema,
   analysisArrayVehicleSchema,
   analysisPersonSchema,
   plateHistorySchema,
+  secondDriverSchema,
 } from './schema'
 import { RequestAnalysisUI } from './ui'
 import {
   defaultPerson,
   defaultPlateHistory,
   defaultVehicle,
+  defaultSecondDriver,
   preparePersonAnalysis,
   preparePersonData,
   prepareVehicleData,
@@ -117,10 +121,20 @@ export function RequestAnalysisPage() {
     values: { ...defaultPlateHistory, ...formValuesOnlyForValidation },
   })
 
+  const {
+    control: controlSecondDriver,
+    reset: resetSecondDriver,
+    handleSubmit: handleSubmitSecondDriver,
+  } = useForm<SecondDriverSchema>({
+    resolver: zodResolver(secondDriverSchema),
+    values: { ...defaultSecondDriver, ...formValuesOnlyForValidation },
+  })
+
   const handleClear = () => {
     resetPerson()
     resetVehicle()
     resetPlateHistory()
+    resetSecondDriver()
     setPersonAnalysis([])
     setVehicleAnalysisType(AnalysisType.VEHICLE)
     setAnalysisType(analysisTypeFromUrl ?? AnalysisType.PERSON)
@@ -241,6 +255,26 @@ export function RequestAnalysisPage() {
     }
   }
 
+  const onRequestSecondDriverAnalysis = async (data: PlateHistorySchema) => {
+    try {
+      setAnaysisTypeLoading(AnalysisType.SECOND_DRIVER)
+
+      await requestAnalysisSecondDriver({
+        plate: data.plate,
+        plate_state: data.plate_state,
+        company_name: data.company_name,
+        owner_document: data.owner_document,
+        owner_name: data.owner_name,
+      })
+
+      onSuccessRequestAnalysis()
+    } catch (error) {
+      onErrorRequestAnalysis(error)
+    } finally {
+      setAnaysisTypeLoading(null)
+    }
+  }
+
   const handleAddVehicleForm = () =>
     appendVehicle({ ...defaultVehicle, ...formValuesOnlyForValidation })
 
@@ -262,6 +296,7 @@ export function RequestAnalysisPage() {
       controlPerson={controlPerson}
       controlVehicle={controlVehicle}
       controlPlateHistory={controlPlateHistory}
+      controlSecondDriver={controlSecondDriver}
       onChangePersonAnalysis={handleChangePersonAnalysis}
       onChangeVehicleAnalysisType={setVehicleAnalysisType}
       onChangeAnalysisType={setAnalysisType}
@@ -270,6 +305,9 @@ export function RequestAnalysisPage() {
       onRequestVehicleAnalysis={handleSubmitVehicle(onRequestVehicleAnalysis)}
       onRequestPlateHistoryAnalysis={handleSubmitPlateHistory(
         onRequestPlateHistoryAnalysis,
+      )}
+      onRequestSecondDriverAnalysis={handleSubmitSecondDriver(
+        onRequestSecondDriverAnalysis,
       )}
       addVehicleForm={handleAddVehicleForm}
       removeVehicleForm={removeVehicle}

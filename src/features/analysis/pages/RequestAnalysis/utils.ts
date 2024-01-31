@@ -11,6 +11,7 @@ import {
   AnalysisPersonSchema,
   AnalysisVehiclesSchema,
   PlateHistorySchema,
+  SecondDriverSchema,
 } from './schema'
 
 export const defaultVehicle: AnalysisVehiclesSchema = {
@@ -46,6 +47,10 @@ export const defaultPlateHistory: PlateHistorySchema = {
   plate_state: '',
   owner_document: '',
   owner_name: '',
+}
+
+export const defaultSecondDriver: SecondDriverSchema = {
+  ...defaultPlateHistory,
 }
 
 export const preparePersonData = (

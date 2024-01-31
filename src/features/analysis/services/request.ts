@@ -43,6 +43,8 @@ type RequestAnalysisPlateHistoryBody = {
   owner_document: string
 }
 
+type RequestAnalysisSecondDriver = RequestAnalysisPlateHistoryBody
+
 type RequestAnalysisComboBody = {
   combo_number: number
   person_analysis: BackRegionPersonAnalysis[]
@@ -72,6 +74,16 @@ export const requestAnalysisPlateHistory = async (
   await requestAuth.post(
     env.VITE_API_REQUEST_URL,
     `/analysis/vehicle/plate-history`,
+    { body },
+  )
+}
+
+export const requestAnalysisSecondDriver = async (
+  body: RequestAnalysisSecondDriver,
+) => {
+  await requestAuth.post(
+    env.VITE_API_REQUEST_URL,
+    `/analysis/vehicle/second-driver`,
     { body },
   )
 }

@@ -90,9 +90,12 @@ export const plateHistorySchema = z
     }
   })
 
+export const secondDriverSchema = plateHistorySchema
+
 export type AnalysisVehiclesSchema = z.infer<typeof analysisVehiclesSchema>
 export type AnalysisArrayVehicleSchema = z.infer<
   typeof analysisArrayVehicleSchema
 >
 export type AnalysisPersonSchema = z.infer<typeof analysisPersonSchema>
 export type PlateHistorySchema = z.infer<typeof plateHistorySchema>
+export type SecondDriverSchema = PlateHistorySchema

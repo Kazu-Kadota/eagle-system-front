@@ -71,6 +71,7 @@ export const vehiclesTypesSelectItems: SelectItem[] = [
 export const vehicleAnalysisSelectItems: SelectItem<AnalysisType>[] = [
   { label: 'Veículo', value: AnalysisType.VEHICLE },
   { label: 'Histórico de placa', value: AnalysisType.VEHICLE_PLATE_HISTORY },
+  { label: 'Segundo dono', value: AnalysisType.SECOND_DRIVER },
 ]
 
 export const analysisResultsSelectItems: SelectItem<AnalysisResult>[] = [
@@ -88,6 +89,7 @@ export const analysisTypeButtonLabel = {
   [AnalysisType.PERSON]: 'Análise de Pessoa',
   [AnalysisType.VEHICLE]: 'Análise de Veículo',
   [AnalysisType.VEHICLE_PLATE_HISTORY]: 'Análise de Histórico de placa',
+  [AnalysisType.SECOND_DRIVER]: 'Análise de Segundo dono',
   [AnalysisType.COMBO]: 'Análise de Combo',
 } as const
 
@@ -101,5 +103,6 @@ export const analysisTypeButtonTheme = {
   [AnalysisType.PERSON]: 'blue',
   [AnalysisType.VEHICLE]: 'blue',
   [AnalysisType.VEHICLE_PLATE_HISTORY]: 'brown',
+  [AnalysisType.SECOND_DRIVER]: 'brown',
   [AnalysisType.COMBO]: 'brown',
 } as const

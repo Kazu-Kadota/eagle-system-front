@@ -17,6 +17,7 @@ import {
   AnalysisArrayVehicleSchema,
   AnalysisPersonSchema,
   PlateHistorySchema,
+  SecondDriverSchema,
 } from '../schema'
 
 type VehicleField = FieldArrayWithId<
@@ -38,6 +39,7 @@ export interface RequestAnalysisUIProps {
   controlPerson: Control<AnalysisPersonSchema>
   controlVehicle: Control<AnalysisArrayVehicleSchema>
   controlPlateHistory: Control<PlateHistorySchema>
+  controlSecondDriver: Control<SecondDriverSchema>
   personAnalysis: RegionPersonAnalysis[]
   onChangePersonAnalysis: (value: RegionPersonAnalysis[]) => void
   addVehicleForm: () => void
@@ -45,6 +47,7 @@ export interface RequestAnalysisUIProps {
   onRequestPersonAnalysis: () => void
   onRequestVehicleAnalysis: () => void
   onRequestPlateHistoryAnalysis: () => void
+  onRequestSecondDriverAnalysis: () => void
   onRequestComboAnalysis: (e: React.FormEvent<HTMLFormElement>) => void
 }
 
@@ -60,6 +63,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
   controlPerson,
   controlVehicle,
   controlPlateHistory,
+  controlSecondDriver,
   onChangeVehicleAnalysisType,
   onChangePersonAnalysis,
   onRequestPersonAnalysis,
@@ -69,6 +73,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
   removeVehicleForm,
   onRequestComboAnalysis,
   onRequestPlateHistoryAnalysis,
+  onRequestSecondDriverAnalysis,
 }) => {
   const showPersonForm = () =>
     personAnalysis?.some(
@@ -104,6 +109,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
         key={field.id + analysisType}
         controlVehicle={controlVehicle}
         controlPlateHistory={controlPlateHistory}
+        controlSecondDriver={controlSecondDriver}
         userType={userType}
         analysisTypeLoading={analysisTypeLoading}
         companiesLoading={companiesLoading}
@@ -116,6 +122,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
         vehicleAnalysisType={vehicleAnalysisType}
         onChangeVehicleAnalysisType={onChangeVehicleAnalysisType}
         onRequestPlateHistoryAnalysis={onRequestPlateHistoryAnalysis}
+        onRequestSecondDriverAnalysis={onRequestSecondDriverAnalysis}
         index={index}
       />
     ))
@@ -146,6 +153,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
               analysisTypeLoading={analysisTypeLoading}
               companiesLoading={companiesLoading}
               companiesSelectItems={companiesSelectItems}
+              controlSecondDriver={controlSecondDriver}
               onRequestAnalysis={onRequestComboAnalysis}
               analysisType={analysisType}
               addVehicleForm={addVehicleForm}
@@ -154,6 +162,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
               onRequestPlateHistoryAnalysis={onRequestPlateHistoryAnalysis}
               controlPlateHistory={controlPlateHistory}
               onChangeVehicleAnalysisType={onChangeVehicleAnalysisType}
+              onRequestSecondDriverAnalysis={onRequestSecondDriverAnalysis}
               vehicleAnalysisType={vehicleAnalysisType}
               index={index}
             />
@@ -179,6 +188,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
           [AnalysisType.PERSON]: renderPersonForm,
           [AnalysisType.VEHICLE]: renderVehicleForm,
           [AnalysisType.VEHICLE_PLATE_HISTORY]: renderVehicleForm,
+          [AnalysisType.SECOND_DRIVER]: renderVehicleForm,
           [AnalysisType.COMBO]: renderComboForm,
         }[analysisType]()}
     </>

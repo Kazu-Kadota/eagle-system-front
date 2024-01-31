@@ -21,12 +21,14 @@ import { estadosVehiclesSelectItems } from '../../constants/estados'
 import {
   AnalysisArrayVehicleSchema,
   PlateHistorySchema,
+  SecondDriverSchema,
 } from '../../pages/RequestAnalysis/schema'
 
 interface VehiclesFormProps {
   analysisTypeLoading: AnalysisType | null
   controlVehicle: Control<AnalysisArrayVehicleSchema>
   controlPlateHistory: Control<PlateHistorySchema>
+  controlSecondDriver: Control<SecondDriverSchema>
   vehicleAnalysisType: AnalysisType
   analysisType?: AnalysisType
   userType?: UserType
@@ -37,6 +39,7 @@ interface VehiclesFormProps {
   onChangeVehicleAnalysisType: (value: AnalysisType) => void
   onRequestAnalysis: (e: React.FormEvent<HTMLFormElement>) => void
   onRequestPlateHistoryAnalysis: () => void
+  onRequestSecondDriverAnalysis: () => void
   addVehicleForm: () => void
   removeVehicleForm: (index: number) => void
 }
@@ -52,11 +55,13 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
   vehiclesLength,
   controlPlateHistory,
   controlVehicle,
+  controlSecondDriver,
   onChangeVehicleAnalysisType,
   onRequestAnalysis,
   addVehicleForm,
   removeVehicleForm,
   onRequestPlateHistoryAnalysis,
+  onRequestSecondDriverAnalysis,
 }) => {
   const renderVehicleForm = () => (
     <div className="flex">
@@ -315,6 +320,96 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
     </form>
   )
 
+  const renderSecondDriverForm = () => (
+    <form
+      key={AnalysisType.SECOND_DRIVER}
+      className={cn(
+        'flex flex-col gap-3 sm:gap-4',
+        analysisType !== AnalysisType.COMBO && 'mt-4',
+      )}
+      onSubmit={onRequestSecondDriverAnalysis}
+    >
+      <InputRow>
+        {hasUserType(userType, UserType.ADMIN) &&
+          analysisType !== AnalysisType.COMBO && (
+            <ControlledInput
+              control={controlSecondDriver}
+              label="Empresa"
+              placeholder="Selecione uma empresa"
+              name="company_name"
+              required
+              items={companiesSelectItems}
+              loading={companiesLoading}
+              inputVariants={{ size: 'sm' }}
+              labelVariants={{ size: 'sm' }}
+              containerVariants={{ layout: 'row' }}
+              containerClassName="flex-1"
+            />
+          )}
+        <ControlledInput
+          control={controlSecondDriver}
+          label="Nome do Proprietário"
+          placeholder="Nome"
+          name="owner_name"
+          required
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
+          containerVariants={{ layout: 'row' }}
+          containerClassName="flex-[3]"
+        />
+      </InputRow>
+
+      <InputRow>
+        <ControlledInput
+          control={controlSecondDriver}
+          label="CPF/CNPJ do Proprietário"
+          placeholder="XX.XXX.XXX/XXXX-XX"
+          name="owner_document"
+          type="cpfOrCnpj"
+          required
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
+          containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
+        />
+        <ControlledInput
+          control={controlSecondDriver}
+          label="Placa"
+          placeholder="XXXXXXX"
+          name="plate"
+          required
+          type="plate"
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
+          containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
+        />
+        <ControlledInput
+          control={controlSecondDriver}
+          label="Estado da Placa do veículo"
+          name="plate_state"
+          required
+          items={estadosVehiclesSelectItems}
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
+          containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
+        />
+      </InputRow>
+
+      <Button
+        theme="success"
+        size="xsStrong"
+        shadow="base"
+        className="mt-2 min-w-[10rem] self-center"
+        loading={analysisTypeLoading === AnalysisType.SECOND_DRIVER}
+        onClick={onRequestSecondDriverAnalysis}
+      >
+        Solicitar
+      </Button>
+    </form>
+  )
+
   return (
     <Box
       spacing="sm"
@@ -349,6 +444,7 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
       {{
         [AnalysisType.VEHICLE]: renderVehicleForm,
         [AnalysisType.VEHICLE_PLATE_HISTORY]: renderPlateHistoryForm,
+        [AnalysisType.SECOND_DRIVER]: renderSecondDriverForm,
         [AnalysisType.COMBO]: returnNull,
         [AnalysisType.PERSON]: returnNull,
       }[vehicleAnalysisType]()}
