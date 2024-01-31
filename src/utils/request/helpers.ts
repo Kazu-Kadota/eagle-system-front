@@ -52,4 +52,5 @@ export const isBlobFile = (blob: Blob) => {
   return fileTypes.includes(blob.type)
 }
 
-export const isTokenNotAuthorized = (status: number) => status === 403
+export const isTokenNotAuthorized = (status: number) =>
+  status === 403 || status === 498
