@@ -11,6 +11,7 @@ export enum AnalysisType {
   PERSON = 'person',
   VEHICLE = 'vehicle',
   VEHICLE_PLATE_HISTORY = 'vehicle-plate-history',
+  SECOND_DRIVER = 'vehicle-second-driver',
 }
 
 export enum PersonAnalysisType {

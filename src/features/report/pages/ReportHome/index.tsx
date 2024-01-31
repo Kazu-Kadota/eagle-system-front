@@ -24,6 +24,7 @@ const downloadAnalysisReport = (analysisType: AnalysisType) =>
     [AnalysisType.COMBO]: downloadPersonAnalysisReport,
     [AnalysisType.VEHICLE]: downloadVehicleAnalysisReport,
     [AnalysisType.VEHICLE_PLATE_HISTORY]: downloadVehicleAnalysisReport,
+    [AnalysisType.SECOND_DRIVER]: downloadVehicleAnalysisReport,
   })[analysisType]
 
 export function ReportHomePage() {

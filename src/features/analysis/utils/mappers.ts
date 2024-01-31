@@ -57,8 +57,10 @@ export const preparePersonDataFromApi = (
 })
 
 export const getVehicleAnalysisType = (analysis: VehicleAnalysis) => {
-  if (analysis.analysis_type === AnalysisType.VEHICLE_PLATE_HISTORY) {
-    return 'Histórico de placa'
-  }
-  return analysis.vehicle_type
+  const analysisTypeString = {
+    [AnalysisType.VEHICLE_PLATE_HISTORY]: 'Histórico de placa',
+    [AnalysisType.SECOND_DRIVER]: 'Segundo dono',
+  }[analysis.analysis_type as never]
+
+  return analysisTypeString ?? analysis.vehicle_type
 }
