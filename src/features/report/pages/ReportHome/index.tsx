@@ -51,6 +51,15 @@ export function ReportHomePage() {
   const [isLoading, setLoading] = useState(false)
 
   const onSuccessRequestAnalysis = () => {
+    const goBackRoute = {
+      [AnalysisType.PERSON]: RoutePaths.Analysis.PEOPLE_ANALYSIS_HOME,
+      [AnalysisType.VEHICLE]: RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
+      [AnalysisType.COMBO]: RoutePaths.Analysis.PEOPLE_ANALYSIS_HOME,
+      [AnalysisType.SECOND_DRIVER]: RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
+      [AnalysisType.VEHICLE_PLATE_HISTORY]:
+        RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
+    }[analysisType]
+
     modal.open({
       title: 'Download concluído com\nsucesso!',
       buttons: [
@@ -58,7 +67,7 @@ export function ReportHomePage() {
         {
           children: 'Ir para página inicial',
           theme: 'dark',
-          onClick: () => navigate(RoutePaths.Analysis.ANALYSIS_HOME),
+          onClick: () => navigate(goBackRoute),
         },
       ],
     })

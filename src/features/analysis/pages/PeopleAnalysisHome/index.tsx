@@ -1,20 +1,17 @@
 import { useAuthStore } from 'src/store/auth'
-import { usePersonAnalysis, useVehicleAnalysis } from '../../hooks'
+import { usePersonAnalysis } from '../../hooks'
 import { AnalysisHomeUI } from './ui'
 
-export function AnalysisHomePage() {
+export function PeopleAnalysisHomePage() {
   const userType = useAuthStore((state) => state.user.user_type)
 
   const { personAnalysis, isLoading: isLoadingPerson } = usePersonAnalysis()
 
-  const { vehicleAnalysis, isLoading: isLoadingVehicle } = useVehicleAnalysis()
-
   return (
     <AnalysisHomeUI
       userType={userType}
-      isLoading={isLoadingPerson || isLoadingVehicle}
+      isLoading={isLoadingPerson}
       personAnalysis={personAnalysis}
-      vehicleAnalysis={vehicleAnalysis}
     />
   )
 }

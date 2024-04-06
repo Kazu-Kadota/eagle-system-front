@@ -3,7 +3,8 @@ import { RequestAnalysisParams } from './pages/RequestAnalysis'
 import { PersonAnalysis, VehicleAnalysis } from 'src/models'
 
 export const AnalysisRoutePaths = {
-  ANALYSIS_HOME: '/analises',
+  PEOPLE_ANALYSIS_HOME: '/analises/pessoas',
+  VEHICLE_ANALYSIS_HOME: '/analises/veiculos',
   SEARCH_PEOPLE_ANALYSIS: '/analises/pessoas/consultar',
   SEARCH_VEHICLE_ANALYSIS: '/analises/veiculos/consultar',
   requestAnalysis: (params?: RequestAnalysisParams) =>

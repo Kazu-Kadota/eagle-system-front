@@ -18,7 +18,14 @@ interface NavbarLinks extends NavbarItemProps {
 
 const navlinks: NavbarLinks[] = [
   { label: 'Home', path: RoutePaths.Common.HOME },
-  { label: 'Análises', path: RoutePaths.Analysis.ANALYSIS_HOME },
+  {
+    label: 'Análises de Pessoas',
+    path: RoutePaths.Analysis.PEOPLE_ANALYSIS_HOME,
+  },
+  {
+    label: 'Análises de Véiculos',
+    path: RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
+  },
   {
     label: 'Relatórios',
     path: RoutePaths.Report.REPORT_HOME,

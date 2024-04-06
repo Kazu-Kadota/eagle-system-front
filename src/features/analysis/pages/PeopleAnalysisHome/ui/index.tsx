@@ -1,25 +1,15 @@
 import { ButtonProps, LoadingContainer } from 'src/components'
 import { AnalysisTable } from 'src/features/analysis/components/AnalysisTable'
 import { UserType } from 'src/models'
-import {
-  AnalysisType,
-  PersonAnalysis,
-  VehicleAnalysis,
-} from 'src/models/analysis'
+import { AnalysisType, PersonAnalysis } from 'src/models/analysis'
 import { RoutePaths } from 'src/routes/paths'
 import { hasUserType } from 'src/utils/userType'
-import {
-  personTableColumns,
-  personTableColumnsAdminOperator,
-  vehicleTableColumns,
-  vehicleTableColumnsAdminOperator,
-} from './columns'
+import { personTableColumns, personTableColumnsAdminOperator } from './columns'
 
 interface AnalysisHomeUIProps {
   userType: UserType
   isLoading: boolean
   personAnalysis: PersonAnalysis[]
-  vehicleAnalysis: VehicleAnalysis[]
 }
 
 const analysisTypeLabel = {
@@ -67,7 +57,6 @@ export function AnalysisHomeUI({
   isLoading,
   userType,
   personAnalysis,
-  vehicleAnalysis,
 }: AnalysisHomeUIProps) {
   if (isLoading) {
     return <LoadingContainer />
@@ -84,17 +73,6 @@ export function AnalysisHomeUI({
             : personTableColumns
         }
         actions={getTableActions(AnalysisType.PERSON, userType)}
-      />
-
-      <AnalysisTable
-        title="Veículos"
-        data={vehicleAnalysis}
-        columns={
-          hasUserType(userType, UserType.ADMIN, UserType.OPERATOR)
-            ? vehicleTableColumnsAdminOperator
-            : vehicleTableColumns
-        }
-        actions={getTableActions(AnalysisType.VEHICLE, userType)}
       />
     </div>
   )
