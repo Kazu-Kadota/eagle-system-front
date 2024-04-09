@@ -10,7 +10,12 @@ import {
   TextArea,
 } from 'src/components'
 import { AnalysisTable } from 'src/features/analysis/components'
-import { AnalysisStatus, PersonAnalysis, UserType } from 'src/models'
+import {
+  AnalysisStatus,
+  AnalysisType,
+  PersonAnalysis,
+  UserType,
+} from 'src/models'
 import { SelectItem } from 'src/types/select'
 import { hasUserType } from 'src/utils/userType'
 import { AnalysisPersonSearchSchema } from '../schema'
@@ -103,6 +108,7 @@ export function SearchPersonAnalysisUI({
           {items.length > 0 && (
             <AnalysisTable
               columns={columns}
+              analysisType={AnalysisType.PERSON}
               data={items}
               onClick={setSelectedItem}
               pageCount={5}

@@ -1,8 +1,8 @@
-import { VariantProps, tv } from 'tailwind-variants'
-import { PasswordInput } from './PasswordInput'
 import { SelectItem } from 'src/types/select'
+import { VariantProps, tv } from 'tailwind-variants'
 import { Spinner } from '..'
 import { MaskInput } from './MaskInput'
+import { PasswordInput } from './PasswordInput'
 
 const labelStyle = tv({
   base: 'block font-semibold',
@@ -45,9 +45,13 @@ const inputStyleSlots = tv({
   },
   variants: {
     size: {
+      xs: {
+        containerInput: 'h-5 min-h-[1.25rem]',
+        input: 'text-md pl-0.5 pr-2',
+      },
       sm: {
         containerInput: 'h-6 min-h-[1.5rem]',
-        input: 'px-2 text-sm',
+        input: 'pl-2 pr-2 text-sm',
       },
       md: {
         containerInput: 'h-7 min-h-[1.75rem]',
@@ -98,7 +102,8 @@ export interface InputProps {
   required?: boolean
   placeholder?: string
   value?: string
-  onChange?: React.ChangeEventHandler<HTMLElement>
+  showEmptyValue?: boolean
+  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement>
   onBlur?: React.FocusEventHandler<HTMLElement>
 }
 
@@ -126,6 +131,7 @@ export function Input({
   loading,
   required,
   disabled = false,
+  showEmptyValue = true,
   value,
   type = 'text',
   onChange,
@@ -149,9 +155,11 @@ export function Input({
 
   const renderSelect = () => (
     <select {...commonProps}>
-      <option key="" value="">
-        {placeholder ?? 'Selecione um item'}
-      </option>
+      {showEmptyValue && (
+        <option key="" value="">
+          {placeholder ?? 'Selecione um item'}
+        </option>
+      )}
       {items!.map((item) => (
         <option key={item.value} value={item.value}>
           {item.label}

@@ -7,18 +7,21 @@ import {
 } from '@tanstack/react-table'
 import ReactPaginate from 'react-paginate'
 import { PageArrowLeftIcon, PageArrowRightIcon } from 'src/assets/icons'
-import { Button, ButtonProps } from 'src/components'
-import { Analysis } from 'src/models'
+import { Button, ButtonProps, Input } from 'src/components'
+import { listNumOfItemsPerPage } from 'src/features/analysis/constants/table'
+import { Analysis, AnalysisType } from 'src/models'
+import { useConfigStore } from 'src/store/config'
 import { ValueOf } from 'src/types/utils'
 import { cn } from 'src/utils/classNames'
 
 export interface TableProps<T> {
+  analysisType: AnalysisType
   title?: string
   data: T[]
   columns: ColumnDef<T, ValueOf<T>>[]
   actions?: ButtonProps[]
-  pageCount?: number
   className?: string
+  pageCount?: number
   onClick?: (item: T) => void
 }
 
@@ -28,14 +31,22 @@ export const AnalysisTable = <T extends Analysis>({
   title,
   actions,
   className,
-  pageCount = 25,
+  analysisType,
+  pageCount,
   onClick,
 }: TableProps<T>) => {
+  const initialPageSize =
+    pageCount ||
+    useConfigStore.getState().getNumOfItemsPerPage(analysisType) ||
+    25
+
+  const savePageSize = useConfigStore.getState().setNumOfItemsPerPage
+
   const table = useReactTable<T>({
     data,
     columns,
     initialState: {
-      pagination: { pageSize: pageCount },
+      pagination: { pageSize: initialPageSize },
     },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -44,6 +55,16 @@ export const AnalysisTable = <T extends Analysis>({
   const { pageIndex, pageSize } = table.getState().pagination
   const numOfItemsSeen = Math.min((pageIndex + 1) * pageSize, data.length)
   const currentPageCount = table.getPageCount()
+
+  const handleOnChangePageSize = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPageSize = parseInt(e.target.value)
+
+    table.setPageSize(newPageSize)
+
+    if (!pageCount) {
+      savePageSize(analysisType, newPageSize)
+    }
+  }
 
   return (
     <div className={className}>
@@ -120,10 +141,23 @@ export const AnalysisTable = <T extends Analysis>({
         )}
       </div>
 
-      <div className="flex flex-col items-center justify-between gap-2 rounded-b-[3px] bg-light px-4 pb-3 pt-4 sm:flex-row sm:py-[0.35rem]">
-        <p className="text-xs font-bold text-primary">
+      <div className="flex flex-col-reverse items-center justify-between gap-5 rounded-b-[3px] bg-light px-4 pb-3 pt-4 sm:flex-row sm:gap-6 sm:py-2">
+        <p className="flex-1 text-xs font-bold text-primary">
           Mostrando {numOfItemsSeen} de {data.length} solicitações
         </p>
+
+        <Input
+          label="Exibir:"
+          name="itemsPerPage"
+          value={pageSize.toString()}
+          items={listNumOfItemsPerPage}
+          inputVariants={{ size: 'xs' }}
+          labelVariants={{ size: 'xs' }}
+          containerVariants={{ layout: 'row' }}
+          showEmptyValue={false}
+          onChange={handleOnChangePageSize}
+        />
+
         {currentPageCount > 0 && (
           <ReactPaginate
             breakLabel="..."

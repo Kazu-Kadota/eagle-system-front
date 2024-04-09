@@ -69,6 +69,7 @@ export function AnalysisHomeUI({
     <div className="flex flex-col gap-10 sm:gap-[3.4rem]">
       <AnalysisTable
         title="Veículos"
+        analysisType={AnalysisType.VEHICLE}
         data={vehicleAnalysis}
         columns={
           hasUserType(userType, UserType.ADMIN, UserType.OPERATOR)

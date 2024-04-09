@@ -19,7 +19,12 @@ import {
   vehiclesTypesSelectItems,
 } from 'src/features/analysis/constants/analysis'
 import { estadosVehiclesSelectItems } from 'src/features/analysis/constants/estados'
-import { AnalysisStatus, UserType, VehicleAnalysis } from 'src/models'
+import {
+  AnalysisStatus,
+  AnalysisType,
+  UserType,
+  VehicleAnalysis,
+} from 'src/models'
 import { SelectItem } from 'src/types/select'
 import { hasUserType } from 'src/utils/userType'
 import { AnalysisVehicleSearchSchema } from '../schema'
@@ -111,6 +116,7 @@ export function SearchVehicleAnalysisUI({
           {items.length > 0 && (
             <AnalysisTable
               columns={columns}
+              analysisType={AnalysisType.VEHICLE}
               data={items}
               onClick={setSelectedItem}
               pageCount={5}
