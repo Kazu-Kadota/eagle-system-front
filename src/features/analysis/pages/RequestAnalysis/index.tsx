@@ -140,7 +140,16 @@ export function RequestAnalysisPage() {
     setAnalysisType(analysisTypeFromUrl ?? AnalysisType.PERSON)
   }
 
-  const onSuccessRequestAnalysis = () => {
+  const onSuccessRequestAnalysis = (analysisType: AnalysisType) => {
+    const goBackRoute = {
+      [AnalysisType.PERSON]: RoutePaths.Analysis.PEOPLE_ANALYSIS_HOME,
+      [AnalysisType.VEHICLE]: RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
+      [AnalysisType.COMBO]: RoutePaths.Analysis.PEOPLE_ANALYSIS_HOME,
+      [AnalysisType.SECOND_DRIVER]: RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
+      [AnalysisType.VEHICLE_PLATE_HISTORY]:
+        RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
+    }[analysisType]
+
     modal.open({
       title: 'Solicitação enviada!',
       buttons: [
@@ -148,7 +157,7 @@ export function RequestAnalysisPage() {
         {
           children: 'Ir para página inicial',
           theme: 'dark',
-          onClick: () => navigate(RoutePaths.Analysis.ANALYSIS_HOME),
+          onClick: () => navigate(goBackRoute),
         },
       ],
     })
@@ -174,7 +183,7 @@ export function RequestAnalysisPage() {
         ),
       })
 
-      onSuccessRequestAnalysis()
+      onSuccessRequestAnalysis(AnalysisType.PERSON)
     } catch (error) {
       onErrorRequestAnalysis(error)
     } finally {
@@ -190,7 +199,7 @@ export function RequestAnalysisPage() {
 
       await requestAnalysisVehicle(prepareVehicleData(data))
 
-      onSuccessRequestAnalysis()
+      onSuccessRequestAnalysis(AnalysisType.VEHICLE)
     } catch (error) {
       onErrorRequestAnalysis(error)
     } finally {
@@ -227,7 +236,7 @@ export function RequestAnalysisPage() {
         ),
       })
 
-      onSuccessRequestAnalysis()
+      onSuccessRequestAnalysis(AnalysisType.COMBO)
     } catch (error) {
       onErrorRequestAnalysis(error)
     } finally {
@@ -247,7 +256,7 @@ export function RequestAnalysisPage() {
         owner_name: data.owner_name,
       })
 
-      onSuccessRequestAnalysis()
+      onSuccessRequestAnalysis(AnalysisType.VEHICLE_PLATE_HISTORY)
     } catch (error) {
       onErrorRequestAnalysis(error)
     } finally {
@@ -267,7 +276,7 @@ export function RequestAnalysisPage() {
         owner_name: data.owner_name,
       })
 
-      onSuccessRequestAnalysis()
+      onSuccessRequestAnalysis(AnalysisType.SECOND_DRIVER)
     } catch (error) {
       onErrorRequestAnalysis(error)
     } finally {
