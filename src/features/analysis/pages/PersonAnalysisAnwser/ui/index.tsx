@@ -20,7 +20,12 @@ import {
 import { cnhTypesSelectItems } from 'src/features/analysis/constants/cnh'
 import { estadosSelectItems } from 'src/features/analysis/constants/estados'
 import { getAnalysisTypeString } from 'src/features/analysis/utils/mappers'
-import { AnalysisStatus, PersonAnalysis, UserType } from 'src/models'
+import {
+  AnalysisResult,
+  AnalysisStatus,
+  PersonAnalysis,
+  UserType,
+} from 'src/models'
 import { hasUserType } from 'src/utils/userType'
 import { AnalysisAnswerSchema } from '../schema'
 
@@ -28,6 +33,7 @@ interface AnalysisAnswerUIProps {
   person: PersonAnalysis
   isLoading: boolean
   isSendAnalysisLoading: boolean
+  analysisResult: AnalysisResult
   userType?: UserType
   control: Control<AnalysisAnswerSchema>
   onSubmit: () => void
@@ -37,6 +43,7 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
   isLoading,
   person,
   isSendAnalysisLoading,
+  analysisResult,
   userType,
   control,
   onSubmit,
@@ -256,6 +263,8 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
           />
           <ControlledTextArea
             control={control}
+            shouldShowDisableStyle
+            disabled={analysisResult === AnalysisResult.APPROVED}
             label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
             name="analysis_info"
           />

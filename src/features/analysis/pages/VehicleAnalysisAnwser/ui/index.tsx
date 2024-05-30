@@ -20,7 +20,12 @@ import {
   vehiclesTypesSelectItems,
 } from 'src/features/analysis/constants/analysis'
 import { estadosVehiclesSelectItems } from 'src/features/analysis/constants/estados'
-import { AnalysisStatus, UserType, VehicleAnalysis } from 'src/models'
+import {
+  AnalysisResult,
+  AnalysisStatus,
+  UserType,
+  VehicleAnalysis,
+} from 'src/models'
 import { hasUserType } from 'src/utils/userType'
 import { AnalysisAnswerSchema } from '../schema'
 
@@ -28,6 +33,7 @@ interface VehicleAnalysisAnswerUIProps {
   vehicle: VehicleAnalysis
   isLoading: boolean
   isSendAnalysisLoading: boolean
+  analysisResult: AnalysisResult
   userType?: UserType
   control: Control<AnalysisAnswerSchema>
   onSubmit: () => void
@@ -39,6 +45,7 @@ export const VehicleAnalysisAnswerUI: React.FC<
   isLoading,
   vehicle,
   isSendAnalysisLoading,
+  analysisResult,
   userType,
   control,
   onSubmit,
@@ -197,6 +204,8 @@ export const VehicleAnalysisAnswerUI: React.FC<
             containerClassName="mt-2"
           />
           <ControlledTextArea
+            shouldShowDisableStyle
+            disabled={analysisResult === AnalysisResult.APPROVED}
             control={control}
             label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
             name="analysis_info"
