@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useVehicleAnalysisDetail } from 'src/features/analysis/hooks'
-import { AnalysisResult, AnalysisType } from 'src/models'
+import { AnalysisResult, AnalysisStatus, AnalysisType } from 'src/models'
 import { useAuthStore } from 'src/store/auth'
 import { useModal } from 'src/store/modal'
 import { getErrorMsg } from 'src/utils/errors'
@@ -19,12 +19,13 @@ export const VehicleAnalysisAnswerPage = () => {
   const { id } = useParams()
   const [searchParams] = useSearchParams()
 
-  const { vehicle, isLoading } = useVehicleAnalysisDetail({
-    id: id ?? '',
-    vehicleId: searchParams.get('vehicleId') ?? '',
-  })
+  const { vehicle, isLoading, updateVehicleAnalysis } =
+    useVehicleAnalysisDetail({
+      id: id ?? '',
+      vehicleId: searchParams.get('vehicleId') ?? '',
+    })
 
-  const { control, handleSubmit } = useForm<AnalysisAnswerSchema>({
+  const { control, watch, handleSubmit } = useForm<AnalysisAnswerSchema>({
     resolver: zodResolver(analysisAnswerSchema),
     values: {
       analysis_result: vehicle?.analysis_result ?? AnalysisResult.APPROVED,
@@ -32,6 +33,8 @@ export const VehicleAnalysisAnswerPage = () => {
       confirmed: false,
     },
   })
+
+  const analysisResult = watch('analysis_result')
 
   const sendAnalysisMutation = useMutation({
     mutationFn: (data: AnalysisAnswerSchema) =>
@@ -49,16 +52,22 @@ export const VehicleAnalysisAnswerPage = () => {
           'Não foi possível solicitar a análise, verifique os dados e tente novamente.',
         ),
       ),
-    onSuccess: () => {
+    onSuccess: (_, data) => {
       modal.open({
         title: 'Analise enviada com\nsucesso!',
         buttons: [
           {
             children: 'Fechar',
-            onClick: window.close,
+            onClick: modal.close,
           },
         ],
-        disableOverlayClose: true,
+      })
+
+      updateVehicleAnalysis({
+        ...vehicle,
+        analysis_result: data.analysis_result,
+        analysis_info: data.analysis_info ?? '',
+        status: AnalysisStatus.FINISHED,
       })
     },
   })
@@ -69,6 +78,7 @@ export const VehicleAnalysisAnswerPage = () => {
       vehicle={vehicle}
       userType={user.user_type}
       isLoading={isLoading}
+      analysisResult={analysisResult}
       isSendAnalysisLoading={sendAnalysisMutation.isPending}
       onSubmit={handleSubmit((data) => sendAnalysisMutation.mutate(data))}
     />

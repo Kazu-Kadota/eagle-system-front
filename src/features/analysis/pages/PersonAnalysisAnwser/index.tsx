@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { usePersonAnalysisDetail } from 'src/features/analysis/hooks'
-import { AnalysisResult, AnalysisType } from 'src/models'
+import { AnalysisResult, AnalysisStatus, AnalysisType } from 'src/models'
 import { useAuthStore } from 'src/store/auth'
 import { useModal } from 'src/store/modal'
 import { getErrorMsg } from 'src/utils/errors'
@@ -19,12 +19,12 @@ export const PersonAnalysisAnswerPage = () => {
   const { id } = useParams()
   const [searchParams] = useSearchParams()
 
-  const { person, isLoading } = usePersonAnalysisDetail({
+  const { person, isLoading, updatePersonAnalysis } = usePersonAnalysisDetail({
     id: id ?? '',
     personId: searchParams.get('personId') ?? '',
   })
 
-  const { control, handleSubmit } = useForm<AnalysisAnswerSchema>({
+  const { control, watch, handleSubmit } = useForm<AnalysisAnswerSchema>({
     resolver: zodResolver(analysisAnswerSchema),
     values: {
       analysis_result: person?.analysis_result ?? AnalysisResult.APPROVED,
@@ -32,6 +32,8 @@ export const PersonAnalysisAnswerPage = () => {
       confirmed: false,
     },
   })
+
+  const analysisResult = watch('analysis_result')
 
   const sendAnalysisMutation = useMutation({
     mutationFn: (data: AnalysisAnswerSchema) =>
@@ -49,16 +51,22 @@ export const PersonAnalysisAnswerPage = () => {
           'Não foi possível solicitar a análise, verifique os dados e tente novamente.',
         ),
       ),
-    onSuccess: () => {
+    onSuccess: (_, data) => {
       modal.open({
         title: 'Analise enviada com\nsucesso!',
         buttons: [
           {
             children: 'OK',
-            onClick: window.close,
+            onClick: modal.close,
           },
         ],
-        disableOverlayClose: true,
+      })
+
+      updatePersonAnalysis({
+        ...person,
+        analysis_result: data.analysis_result,
+        analysis_info: data.analysis_info ?? '',
+        status: AnalysisStatus.FINISHED,
       })
     },
   })
@@ -68,6 +76,7 @@ export const PersonAnalysisAnswerPage = () => {
       control={control}
       person={person}
       userType={user.user_type}
+      analysisResult={analysisResult}
       isLoading={isLoading}
       isSendAnalysisLoading={sendAnalysisMutation.isPending}
       onSubmit={handleSubmit((data) => sendAnalysisMutation.mutate(data))}
