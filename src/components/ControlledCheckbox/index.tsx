@@ -4,6 +4,7 @@ import {
   type FieldValues,
   type Path,
 } from 'react-hook-form'
+import { CheckIcon } from 'src/assets/icons'
 import { cn } from 'src/utils/classNames'
 
 interface ControlledCheckboxProps<T extends FieldValues> {
@@ -11,35 +12,45 @@ interface ControlledCheckboxProps<T extends FieldValues> {
   name: Path<T>
   control: Control<T>
   error?: string
+  containerClassName?: string
 }
 
 export const ControlledCheckbox = <T extends FieldValues>({
   label,
   name,
   control,
+  containerClassName,
 }: ControlledCheckboxProps<T>) => {
   const {
-    field,
+    field: { value, onChange },
     fieldState: { error },
   } = useController({ name, control })
 
   return (
-    <div className="xs:gap-[0.4rem] flex items-center gap-2">
-      <input
-        {...field}
-        type="checkbox"
-        id={`checkbox-${name}`}
-        className="h-4 w-4"
-      />
-      <label
-        htmlFor={`checkbox-${name}`}
+    <button
+      type="button"
+      className={cn(
+        'xs:gap-[0.4rem] flex items-center gap-2',
+        containerClassName,
+      )}
+      onClick={() => onChange(!value)}
+    >
+      <span
+        className={
+          value ? 'h-4 w-4 bg-link' : 'h-4 w-4 border border-placeholder'
+        }
+      >
+        {value && <CheckIcon className="w-4 fill-light" />}
+      </span>
+
+      <span
         className={cn(
           'text-sm',
           error?.message ? 'font-bold text-error' : 'font-semibold text-dark',
         )}
       >
         {label}
-      </label>
-    </div>
+      </span>
+    </button>
   )
 }
