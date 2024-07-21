@@ -43,6 +43,7 @@ export type Analysis = {
   user_id: string
   company_name: string
   updated_at: string
+  from_db: boolean
 }
 
 export type PersonAnalysis = Analysis & {

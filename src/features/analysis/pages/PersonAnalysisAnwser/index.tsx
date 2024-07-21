@@ -30,6 +30,7 @@ export const PersonAnalysisAnswerPage = () => {
       analysis_result: person?.analysis_result ?? AnalysisResult.APPROVED,
       analysis_info: person?.analysis_info ?? '',
       confirmed: false,
+      from_db: false,
     },
   })
 
@@ -43,12 +44,13 @@ export const PersonAnalysisAnswerPage = () => {
         analysisCategory: AnalysisType.PERSON,
         analysis_info: data.analysis_info || undefined,
         analysis_result: data.analysis_result,
+        from_db: data.from_db,
       }),
     onError: (error) =>
       toast.error(
         getErrorMsg(
           error,
-          'Não foi possível solicitar a análise, verifique os dados e tente novamente.',
+          'Não foi possível responder a análise, verifique os dados e tente novamente.',
         ),
       ),
     onSuccess: (_, data) => {
