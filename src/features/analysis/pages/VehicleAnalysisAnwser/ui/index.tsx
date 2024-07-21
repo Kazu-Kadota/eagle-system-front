@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { Control } from 'react-hook-form'
+import { Control, Controller } from 'react-hook-form'
 import {
   Box,
   Button,
@@ -20,12 +20,14 @@ import {
   vehiclesTypesSelectItems,
 } from 'src/features/analysis/constants/analysis'
 import { estadosVehiclesSelectItems } from 'src/features/analysis/constants/estados'
+import { userApiSelectItems } from 'src/features/auth/constants'
 import {
   AnalysisResult,
   AnalysisStatus,
   UserType,
   VehicleAnalysis,
 } from 'src/models'
+import { onChangeStringBoolean, toStringBoolean } from 'src/utils/boolean'
 import { hasUserType } from 'src/utils/userType'
 import { AnalysisAnswerSchema } from '../schema'
 
@@ -203,6 +205,22 @@ export const VehicleAnalysisAnswerUI: React.FC<
             items={analysisResultsSelectItems}
             containerClassName="mt-2"
           />
+          <Controller
+            control={control}
+            name="from_db"
+            render={({ field, fieldState: { error } }) => (
+              <SelectGroup
+                required
+                title="Resposta do Banco de Dados?"
+                items={userApiSelectItems}
+                layout="row"
+                value={toStringBoolean(field.value)}
+                error={error?.message}
+                containerClassName="mb-2 mt-1"
+                onChange={onChangeStringBoolean(field.onChange)}
+              />
+            )}
+          />
           <ControlledTextArea
             shouldShowDisableStyle
             disabled={analysisResult === AnalysisResult.APPROVED}
@@ -234,6 +252,15 @@ export const VehicleAnalysisAnswerUI: React.FC<
             layout="row"
             value={vehicle.analysis_result}
             items={analysisResultsSelectItems}
+          />
+          <SelectGroup
+            required
+            title="Resposta do Banco de Dados?"
+            items={userApiSelectItems}
+            layout="row"
+            value={toStringBoolean(vehicle.from_db)}
+            containerClassName="mb-2"
+            disabled
           />
           <TextArea
             label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"

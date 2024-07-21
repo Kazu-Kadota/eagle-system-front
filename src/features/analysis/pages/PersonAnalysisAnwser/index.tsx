@@ -29,8 +29,8 @@ export const PersonAnalysisAnswerPage = () => {
     values: {
       analysis_result: person?.analysis_result ?? AnalysisResult.APPROVED,
       analysis_info: person?.analysis_info ?? '',
+      from_db: person?.from_db ?? false,
       confirmed: false,
-      from_db: false,
     },
   })
 
@@ -68,6 +68,7 @@ export const PersonAnalysisAnswerPage = () => {
         ...person,
         analysis_result: data.analysis_result,
         analysis_info: data.analysis_info ?? '',
+        from_db: data.from_db,
         status: AnalysisStatus.FINISHED,
       })
     },
