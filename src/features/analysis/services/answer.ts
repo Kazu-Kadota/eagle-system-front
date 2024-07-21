@@ -8,6 +8,7 @@ interface SendAnalysisOptions {
   vehicle_id?: string
   analysis_info?: string
   analysis_result: string
+  from_db: boolean
 }
 
 export const sendAnalysis = async ({
@@ -17,12 +18,13 @@ export const sendAnalysis = async ({
   analysisCategory,
   analysis_info,
   analysis_result,
+  from_db,
 }: SendAnalysisOptions) => {
   const { data } = await requestAuth.post(
     env.VITE_API_REQUEST_URL,
     `/analysis/${analysisCategory}/${id}/answer`,
     {
-      body: { analysis_info, analysis_result },
+      body: { analysis_info, analysis_result, from_db },
       query: { person_id, vehicle_id },
     },
   )

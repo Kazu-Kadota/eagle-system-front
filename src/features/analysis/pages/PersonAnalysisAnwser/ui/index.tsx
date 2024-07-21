@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { Control } from 'react-hook-form'
+import { Control, Controller } from 'react-hook-form'
 import {
   Box,
   Button,
@@ -20,12 +20,14 @@ import {
 import { cnhTypesSelectItems } from 'src/features/analysis/constants/cnh'
 import { estadosSelectItems } from 'src/features/analysis/constants/estados'
 import { getAnalysisTypeString } from 'src/features/analysis/utils/mappers'
+import { userApiSelectItems } from 'src/features/auth/constants'
 import {
   AnalysisResult,
   AnalysisStatus,
   PersonAnalysis,
   UserType,
 } from 'src/models'
+import { onChangeStringBoolean, toStringBoolean } from 'src/utils/boolean'
 import { hasUserType } from 'src/utils/userType'
 import { AnalysisAnswerSchema } from '../schema'
 
@@ -261,6 +263,22 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
             items={analysisResultsSelectItems}
             containerClassName="mt-2"
           />
+          <Controller
+            control={control}
+            name="from_db"
+            render={({ field, fieldState: { error } }) => (
+              <SelectGroup
+                required
+                title="Resposta do Banco de Dados?"
+                items={userApiSelectItems}
+                layout="row"
+                value={toStringBoolean(field.value)}
+                error={error?.message}
+                containerClassName="mb-2 mt-1"
+                onChange={onChangeStringBoolean(field.onChange)}
+              />
+            )}
+          />
           <ControlledTextArea
             control={control}
             shouldShowDisableStyle
@@ -292,6 +310,15 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
             layout="row"
             value={person.analysis_result}
             items={analysisResultsSelectItems}
+          />
+          <SelectGroup
+            required
+            title="Resposta do Banco de Dados?"
+            items={userApiSelectItems}
+            layout="row"
+            value={toStringBoolean(person.from_db)}
+            containerClassName="mb-2"
+            disabled
           />
           <TextArea
             label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
