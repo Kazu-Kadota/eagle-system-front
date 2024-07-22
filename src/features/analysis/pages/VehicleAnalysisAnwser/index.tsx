@@ -51,7 +51,7 @@ export const VehicleAnalysisAnswerPage = () => {
       toast.error(
         getErrorMsg(
           error,
-          'Não foi possível solicitar a análise, verifique os dados e tente novamente.',
+          'Não foi possível responder a análise, verifique os dados e tente novamente.',
         ),
       ),
     onSuccess: (_, data) => {

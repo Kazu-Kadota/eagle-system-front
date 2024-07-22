@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { Control } from 'react-hook-form'
 import { SearchIcon } from 'src/assets/icons'
 import {
@@ -11,24 +12,25 @@ import {
 } from 'src/components'
 import { AnalysisTable } from 'src/features/analysis/components'
 import {
+  analysisResultsSelectItems,
+  analysisStatusSelectItems,
+  personRegionTypeButtonTheme,
+} from 'src/features/analysis/constants/analysis'
+import { cnhTypesSelectItems } from 'src/features/analysis/constants/cnh'
+import { estadosSelectItems } from 'src/features/analysis/constants/estados'
+import { getAnalysisTypeString } from 'src/features/analysis/utils/mappers'
+import { userApiSelectItems } from 'src/features/auth/constants'
+import {
   AnalysisStatus,
   AnalysisType,
   PersonAnalysis,
   UserType,
 } from 'src/models'
 import { SelectItem } from 'src/types/select'
+import { toStringBoolean } from 'src/utils/boolean'
 import { hasUserType } from 'src/utils/userType'
 import { AnalysisPersonSearchSchema } from '../schema'
 import { columns } from './columns'
-import dayjs from 'dayjs'
-import {
-  analysisResultsSelectItems,
-  analysisStatusSelectItems,
-  personRegionTypeButtonTheme,
-} from 'src/features/analysis/constants/analysis'
-import { getAnalysisTypeString } from 'src/features/analysis/utils/mappers'
-import { estadosSelectItems } from 'src/features/analysis/constants/estados'
-import { cnhTypesSelectItems } from 'src/features/analysis/constants/cnh'
 
 interface SearchPersonAnalysisUIProps {
   userType: UserType
@@ -323,6 +325,15 @@ export function SearchPersonAnalysisUI({
                 value={selectedItem.analysis_result}
                 items={analysisResultsSelectItems}
                 containerClassName="mt-2"
+              />
+              <SelectGroup
+                required
+                title="Resposta do Banco de Dados?"
+                items={userApiSelectItems}
+                layout="row"
+                value={toStringBoolean(selectedItem.from_db)}
+                containerClassName="mb-2"
+                disabled
               />
               <TextArea
                 label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
