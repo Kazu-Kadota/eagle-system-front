@@ -30,6 +30,7 @@ export const VehicleAnalysisAnswerPage = () => {
     values: {
       analysis_result: vehicle?.analysis_result ?? AnalysisResult.APPROVED,
       analysis_info: vehicle?.analysis_info ?? '',
+      from_db: vehicle?.from_db ?? false,
       confirmed: false,
     },
   })
@@ -44,12 +45,13 @@ export const VehicleAnalysisAnswerPage = () => {
         analysisCategory: AnalysisType.VEHICLE,
         analysis_info: data.analysis_info || undefined,
         analysis_result: data.analysis_result,
+        from_db: data.from_db,
       }),
     onError: (error) =>
       toast.error(
         getErrorMsg(
           error,
-          'Não foi possível solicitar a análise, verifique os dados e tente novamente.',
+          'Não foi possível responder a análise, verifique os dados e tente novamente.',
         ),
       ),
     onSuccess: (_, data) => {
@@ -67,6 +69,7 @@ export const VehicleAnalysisAnswerPage = () => {
         ...vehicle,
         analysis_result: data.analysis_result,
         analysis_info: data.analysis_info ?? '',
+        from_db: data.from_db,
         status: AnalysisStatus.FINISHED,
       })
     },

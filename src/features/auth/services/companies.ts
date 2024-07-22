@@ -15,3 +15,12 @@ export const getCompanies = async () => {
 
   return data
 }
+
+export const getMyCompany = async () => {
+  const { data } = await requestAuth.get<Company>(
+    env.VITE_API_USER_URL,
+    '/my-company',
+  )
+
+  return data
+}

@@ -19,6 +19,7 @@ import {
   vehiclesTypesSelectItems,
 } from 'src/features/analysis/constants/analysis'
 import { estadosVehiclesSelectItems } from 'src/features/analysis/constants/estados'
+import { userApiSelectItems } from 'src/features/auth/constants'
 import {
   AnalysisStatus,
   AnalysisType,
@@ -26,6 +27,7 @@ import {
   VehicleAnalysis,
 } from 'src/models'
 import { SelectItem } from 'src/types/select'
+import { toStringBoolean } from 'src/utils/boolean'
 import { hasUserType } from 'src/utils/userType'
 import { AnalysisVehicleSearchSchema } from '../schema'
 import { columns } from './columns'
@@ -271,6 +273,15 @@ export function SearchVehicleAnalysisUI({
                 value={selectedItem.analysis_result}
                 items={analysisResultsSelectItems}
                 containerClassName="mt-2"
+              />
+              <SelectGroup
+                required
+                title="Resposta do Banco de Dados?"
+                items={userApiSelectItems}
+                layout="row"
+                value={toStringBoolean(selectedItem.from_db)}
+                containerClassName="mb-2"
+                disabled
               />
               <TextArea
                 label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"

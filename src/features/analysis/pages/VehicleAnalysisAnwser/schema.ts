@@ -6,6 +6,7 @@ export const analysisAnswerSchema = z
     analysis_info: z.string().optional(),
     analysis_result: z.nativeEnum(AnalysisResult),
     confirmed: z.literal<boolean>(true),
+    from_db: z.boolean(),
   })
   .superRefine((value, ctx) => {
     if (value.analysis_result === 'REJECTED' && !value.analysis_info) {

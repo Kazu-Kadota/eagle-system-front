@@ -18,12 +18,14 @@ export enum PersonAnalysisType {
   SIMPLE = 'simple',
   HISTORY = 'history',
   CNH_STATUS = 'cnh-status',
+  NATIONAL_DB = 'national + db',
 }
 
 export enum PersonRegionType {
   STATES = 'states',
   NATIONAL = 'national',
   CNH_STATUS = 'cnh-status',
+  NATIONAL_DB = 'national + db',
 }
 
 export enum AnalysisResult {
@@ -43,6 +45,7 @@ export type Analysis = {
   user_id: string
   company_name: string
   updated_at: string
+  from_db: boolean
 }
 
 export type PersonAnalysis = Analysis & {
