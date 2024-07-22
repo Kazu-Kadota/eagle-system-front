@@ -1,5 +1,5 @@
 import { Control, FieldArrayWithId } from 'react-hook-form'
-import { Box, SelectGroup } from 'src/components'
+import { Box, LoadingContainer, SelectGroup } from 'src/components'
 import {
   AnalysisTypeSelect,
   PersonForm,
@@ -27,6 +27,8 @@ type VehicleField = FieldArrayWithId<
 >
 
 export interface RequestAnalysisUIProps {
+  isLoading: boolean
+  isDbEnabled: boolean
   analysisType?: AnalysisType
   analysisTypeLoading: AnalysisType | null
   vehicleAnalysisType: AnalysisType
@@ -52,6 +54,8 @@ export interface RequestAnalysisUIProps {
 }
 
 export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
+  isLoading,
+  isDbEnabled,
   analysisType,
   analysisTypeLoading,
   fieldsVehicle,
@@ -85,6 +89,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
   const renderPersonForm = () => (
     <>
       <AnalysisTypeSelect
+        isDbEnabled={isDbEnabled}
         personAnalysis={personAnalysis}
         showCNHStatus
         onChangePersonAnalysis={onChangePersonAnalysis as never}
@@ -130,6 +135,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
   const renderComboForm = () => (
     <>
       <AnalysisTypeSelect
+        isDbEnabled={isDbEnabled}
         personAnalysis={personAnalysis}
         onChangePersonAnalysis={onChangePersonAnalysis as never}
       />
@@ -171,6 +177,10 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
       )}
     </>
   )
+
+  if (isLoading) {
+    return <LoadingContainer />
+  }
 
   return (
     <>

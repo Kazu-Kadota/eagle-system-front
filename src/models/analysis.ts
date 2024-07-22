@@ -18,12 +18,14 @@ export enum PersonAnalysisType {
   SIMPLE = 'simple',
   HISTORY = 'history',
   CNH_STATUS = 'cnh-status',
+  NATIONAL_DB = 'national + db',
 }
 
 export enum PersonRegionType {
   STATES = 'states',
   NATIONAL = 'national',
   CNH_STATUS = 'cnh-status',
+  NATIONAL_DB = 'national + db',
 }
 
 export enum AnalysisResult {

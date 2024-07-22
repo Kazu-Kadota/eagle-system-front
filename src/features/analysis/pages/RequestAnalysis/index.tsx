@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { useCompanies } from 'src/features/auth'
+import { useCompanies, useMyCompany } from 'src/features/auth'
 import {
   AnalysisType,
   PersonRegionType,
@@ -42,6 +42,7 @@ import {
   preparePersonAnalysis,
   preparePersonData,
   prepareVehicleData,
+  validatePersonAnalysis,
 } from './utils'
 
 export type RequestAnalysisParams = {
@@ -78,6 +79,8 @@ export function RequestAnalysisPage() {
     userType: user.user_type,
     analysisType,
   }
+
+  const { featureFlags, isLoading: myCompanyLoading } = useMyCompany()
 
   const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
     enabled: hasUserType(user.user_type, UserType.ADMIN),
@@ -173,6 +176,13 @@ export function RequestAnalysisPage() {
 
   const onRequestPersonAnalysis = async (data: AnalysisPersonSchema) => {
     try {
+      const { isValid, msg } = validatePersonAnalysis(personAnalysis)
+
+      if (!isValid) {
+        toast.error(msg, { autoClose: 3500 })
+        return
+      }
+
       setAnaysisTypeLoading(AnalysisType.PERSON)
 
       await requestAnalysisPerson({
@@ -211,6 +221,13 @@ export function RequestAnalysisPage() {
     e: React.FormEvent<HTMLFormElement>,
   ) => {
     e.preventDefault()
+
+    const { isValid, msg } = validatePersonAnalysis(personAnalysis)
+
+    if (!isValid) {
+      toast.error(msg, { autoClose: 3500 })
+      return
+    }
 
     const [personData, vehiclesData] = await Promise.all([
       submitFormPromise(handleSubmitPerson),
@@ -294,6 +311,8 @@ export function RequestAnalysisPage() {
 
   return (
     <RequestAnalysisUI
+      isLoading={myCompanyLoading}
+      isDbEnabled={featureFlags.database_access_consult}
       userType={user.user_type}
       analysisType={analysisType}
       personAnalysis={personAnalysis}

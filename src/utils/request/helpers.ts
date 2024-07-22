@@ -52,5 +52,5 @@ export const isBlobFile = (blob: Blob) => {
   return fileTypes.includes(blob.type)
 }
 
-export const isTokenNotAuthorized = (status: number) =>
-  status === 403 || status === 498
+export const isTokenNotAuthorized = (name: string, status: number) =>
+  (status === 403 && name === 'Usuário não autenticado') || status === 498

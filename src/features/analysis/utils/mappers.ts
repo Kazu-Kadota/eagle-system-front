@@ -18,6 +18,7 @@ export const regionTypes: { [key in PersonRegionType]: string } = {
   [PersonRegionType.NATIONAL]: 'Nacional',
   [PersonRegionType.STATES]: 'Estadual',
   [PersonRegionType.CNH_STATUS]: 'Status da CNH',
+  [PersonRegionType.NATIONAL_DB]: 'Nacional Histórico ou Banco de dados',
 }
 
 export const personAnalysis: {
@@ -26,11 +27,16 @@ export const personAnalysis: {
   [PersonAnalysisType.HISTORY]: 'Histórico',
   [PersonAnalysisType.SIMPLE]: 'Simples',
   [PersonAnalysisType.CNH_STATUS]: 'Status da CNH',
+  [PersonAnalysisType.NATIONAL_DB]: 'Nacional Histórico ou Banco de dados',
 }
 
 export const getAnalysisTypeString = (analysis: PersonAnalysis) => {
   if (analysis.person_analysis_type === PersonAnalysisType.CNH_STATUS) {
     return personAnalysis[PersonAnalysisType.CNH_STATUS]
+  }
+
+  if (analysis.region_type === PersonRegionType.NATIONAL_DB) {
+    return regionTypes[PersonRegionType.NATIONAL_DB]
   }
 
   const string = `${regionTypes[analysis.region_type]} ${

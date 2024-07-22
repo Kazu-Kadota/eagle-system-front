@@ -7,7 +7,7 @@ import {
   State,
 } from 'src/models'
 import {
-  personAnalysisItems,
+  getPersonAnalysisItems,
   regionAnalysisItems,
   regionAnalysisItemsWithCNH,
 } from '../../constants/analysis'
@@ -15,6 +15,7 @@ import { estadosSelectItems } from '../../constants/estados'
 import { SelectItem } from 'src/types/select'
 
 interface AnalysisTypeSelectProps {
+  isDbEnabled: boolean
   personAnalysis: RegionPersonAnalysis[]
   showCNHStatus?: boolean
   onChangePersonAnalysis: (
@@ -26,6 +27,7 @@ interface AnalysisTypeSelectProps {
 
 interface AnalysisTypeSelectItemProps {
   item: SelectItem
+  isDbEnabled: boolean
   personAnalysis: RegionPersonAnalysis | undefined
   onChangePersonAnalysis: (
     items:
@@ -35,7 +37,7 @@ interface AnalysisTypeSelectItemProps {
 }
 
 export const AnalysisTypeSelectItem: React.FC<AnalysisTypeSelectItemProps> =
-  memo(({ item, personAnalysis, onChangePersonAnalysis }) => {
+  memo(({ item, isDbEnabled, personAnalysis, onChangePersonAnalysis }) => {
     const setRegionType = (values: RegionPersonAnalysis[]) => {
       if (personAnalysis?.region_type) {
         return values.filter(
@@ -103,7 +105,10 @@ export const AnalysisTypeSelectItem: React.FC<AnalysisTypeSelectItemProps> =
         {personAnalysis?.region_type &&
           personAnalysis.region_type !== PersonRegionType.CNH_STATUS && (
             <div className="mt-1 flex flex-col">
-              {personAnalysisItems.map((radioItem) => (
+              {getPersonAnalysisItems(
+                personAnalysis.region_type,
+                isDbEnabled,
+              ).map((radioItem) => (
                 <button
                   type="button"
                   key={radioItem.value}
@@ -160,6 +165,7 @@ AnalysisTypeSelectItem.displayName = 'AnalysisTypeSelectItem'
 
 export const AnalysisTypeSelect: React.FC<AnalysisTypeSelectProps> = ({
   personAnalysis,
+  isDbEnabled,
   showCNHStatus,
   onChangePersonAnalysis,
 }) => {
@@ -176,6 +182,7 @@ export const AnalysisTypeSelect: React.FC<AnalysisTypeSelectProps> = ({
       <div className="mt-3 flex max-w-3xl flex-col gap-[0.65rem] md:flex-row">
         {items.map((item) => (
           <AnalysisTypeSelectItem
+            isDbEnabled={isDbEnabled}
             key={item.value}
             item={item}
             onChangePersonAnalysis={onChangePersonAnalysis}

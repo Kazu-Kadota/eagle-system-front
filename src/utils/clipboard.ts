@@ -29,6 +29,7 @@ export const personNameKeys: { [key in keyof PersonAnalysis]: string } = {
   finished_at: 'Data de finalização',
   region: 'Região',
   updated_at: 'Data de atualização',
+  from_db: 'Resposta do banco de dados',
 }
 
 export const vehicleNameKeys: { [key in keyof VehicleAnalysis]: string } = {
@@ -50,6 +51,7 @@ export const vehicleNameKeys: { [key in keyof VehicleAnalysis]: string } = {
   vehicle_id: 'ID da pessoa',
   vehicle_type: 'Tipo de veículo',
   updated_at: 'Data de atualização',
+  from_db: 'Resposta do banco de dados',
 }
 
 export const keysToRemove = [
@@ -66,6 +68,7 @@ export const keysToRemove = [
   'region_type',
   'combo_number',
   'region',
+  'from_db',
 ]
 
 export const keysDateToFormat = [

@@ -33,16 +33,30 @@ export const simpleAnalysisTypesItems: SelectItem<AnalysisType>[] = [
   },
 ]
 
-export const personAnalysisItems: SelectItem[] = [
-  {
-    label: 'Simples',
-    value: PersonAnalysisType.SIMPLE,
-  },
-  {
-    label: 'Histórico',
-    value: PersonAnalysisType.HISTORY,
-  },
-]
+export const getPersonAnalysisItems = (
+  regionType: PersonRegionType,
+  isDbEnabled: boolean,
+): SelectItem[] => {
+  const items = [
+    {
+      label: 'Simples',
+      value: PersonAnalysisType.SIMPLE,
+    },
+    {
+      label: 'Histórico',
+      value: PersonAnalysisType.HISTORY,
+    },
+  ]
+
+  if (regionType === PersonRegionType.NATIONAL && isDbEnabled) {
+    items.push({
+      label: 'Histórico ou Banco de dados',
+      value: PersonAnalysisType.NATIONAL_DB,
+    })
+  }
+
+  return items
+}
 
 export const regionAnalysisItems: SelectItem[] = [
   {
@@ -95,6 +109,7 @@ export const analysisTypeButtonLabel = {
 
 export const personRegionTypeButtonTheme = {
   [PersonRegionType.NATIONAL]: 'blue',
+  [PersonRegionType.NATIONAL_DB]: 'blue',
   [PersonRegionType.STATES]: 'brown',
   [PersonRegionType.CNH_STATUS]: 'placeholder',
 } as const
