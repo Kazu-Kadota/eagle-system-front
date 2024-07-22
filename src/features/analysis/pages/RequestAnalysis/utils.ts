@@ -99,6 +99,8 @@ export const preparePersonAnalysis = (
   const analysis = Object.values(PersonAnalysisType).reduce<
     BackRegionPersonAnalysis[]
   >((array, type) => {
+    if (type === PersonAnalysisType.NATIONAL_DB) return array
+
     const item: BackRegionPersonAnalysis = { type, region_types: [] }
 
     data.forEach((region) => {
@@ -106,6 +108,16 @@ export const preparePersonAnalysis = (
         item.region_types!.push(region.region_type)
       }
     })
+
+    if (type === PersonAnalysisType.HISTORY) {
+      const hasNationalDb = data
+        .find((item) => item.region_type === PersonRegionType.NATIONAL)
+        ?.analysis_type?.includes(PersonAnalysisType.NATIONAL_DB)
+
+      if (hasNationalDb) {
+        item.region_types!.push(PersonRegionType.NATIONAL_DB)
+      }
+    }
 
     if (item.region_types!.includes(PersonRegionType.STATES)) {
       item.regions = regions
@@ -126,4 +138,29 @@ export const preparePersonAnalysis = (
   }
 
   return analysis
+}
+
+export const validatePersonAnalysis = (
+  personAnalysis: RegionPersonAnalysis[],
+) => {
+  if (!personAnalysis) {
+    return { isValid: true, msg: '' }
+  }
+
+  const nationalAnalysis = personAnalysis.find(
+    (item) => item.region_type === PersonRegionType.NATIONAL,
+  )
+
+  if (
+    nationalAnalysis &&
+    nationalAnalysis.analysis_type.includes(PersonAnalysisType.HISTORY) &&
+    nationalAnalysis.analysis_type.includes(PersonAnalysisType.NATIONAL_DB)
+  ) {
+    return {
+      isValid: false,
+      msg: 'Não é possível escolher "Histórico" e "Histórico ou Banco de dados" ao mesmo tempo',
+    }
+  }
+
+  return { isValid: true, msg: '' }
 }

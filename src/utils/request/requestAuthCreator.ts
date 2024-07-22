@@ -29,7 +29,7 @@ export const requestAuthCreator =
       return { data: data as T, status: res.status }
     }
 
-    if (isTokenNotAuthorized(res.status)) {
+    if (isTokenNotAuthorized(data.name, res.status)) {
       clearStorage()
       throw new TokenExpiredError()
     }
@@ -49,13 +49,14 @@ export const requestDownloadAuthCreator =
       headers: constructAuthHeaders(options),
     })
 
-    if (isTokenNotAuthorized(res.status)) {
-      clearStorage()
-      throw new TokenExpiredError()
-    }
-
     if (!res.ok) {
       const data = await res.json()
+
+      if (isTokenNotAuthorized(data.name, res.status)) {
+        clearStorage()
+        throw new TokenExpiredError()
+      }
+
       throw new ApiError(data)
     }
 
