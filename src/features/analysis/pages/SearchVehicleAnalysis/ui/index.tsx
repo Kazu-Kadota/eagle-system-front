@@ -14,8 +14,8 @@ import { AnalysisTable } from 'src/features/analysis/components'
 import {
   analysisResultsSelectItems,
   analysisStatusSelectItems,
-  analysisTypeButtonLabel,
   analysisTypeButtonTheme,
+  getAnalysisVehicleTypeLabel,
   vehiclesTypesSelectItems,
 } from 'src/features/analysis/constants/analysis'
 import { estadosVehiclesSelectItems } from 'src/features/analysis/constants/estados'
@@ -155,7 +155,7 @@ export function SearchVehicleAnalysisUI({
               disabled
               shadow="base"
             >
-              {analysisTypeButtonLabel[selectedItem.analysis_type]}
+              {getAnalysisVehicleTypeLabel(selectedItem.vehicle_analysis_type)}
             </Button>
           </div>
 

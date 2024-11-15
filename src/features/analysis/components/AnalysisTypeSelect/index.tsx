@@ -145,7 +145,7 @@ export const AnalysisTypeSelectItem: React.FC<AnalysisTypeSelectItemProps> =
         {personAnalysis?.region_type === PersonRegionType.STATES && (
           <div className="mt-3 max-w-[15rem]">
             <label
-              className="mb-1 block text-sm font-semibold"
+              className="mb-1 block text-[0.8rem] font-semibold"
               htmlFor="region_states"
             >
               <span className="text-error">*</span>
@@ -189,8 +189,8 @@ export const AnalysisTypeSelect: React.FC<AnalysisTypeSelectProps> = ({
         Você deve selecionar ao menos uma opção abaixo
       </small>
       <div
-        style={{ maxWidth: `${items.length * 13}rem` }}
-        className="mt-3 flex flex-col gap-[0.65rem] lg:flex-row"
+        style={{ maxWidth: `${items.length * 12}rem` }}
+        className="mt-3 flex flex-col gap-[0.65rem] xl:flex-row"
       >
         {items.map((item) => (
           <AnalysisTypeSelectItem

@@ -10,8 +10,14 @@ export enum AnalysisType {
   COMBO = 'combo',
   PERSON = 'person',
   VEHICLE = 'vehicle',
+}
+
+export enum VehicleAnalysisType {
+  SIMPLE = 'simple',
+  BASIC_DATA = 'basic-data',
+  ANTT = 'antt',
   VEHICLE_PLATE_HISTORY = 'vehicle-plate-history',
-  SECOND_DRIVER = 'vehicle-second-driver',
+  VEHICLE_SECOND_DRIVER = 'vehicle-second-driver',
 }
 
 export enum PersonAnalysisType {
@@ -90,6 +96,7 @@ export type VehicleAnalysis = Analysis & {
   chassis: string
   vehicle_id: string
   owner_document: string
+  vehicle_analysis_type: VehicleAnalysisType
 }
 
 export interface RegionPersonAnalysis {

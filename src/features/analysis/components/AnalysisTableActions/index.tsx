@@ -18,17 +18,12 @@ const copyToClipboardFn = {
   [AnalysisType.PERSON]: copyPersonToClipboard,
   [AnalysisType.COMBO]: copyPersonToClipboard,
   [AnalysisType.VEHICLE]: copyVehicleToClipboard,
-  [AnalysisType.VEHICLE_PLATE_HISTORY]: copyVehicleToClipboard,
-  [AnalysisType.SECOND_DRIVER]: copyVehicleToClipboard,
 }
 
 const detailRouteFn = {
   [AnalysisType.PERSON]: RoutePaths.Analysis.peopleAnalysisDetail,
   [AnalysisType.COMBO]: RoutePaths.Analysis.peopleAnalysisDetail,
   [AnalysisType.VEHICLE]: RoutePaths.Analysis.vehicleAnalysisDetail,
-  [AnalysisType.VEHICLE_PLATE_HISTORY]:
-    RoutePaths.Analysis.vehicleAnalysisDetail,
-  [AnalysisType.SECOND_DRIVER]: RoutePaths.Analysis.vehicleAnalysisDetail,
 }
 
 export const AnalysisTableActions: React.FC<AnalysisTableActionsProps> = ({

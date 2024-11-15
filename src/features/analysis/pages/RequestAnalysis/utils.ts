@@ -11,8 +11,7 @@ import { PersonAnalysisBody, VehicleAnalysisBody } from '../../services/request'
 import {
   AnalysisPersonSchema,
   AnalysisVehiclesSchema,
-  PlateHistorySchema,
-  SecondDriverSchema,
+  BasicVehicleFormSchema,
 } from './schema'
 
 export const defaultVehicle: AnalysisVehiclesSchema = {
@@ -43,15 +42,11 @@ export const defaultPerson: AnalysisPersonSchema = {
   security_number_cnh: '',
 }
 
-export const defaultPlateHistory: PlateHistorySchema = {
+export const defaultBasicForm: BasicVehicleFormSchema = {
   plate: '',
   plate_state: '',
   owner_document: '',
   owner_name: '',
-}
-
-export const defaultSecondDriver: SecondDriverSchema = {
-  ...defaultPlateHistory,
 }
 
 export const preparePersonData = (

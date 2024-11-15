@@ -9,6 +9,7 @@ import {
   PersonRegionType,
   RegionPersonAnalysis,
   UserType,
+  VehicleAnalysisType,
 } from 'src/models'
 import { RoutePaths } from 'src/routes/paths'
 import { useAuthStore } from 'src/store/auth'
@@ -19,26 +20,22 @@ import { hasUserType } from 'src/utils/userType'
 import {
   requestAnalysisCombo,
   requestAnalysisPerson,
-  requestAnalysisPlateHistory,
-  requestAnalysisSecondDriver,
   requestAnalysisVehicle,
+  requestBasicVehicleAnalysis,
 } from '../../services/request'
 import {
   AnalysisArrayVehicleSchema,
   AnalysisPersonSchema,
-  PlateHistorySchema,
-  SecondDriverSchema,
+  BasicVehicleFormSchema,
   analysisArrayVehicleSchema,
   analysisPersonSchema,
-  plateHistorySchema,
-  secondDriverSchema,
+  basicVehicleFormSchema,
 } from './schema'
 import { RequestAnalysisUI } from './ui'
 import {
+  defaultBasicForm,
   defaultPerson,
-  defaultPlateHistory,
   defaultVehicle,
-  defaultSecondDriver,
   preparePersonAnalysis,
   preparePersonData,
   prepareVehicleData,
@@ -69,11 +66,12 @@ export function RequestAnalysisPage() {
       : [],
   )
   const [vehicleAnalysisType, setVehicleAnalysisType] = useState(
-    AnalysisType.VEHICLE,
+    VehicleAnalysisType.SIMPLE,
   )
 
-  const [analysisTypeLoading, setAnaysisTypeLoading] =
-    useState<AnalysisType | null>(null)
+  const [analysisTypeLoading, setAnaysisTypeLoading] = useState<
+    AnalysisType | VehicleAnalysisType | null
+  >(null)
 
   const formValuesOnlyForValidation = {
     userType: user.user_type,
@@ -116,30 +114,20 @@ export function RequestAnalysisPage() {
   })
 
   const {
-    control: controlPlateHistory,
-    reset: resetPlateHistory,
-    handleSubmit: handleSubmitPlateHistory,
-  } = useForm<PlateHistorySchema>({
-    resolver: zodResolver(plateHistorySchema),
-    values: { ...defaultPlateHistory, ...formValuesOnlyForValidation },
-  })
-
-  const {
-    control: controlSecondDriver,
-    reset: resetSecondDriver,
-    handleSubmit: handleSubmitSecondDriver,
-  } = useForm<SecondDriverSchema>({
-    resolver: zodResolver(secondDriverSchema),
-    values: { ...defaultSecondDriver, ...formValuesOnlyForValidation },
+    control: controlBasicFormVehicle,
+    reset: resetBasicFormVehicle,
+    handleSubmit: handleSubmitBasicFormVehicle,
+  } = useForm<BasicVehicleFormSchema>({
+    resolver: zodResolver(basicVehicleFormSchema),
+    values: { ...defaultBasicForm, ...formValuesOnlyForValidation },
   })
 
   const handleClear = () => {
     resetPerson()
     resetVehicle()
-    resetPlateHistory()
-    resetSecondDriver()
+    resetBasicFormVehicle()
     setPersonAnalysis([])
-    setVehicleAnalysisType(AnalysisType.VEHICLE)
+    setVehicleAnalysisType(VehicleAnalysisType.SIMPLE)
     setAnalysisType(analysisTypeFromUrl ?? AnalysisType.PERSON)
   }
 
@@ -148,9 +136,6 @@ export function RequestAnalysisPage() {
       [AnalysisType.PERSON]: RoutePaths.Analysis.PEOPLE_ANALYSIS_HOME,
       [AnalysisType.VEHICLE]: RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
       [AnalysisType.COMBO]: RoutePaths.Analysis.PEOPLE_ANALYSIS_HOME,
-      [AnalysisType.SECOND_DRIVER]: RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
-      [AnalysisType.VEHICLE_PLATE_HISTORY]:
-        RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
     }[analysisType]
 
     modal.open({
@@ -261,39 +246,22 @@ export function RequestAnalysisPage() {
     }
   }
 
-  const onRequestPlateHistoryAnalysis = async (data: PlateHistorySchema) => {
+  const onRequestBasicFormVehicle = async (data: BasicVehicleFormSchema) => {
     try {
-      setAnaysisTypeLoading(AnalysisType.VEHICLE_PLATE_HISTORY)
+      setAnaysisTypeLoading(vehicleAnalysisType)
 
-      await requestAnalysisPlateHistory({
-        plate: data.plate,
-        plate_state: data.plate_state,
-        company_name: data.company_name,
-        owner_document: data.owner_document,
-        owner_name: data.owner_name,
-      })
+      await requestBasicVehicleAnalysis(
+        {
+          plate: data.plate,
+          plate_state: data.plate_state,
+          company_name: data.company_name,
+          owner_document: data.owner_document,
+          owner_name: data.owner_name,
+        },
+        vehicleAnalysisType,
+      )
 
-      onSuccessRequestAnalysis(AnalysisType.VEHICLE_PLATE_HISTORY)
-    } catch (error) {
-      onErrorRequestAnalysis(error)
-    } finally {
-      setAnaysisTypeLoading(null)
-    }
-  }
-
-  const onRequestSecondDriverAnalysis = async (data: PlateHistorySchema) => {
-    try {
-      setAnaysisTypeLoading(AnalysisType.SECOND_DRIVER)
-
-      await requestAnalysisSecondDriver({
-        plate: data.plate,
-        plate_state: data.plate_state,
-        company_name: data.company_name,
-        owner_document: data.owner_document,
-        owner_name: data.owner_name,
-      })
-
-      onSuccessRequestAnalysis(AnalysisType.SECOND_DRIVER)
+      onSuccessRequestAnalysis(analysisType)
     } catch (error) {
       onErrorRequestAnalysis(error)
     } finally {
@@ -306,7 +274,7 @@ export function RequestAnalysisPage() {
 
   const handleChangePersonAnalysis = (analysis: RegionPersonAnalysis[]) => {
     setPersonAnalysis(analysis)
-    setVehicleAnalysisType(AnalysisType.VEHICLE)
+    setVehicleAnalysisType(VehicleAnalysisType.SIMPLE)
   }
 
   return (
@@ -323,19 +291,15 @@ export function RequestAnalysisPage() {
       companiesSelectItems={companiesSelectItems}
       controlPerson={controlPerson}
       controlVehicle={controlVehicle}
-      controlPlateHistory={controlPlateHistory}
-      controlSecondDriver={controlSecondDriver}
+      controlBasicFormVehicle={controlBasicFormVehicle}
       onChangePersonAnalysis={handleChangePersonAnalysis}
       onChangeVehicleAnalysisType={setVehicleAnalysisType}
       onChangeAnalysisType={setAnalysisType}
       onRequestPersonAnalysis={handleSubmitPerson(onRequestPersonAnalysis)}
       onRequestComboAnalysis={onRequestComboAnalysis}
       onRequestVehicleAnalysis={handleSubmitVehicle(onRequestVehicleAnalysis)}
-      onRequestPlateHistoryAnalysis={handleSubmitPlateHistory(
-        onRequestPlateHistoryAnalysis,
-      )}
-      onRequestSecondDriverAnalysis={handleSubmitSecondDriver(
-        onRequestSecondDriverAnalysis,
+      onRequestBasicFormVehicleAnalysis={handleSubmitBasicFormVehicle(
+        onRequestBasicFormVehicle,
       )}
       addVehicleForm={handleAddVehicleForm}
       removeVehicleForm={removeVehicle}

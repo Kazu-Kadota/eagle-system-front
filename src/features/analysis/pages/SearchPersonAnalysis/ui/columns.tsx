@@ -2,9 +2,10 @@ import { ColumnDef } from '@tanstack/react-table'
 import dayjs from 'dayjs'
 import {
   analysisStatus,
+  getAnalysisTypeColor,
   getAnalysisTypeString,
 } from 'src/features/analysis/utils/mappers'
-import { AnalysisStatus, PersonAnalysis, PersonRegionType } from 'src/models'
+import { AnalysisStatus, PersonAnalysis } from 'src/models'
 
 export const columns: ColumnDef<PersonAnalysis, unknown>[] = [
   { accessorKey: 'name', header: 'Nome' },
@@ -21,11 +22,7 @@ export const columns: ColumnDef<PersonAnalysis, unknown>[] = [
     accessorKey: 'region_type',
     header: 'Tipo',
     cell: (props) => (
-      <span
-        className={
-          props.getValue() === PersonRegionType.STATES ? 'text-brown' : ''
-        }
-      >
+      <span className={getAnalysisTypeColor(props.row.original)}>
         {getAnalysisTypeString(props.row.original)}
       </span>
     ),

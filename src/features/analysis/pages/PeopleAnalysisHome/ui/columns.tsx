@@ -7,13 +7,13 @@ import {
 } from 'src/features/analysis/components'
 import {
   analysisStatus,
+  getAnalysisTypeColor,
   getAnalysisTypeString,
 } from 'src/features/analysis/utils/mappers'
 import {
   AnalysisStatus,
   AnalysisType,
   PersonAnalysis,
-  PersonRegionType,
   UserType,
 } from 'src/models'
 import { hasUserType } from 'src/utils/userType'
@@ -34,11 +34,7 @@ const createPersonColumns = (userType: UserType) => {
       accessorKey: 'region_type',
       header: 'Tipo',
       cell: (props) => (
-        <span
-          className={
-            props.getValue() === PersonRegionType.STATES ? 'text-brown' : ''
-          }
-        >
+        <span className={getAnalysisTypeColor(props.row.original)}>
           {getAnalysisTypeString(props.row.original)}
         </span>
       ),

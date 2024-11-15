@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
 import {
   AnalysisStatus,
-  AnalysisType,
   PersonAnalysis,
   PersonAnalysisType,
   PersonRegionType,
   regionTypesToAnalysisTypes,
   VehicleAnalysis,
+  VehicleAnalysisType,
 } from 'src/models'
 
 export const analysisStatus: { [key in AnalysisStatus]: string } = {
@@ -61,6 +61,23 @@ export const getAnalysisTypeString = (analysis: PersonAnalysis) => {
   return string
 }
 
+export const getAnalysisTypeColor = (analysis: PersonAnalysis) => {
+  if (analysis.region_type === PersonRegionType.STATES) {
+    return 'text-brown'
+  }
+
+  return {
+    [PersonRegionType.NATIONAL]: '',
+    [PersonRegionType.CNH_STATUS]: 'text-blue',
+    [PersonRegionType.PROCESS]: 'text-blue',
+    [PersonRegionType.BASIC_DATA]: 'text-blue',
+    [PersonRegionType.CNH_BASIC]: 'text-blue',
+    [PersonRegionType.NATIONAL_DB]: '',
+    [PersonAnalysisType.HISTORY]: '',
+    [PersonAnalysisType.SIMPLE]: '',
+  }[analysis.person_analysis_type]
+}
+
 export const preparePersonDataFromApi = (
   person: PersonAnalysis,
 ): PersonAnalysis => ({
@@ -73,11 +90,11 @@ export const preparePersonDataFromApi = (
     : '',
 })
 
-export const getVehicleAnalysisType = (analysis: VehicleAnalysis) => {
-  const analysisTypeString = {
-    [AnalysisType.VEHICLE_PLATE_HISTORY]: 'Histórico de placa',
-    [AnalysisType.SECOND_DRIVER]: 'Segundo dono',
-  }[analysis.analysis_type as never]
-
-  return analysisTypeString ?? analysis.vehicle_type
-}
+export const getVehicleAnalysisType = (analysis: VehicleAnalysis) =>
+  ({
+    [VehicleAnalysisType.ANTT]: 'ANTT',
+    [VehicleAnalysisType.BASIC_DATA]: 'Dados Básicos',
+    [VehicleAnalysisType.VEHICLE_PLATE_HISTORY]: 'Histórico de Placa',
+    [VehicleAnalysisType.VEHICLE_SECOND_DRIVER]: 'Segundo Motorista',
+    [VehicleAnalysisType.SIMPLE]: analysis.vehicle_type,
+  })[analysis.vehicle_analysis_type ?? VehicleAnalysisType.SIMPLE]

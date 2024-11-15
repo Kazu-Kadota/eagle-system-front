@@ -52,6 +52,7 @@ export const vehicleNameKeys: { [key in keyof VehicleAnalysis]: string } = {
   vehicle_type: 'Tipo de veículo',
   updated_at: 'Data de atualização',
   from_db: 'Resposta do banco de dados',
+  vehicle_analysis_type: 'Tipo de análise de veículo',
 }
 
 export const keysToRemove = [

@@ -15,8 +15,8 @@ import {
 import {
   analysisResultsSelectItems,
   analysisStatusSelectItems,
-  analysisTypeButtonLabel,
   analysisTypeButtonTheme,
+  getAnalysisVehicleTypeLabel,
   vehiclesTypesSelectItems,
 } from 'src/features/analysis/constants/analysis'
 import { estadosVehiclesSelectItems } from 'src/features/analysis/constants/estados'
@@ -86,7 +86,7 @@ export const VehicleAnalysisAnswerUI: React.FC<
           disabled
           shadow="base"
         >
-          {analysisTypeButtonLabel[vehicle.analysis_type]}
+          {getAnalysisVehicleTypeLabel(vehicle.vehicle_analysis_type)}
         </Button>
       </div>
 

@@ -23,8 +23,6 @@ const downloadAnalysisReport = (analysisType: AnalysisType) =>
     [AnalysisType.PERSON]: downloadPersonAnalysisReport,
     [AnalysisType.COMBO]: downloadPersonAnalysisReport,
     [AnalysisType.VEHICLE]: downloadVehicleAnalysisReport,
-    [AnalysisType.VEHICLE_PLATE_HISTORY]: downloadVehicleAnalysisReport,
-    [AnalysisType.SECOND_DRIVER]: downloadVehicleAnalysisReport,
   })[analysisType]
 
 export function ReportHomePage() {
@@ -55,9 +53,6 @@ export function ReportHomePage() {
       [AnalysisType.PERSON]: RoutePaths.Analysis.PEOPLE_ANALYSIS_HOME,
       [AnalysisType.VEHICLE]: RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
       [AnalysisType.COMBO]: RoutePaths.Analysis.PEOPLE_ANALYSIS_HOME,
-      [AnalysisType.SECOND_DRIVER]: RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
-      [AnalysisType.VEHICLE_PLATE_HISTORY]:
-        RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
     }[analysisType]
 
     modal.open({

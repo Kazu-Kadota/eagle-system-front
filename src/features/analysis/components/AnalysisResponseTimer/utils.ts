@@ -1,10 +1,10 @@
 import dayjs, { Dayjs } from 'dayjs'
 import {
-  AnalysisType,
   PersonAnalysis,
   PersonAnalysisType,
   PersonRegionType,
   VehicleAnalysis,
+  VehicleAnalysisType,
 } from 'src/models'
 
 export function getPersonInitialTime(analysis: PersonAnalysis) {
@@ -28,13 +28,13 @@ export function getPersonInitialTime(analysis: PersonAnalysis) {
 }
 
 function getVehicleInitialTime(analysis: VehicleAnalysis) {
-  switch (analysis.analysis_type) {
-    case AnalysisType.VEHICLE_PLATE_HISTORY:
-    case AnalysisType.SECOND_DRIVER:
-      return 240
-    default:
-      return 120
-  }
+  return {
+    [VehicleAnalysisType.SIMPLE]: 120,
+    [VehicleAnalysisType.BASIC_DATA]: 30,
+    [VehicleAnalysisType.ANTT]: 30,
+    [VehicleAnalysisType.VEHICLE_PLATE_HISTORY]: 240,
+    [VehicleAnalysisType.VEHICLE_SECOND_DRIVER]: 240,
+  }[analysis.vehicle_analysis_type ?? VehicleAnalysisType.SIMPLE]
 }
 
 function getInitialTime(analysis: PersonAnalysis | VehicleAnalysis) {

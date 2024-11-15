@@ -5,6 +5,7 @@ import {
   FeatureFlags,
   PersonAnalysisType,
   PersonRegionType,
+  VehicleAnalysisType,
 } from 'src/models'
 import { SelectItem } from 'src/types/select'
 
@@ -112,11 +113,30 @@ export const vehiclesTypesSelectItems: SelectItem[] = [
   { label: 'Carreta', value: 'CARRETA' },
 ]
 
-export const vehicleAnalysisSelectItems: SelectItem<AnalysisType>[] = [
-  { label: 'Veículo', value: AnalysisType.VEHICLE },
-  { label: 'Histórico de placa', value: AnalysisType.VEHICLE_PLATE_HISTORY },
-  { label: 'Segundo dono', value: AnalysisType.SECOND_DRIVER },
-]
+export const getVehicleAnalysisSelectItems = (
+  featureFlags: FeatureFlags,
+): SelectItem<VehicleAnalysisType>[] => {
+  const items = [
+    { label: 'Veículo', value: VehicleAnalysisType.SIMPLE },
+    {
+      label: 'Histórico de placa',
+      value: VehicleAnalysisType.VEHICLE_PLATE_HISTORY,
+    },
+    { label: 'Segundo dono', value: VehicleAnalysisType.VEHICLE_SECOND_DRIVER },
+  ]
+
+  if (featureFlags.information_access_vehicle_basic_data) {
+    items.push({
+      label: 'Dados Básicos',
+      value: VehicleAnalysisType.BASIC_DATA,
+    })
+  }
+  if (featureFlags.information_access_vehicle_antt) {
+    items.push({ label: 'ANTT', value: VehicleAnalysisType.ANTT })
+  }
+
+  return items
+}
 
 export const analysisResultsSelectItems: SelectItem<AnalysisResult>[] = [
   { label: 'Nada consta', value: AnalysisResult.APPROVED },
@@ -129,13 +149,15 @@ export const analysisStatusSelectItems: SelectItem<AnalysisStatus>[] = [
   { label: 'Finalizado', value: AnalysisStatus.FINISHED },
 ]
 
-export const analysisTypeButtonLabel = {
-  [AnalysisType.PERSON]: 'Análise de Pessoa',
-  [AnalysisType.VEHICLE]: 'Análise de Veículo',
-  [AnalysisType.VEHICLE_PLATE_HISTORY]: 'Análise de Histórico de placa',
-  [AnalysisType.SECOND_DRIVER]: 'Análise de Segundo dono',
-  [AnalysisType.COMBO]: 'Análise de Combo',
-} as const
+export const getAnalysisVehicleTypeLabel = (type: VehicleAnalysisType) =>
+  ({
+    [VehicleAnalysisType.ANTT]: 'Análise ANTT',
+    [VehicleAnalysisType.BASIC_DATA]: 'Análise de Dados Básicos',
+    [VehicleAnalysisType.VEHICLE_PLATE_HISTORY]:
+      'Análise de Histórico de Placa',
+    [VehicleAnalysisType.VEHICLE_SECOND_DRIVER]: 'Análise de Segundo Motorista',
+    [VehicleAnalysisType.SIMPLE]: 'Análise de Veículo',
+  })[type ?? VehicleAnalysisType.SIMPLE]
 
 export const personRegionTypeButtonTheme = {
   [PersonRegionType.NATIONAL]: 'blue',
@@ -143,14 +165,12 @@ export const personRegionTypeButtonTheme = {
   [PersonRegionType.STATES]: 'brown',
   [PersonRegionType.BASIC_DATA]: 'blue',
   [PersonRegionType.CNH_BASIC]: 'blue',
-  [PersonRegionType.CNH_STATUS]: 'placeholder',
+  [PersonRegionType.CNH_STATUS]: 'blue',
   [PersonRegionType.PROCESS]: 'blue',
 } as const
 
 export const analysisTypeButtonTheme = {
   [AnalysisType.PERSON]: 'blue',
   [AnalysisType.VEHICLE]: 'blue',
-  [AnalysisType.VEHICLE_PLATE_HISTORY]: 'brown',
-  [AnalysisType.SECOND_DRIVER]: 'brown',
   [AnalysisType.COMBO]: 'brown',
 } as const
