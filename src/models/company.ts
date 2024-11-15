@@ -5,7 +5,13 @@ export enum CompanyType {
 
 export enum FeatureFlag {
   DATABASE_ACCESS_CONSULT = 'database_access_consult',
+  INFORMATION_ACCESS_PERSON_CNH_BASIC = 'information_access_person_cnh_basic',
+  INFORMATION_ACCESS_PERSON_CNH_STATUS = 'information_access_person_cnh_status',
+  INFORMATION_ACCESS_PERSON_PROCESS = 'information_access_person_process',
+  INFORMATION_ACCESS_PERSON_BASIC_DATA = 'information_access_person_basic_data',
 }
+
+export type FeatureFlags = Record<FeatureFlag, boolean>
 
 export interface Company {
   company_id: string

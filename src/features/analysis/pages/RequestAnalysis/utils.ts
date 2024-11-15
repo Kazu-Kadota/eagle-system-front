@@ -5,6 +5,7 @@ import {
   PersonAnalysisType,
   PersonRegionType,
   RegionPersonAnalysis,
+  regionTypesToAnalysisTypes,
 } from 'src/models'
 import { PersonAnalysisBody, VehicleAnalysisBody } from '../../services/request'
 import {
@@ -130,11 +131,14 @@ export const preparePersonAnalysis = (
     return array
   }, [])
 
-  if (
-    analysisType === AnalysisType.PERSON &&
-    data.some((item) => item.region_type === PersonRegionType.CNH_STATUS)
-  ) {
-    analysis.push({ type: PersonAnalysisType.CNH_STATUS })
+  if (analysisType === AnalysisType.PERSON) {
+    Object.entries(regionTypesToAnalysisTypes).forEach(
+      ([regionType, analysisType]) => {
+        const hasType = data.some((item) => item.region_type === regionType)
+
+        if (hasType) analysis.push({ type: analysisType as never })
+      },
+    )
   }
 
   return analysis

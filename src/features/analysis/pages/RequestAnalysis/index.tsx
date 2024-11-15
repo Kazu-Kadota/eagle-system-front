@@ -312,7 +312,7 @@ export function RequestAnalysisPage() {
   return (
     <RequestAnalysisUI
       isLoading={myCompanyLoading}
-      isDbEnabled={featureFlags.database_access_consult}
+      featureFlags={featureFlags}
       userType={user.user_type}
       analysisType={analysisType}
       personAnalysis={personAnalysis}

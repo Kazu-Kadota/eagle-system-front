@@ -5,6 +5,7 @@ import {
   PersonAnalysis,
   PersonAnalysisType,
   PersonRegionType,
+  regionTypesToAnalysisTypes,
   VehicleAnalysis,
 } from 'src/models'
 
@@ -18,6 +19,9 @@ export const regionTypes: { [key in PersonRegionType]: string } = {
   [PersonRegionType.NATIONAL]: 'Nacional',
   [PersonRegionType.STATES]: 'Estadual',
   [PersonRegionType.CNH_STATUS]: 'Status da CNH',
+  [PersonRegionType.PROCESS]: 'Processo',
+  [PersonRegionType.BASIC_DATA]: 'Dados Básicos',
+  [PersonRegionType.CNH_BASIC]: 'CNH Básica',
   [PersonRegionType.NATIONAL_DB]: 'Nacional Histórico ou Banco de dados',
 }
 
@@ -27,12 +31,19 @@ export const personAnalysis: {
   [PersonAnalysisType.HISTORY]: 'Histórico',
   [PersonAnalysisType.SIMPLE]: 'Simples',
   [PersonAnalysisType.CNH_STATUS]: 'Status da CNH',
+  [PersonAnalysisType.PROCESS]: 'Processo',
+  [PersonAnalysisType.BASIC_DATA]: 'Dados Básicos',
+  [PersonAnalysisType.CNH_BASIC]: 'CNH Básica',
   [PersonAnalysisType.NATIONAL_DB]: 'Nacional Histórico ou Banco de dados',
 }
 
 export const getAnalysisTypeString = (analysis: PersonAnalysis) => {
-  if (analysis.person_analysis_type === PersonAnalysisType.CNH_STATUS) {
-    return personAnalysis[PersonAnalysisType.CNH_STATUS]
+  if (
+    Object.keys(regionTypesToAnalysisTypes).includes(
+      analysis.person_analysis_type,
+    )
+  ) {
+    return personAnalysis[analysis.person_analysis_type]
   }
 
   if (analysis.region_type === PersonRegionType.NATIONAL_DB) {

@@ -2,6 +2,7 @@ import {
   AnalysisResult,
   AnalysisStatus,
   AnalysisType,
+  FeatureFlags,
   PersonAnalysisType,
   PersonRegionType,
 } from 'src/models'
@@ -35,7 +36,7 @@ export const simpleAnalysisTypesItems: SelectItem<AnalysisType>[] = [
 
 export const getPersonAnalysisItems = (
   regionType: PersonRegionType,
-  isDbEnabled: boolean,
+  featureFlags: FeatureFlags,
 ): SelectItem[] => {
   const items = [
     {
@@ -48,7 +49,10 @@ export const getPersonAnalysisItems = (
     },
   ]
 
-  if (regionType === PersonRegionType.NATIONAL && isDbEnabled) {
+  if (
+    regionType === PersonRegionType.NATIONAL &&
+    featureFlags.database_access_consult
+  ) {
     items.push({
       label: 'Histórico ou Banco de dados',
       value: PersonAnalysisType.NATIONAL_DB,
@@ -58,24 +62,50 @@ export const getPersonAnalysisItems = (
   return items
 }
 
-export const regionAnalysisItems: SelectItem[] = [
-  {
-    label: 'Análise Estadual',
-    value: PersonRegionType.STATES,
-  },
-  {
-    label: 'Análise Nacional',
-    value: PersonRegionType.NATIONAL,
-  },
-]
+export const getRegionAnalysisItems = (
+  analysisType: AnalysisType,
+  featureFlags: FeatureFlags,
+): SelectItem[] => {
+  const items = [
+    {
+      label: 'Análise Estadual',
+      value: PersonRegionType.STATES,
+    },
+    {
+      label: 'Análise Nacional',
+      value: PersonRegionType.NATIONAL,
+    },
+  ]
 
-export const regionAnalysisItemsWithCNH: SelectItem[] = [
-  ...regionAnalysisItems,
-  {
-    label: 'Status da CNH',
-    value: PersonRegionType.CNH_STATUS,
-  },
-]
+  if (analysisType === AnalysisType.PERSON) {
+    if (featureFlags.information_access_person_basic_data) {
+      items.push({
+        label: 'Dados Básicos',
+        value: PersonRegionType.BASIC_DATA,
+      })
+    }
+    if (featureFlags.information_access_person_cnh_basic) {
+      items.push({
+        label: 'CNH Básica',
+        value: PersonRegionType.CNH_BASIC,
+      })
+    }
+    if (featureFlags.information_access_person_cnh_status) {
+      items.push({
+        label: 'Status da CNH',
+        value: PersonRegionType.CNH_STATUS,
+      })
+    }
+    if (featureFlags.information_access_person_process) {
+      items.push({
+        label: 'Processo',
+        value: PersonRegionType.PROCESS,
+      })
+    }
+  }
+
+  return items
+}
 
 export const vehiclesTypesSelectItems: SelectItem[] = [
   { label: 'Cavalo', value: 'CAVALO' },
@@ -111,7 +141,10 @@ export const personRegionTypeButtonTheme = {
   [PersonRegionType.NATIONAL]: 'blue',
   [PersonRegionType.NATIONAL_DB]: 'blue',
   [PersonRegionType.STATES]: 'brown',
+  [PersonRegionType.BASIC_DATA]: 'blue',
+  [PersonRegionType.CNH_BASIC]: 'blue',
   [PersonRegionType.CNH_STATUS]: 'placeholder',
+  [PersonRegionType.PROCESS]: 'blue',
 } as const
 
 export const analysisTypeButtonTheme = {

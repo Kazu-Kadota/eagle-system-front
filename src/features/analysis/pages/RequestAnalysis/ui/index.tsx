@@ -3,12 +3,13 @@ import { Box, LoadingContainer, SelectGroup } from 'src/components'
 import {
   AnalysisTypeSelect,
   PersonForm,
+  statusWithoutOptions,
   VehiclesForm,
 } from 'src/features/analysis/components'
 import { analysisTypesItems } from 'src/features/analysis/constants/analysis'
 import {
   AnalysisType,
-  PersonRegionType,
+  FeatureFlags,
   RegionPersonAnalysis,
   UserType,
 } from 'src/models'
@@ -28,7 +29,7 @@ type VehicleField = FieldArrayWithId<
 
 export interface RequestAnalysisUIProps {
   isLoading: boolean
-  isDbEnabled: boolean
+  featureFlags: FeatureFlags
   analysisType?: AnalysisType
   analysisTypeLoading: AnalysisType | null
   vehicleAnalysisType: AnalysisType
@@ -55,7 +56,7 @@ export interface RequestAnalysisUIProps {
 
 export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
   isLoading,
-  isDbEnabled,
+  featureFlags,
   analysisType,
   analysisTypeLoading,
   fieldsVehicle,
@@ -83,15 +84,16 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
     personAnalysis?.some(
       (personAnalysis) =>
         personAnalysis.analysis_type.length > 0 ||
-        personAnalysis.region_type === PersonRegionType.CNH_STATUS,
+        (analysisType !== AnalysisType.COMBO &&
+          statusWithoutOptions.includes(personAnalysis.region_type)),
     )
 
   const renderPersonForm = () => (
     <>
       <AnalysisTypeSelect
-        isDbEnabled={isDbEnabled}
+        analysisType={AnalysisType.PERSON}
+        featureFlags={featureFlags}
         personAnalysis={personAnalysis}
-        showCNHStatus
         onChangePersonAnalysis={onChangePersonAnalysis as never}
       />
       {showPersonForm() && (
@@ -135,7 +137,8 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
   const renderComboForm = () => (
     <>
       <AnalysisTypeSelect
-        isDbEnabled={isDbEnabled}
+        featureFlags={featureFlags}
+        analysisType={AnalysisType.COMBO}
         personAnalysis={personAnalysis}
         onChangePersonAnalysis={onChangePersonAnalysis as never}
       />

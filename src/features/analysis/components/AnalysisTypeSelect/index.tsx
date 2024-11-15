@@ -1,23 +1,24 @@
 import React, { memo } from 'react'
 import { Box, MultiSelect } from 'src/components'
 import {
+  AnalysisType,
+  FeatureFlags,
   PersonAnalysisType,
   PersonRegionType,
   RegionPersonAnalysis,
   State,
 } from 'src/models'
+import { SelectItem } from 'src/types/select'
 import {
   getPersonAnalysisItems,
-  regionAnalysisItems,
-  regionAnalysisItemsWithCNH,
+  getRegionAnalysisItems,
 } from '../../constants/analysis'
 import { estadosSelectItems } from '../../constants/estados'
-import { SelectItem } from 'src/types/select'
 
 interface AnalysisTypeSelectProps {
-  isDbEnabled: boolean
+  featureFlags: FeatureFlags
+  analysisType: AnalysisType
   personAnalysis: RegionPersonAnalysis[]
-  showCNHStatus?: boolean
   onChangePersonAnalysis: (
     items:
       | RegionPersonAnalysis[]
@@ -27,7 +28,7 @@ interface AnalysisTypeSelectProps {
 
 interface AnalysisTypeSelectItemProps {
   item: SelectItem
-  isDbEnabled: boolean
+  featureFlags: FeatureFlags
   personAnalysis: RegionPersonAnalysis | undefined
   onChangePersonAnalysis: (
     items:
@@ -36,8 +37,16 @@ interface AnalysisTypeSelectItemProps {
   ) => void
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
+export const statusWithoutOptions = [
+  PersonRegionType.BASIC_DATA,
+  PersonRegionType.CNH_BASIC,
+  PersonRegionType.CNH_STATUS,
+  PersonRegionType.PROCESS,
+]
+
 export const AnalysisTypeSelectItem: React.FC<AnalysisTypeSelectItemProps> =
-  memo(({ item, isDbEnabled, personAnalysis, onChangePersonAnalysis }) => {
+  memo(({ item, featureFlags, personAnalysis, onChangePersonAnalysis }) => {
     const setRegionType = (values: RegionPersonAnalysis[]) => {
       if (personAnalysis?.region_type) {
         return values.filter(
@@ -103,11 +112,11 @@ export const AnalysisTypeSelectItem: React.FC<AnalysisTypeSelectItemProps> =
           </span>
         </button>
         {personAnalysis?.region_type &&
-          personAnalysis.region_type !== PersonRegionType.CNH_STATUS && (
+          !statusWithoutOptions.includes(personAnalysis.region_type) && (
             <div className="mt-1 flex flex-col">
               {getPersonAnalysisItems(
                 personAnalysis.region_type,
-                isDbEnabled,
+                featureFlags,
               ).map((radioItem) => (
                 <button
                   type="button"
@@ -126,7 +135,7 @@ export const AnalysisTypeSelectItem: React.FC<AnalysisTypeSelectItemProps> =
                   ) : (
                     <span className="h-4 w-4 border border-placeholder" />
                   )}
-                  <span className="text-sm font-medium text-placeholder">
+                  <span className="text-left text-sm font-medium text-placeholder">
                     {radioItem.label}
                   </span>
                 </button>
@@ -165,11 +174,11 @@ AnalysisTypeSelectItem.displayName = 'AnalysisTypeSelectItem'
 
 export const AnalysisTypeSelect: React.FC<AnalysisTypeSelectProps> = ({
   personAnalysis,
-  isDbEnabled,
-  showCNHStatus,
+  featureFlags,
+  analysisType,
   onChangePersonAnalysis,
 }) => {
-  const items = showCNHStatus ? regionAnalysisItemsWithCNH : regionAnalysisItems
+  const items = getRegionAnalysisItems(analysisType, featureFlags)
 
   return (
     <Box spacing="sm" containerClassName="mb-2">
@@ -179,10 +188,13 @@ export const AnalysisTypeSelect: React.FC<AnalysisTypeSelectProps> = ({
       <small className="mt-0.5 block text-placeholder/80">
         Você deve selecionar ao menos uma opção abaixo
       </small>
-      <div className="mt-3 flex max-w-3xl flex-col gap-[0.65rem] md:flex-row">
+      <div
+        style={{ maxWidth: `${items.length * 13}rem` }}
+        className="mt-3 flex flex-col gap-[0.65rem] lg:flex-row"
+      >
         {items.map((item) => (
           <AnalysisTypeSelectItem
-            isDbEnabled={isDbEnabled}
+            featureFlags={featureFlags}
             key={item.value}
             item={item}
             onChangePersonAnalysis={onChangePersonAnalysis}

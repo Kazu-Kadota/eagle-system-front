@@ -17,15 +17,28 @@ export enum AnalysisType {
 export enum PersonAnalysisType {
   SIMPLE = 'simple',
   HISTORY = 'history',
-  CNH_STATUS = 'cnh-status',
   NATIONAL_DB = 'national + db',
+  BASIC_DATA = 'basic-data',
+  CNH_STATUS = 'cnh-status',
+  CNH_BASIC = 'cnh-basic',
+  PROCESS = 'process',
 }
 
 export enum PersonRegionType {
   STATES = 'states',
   NATIONAL = 'national',
-  CNH_STATUS = 'cnh-status',
   NATIONAL_DB = 'national + db',
+  BASIC_DATA = 'basic-data',
+  CNH_STATUS = 'cnh-status',
+  CNH_BASIC = 'cnh-basic',
+  PROCESS = 'process',
+}
+
+export const regionTypesToAnalysisTypes = {
+  [PersonRegionType.BASIC_DATA]: PersonAnalysisType.BASIC_DATA,
+  [PersonRegionType.CNH_STATUS]: PersonAnalysisType.CNH_STATUS,
+  [PersonRegionType.CNH_BASIC]: PersonAnalysisType.CNH_BASIC,
+  [PersonRegionType.PROCESS]: PersonAnalysisType.PROCESS,
 }
 
 export enum AnalysisResult {

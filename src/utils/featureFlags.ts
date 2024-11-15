@@ -1,4 +1,4 @@
-import { FeatureFlag } from 'src/models'
+import { FeatureFlag, FeatureFlags } from 'src/models'
 
 export const parseFeatureFlags = (flagList: FeatureFlag[]) =>
   flagList.reduce(
@@ -6,5 +6,5 @@ export const parseFeatureFlags = (flagList: FeatureFlag[]) =>
       ...flagObj,
       [flag]: flagList.includes(flag),
     }),
-    {} as Record<FeatureFlag, boolean>,
+    {} as FeatureFlags,
   )

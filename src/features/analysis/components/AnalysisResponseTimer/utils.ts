@@ -9,6 +9,10 @@ import {
 
 export function getPersonInitialTime(analysis: PersonAnalysis) {
   switch (analysis.person_analysis_type) {
+    case PersonAnalysisType.BASIC_DATA:
+    case PersonAnalysisType.CNH_BASIC:
+    case PersonAnalysisType.PROCESS:
+      return 30
     case PersonAnalysisType.CNH_STATUS:
       return 240
   }
