@@ -34,6 +34,7 @@ export enum PersonRegionType {
   STATES = 'states',
   NATIONAL = 'national',
   NATIONAL_DB = 'national + db',
+  NATIONAL_STATES = 'national + state',
   BASIC_DATA = 'basic-data',
   CNH_STATUS = 'cnh-status',
   CNH_BASIC = 'cnh-basic',

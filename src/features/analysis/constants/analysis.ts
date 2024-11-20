@@ -79,6 +79,11 @@ export const getRegionAnalysisItems = (
   ]
 
   if (analysisType === AnalysisType.PERSON) {
+    items.push({
+      label: 'Análise Nacional + 1 Estado',
+      value: PersonRegionType.NATIONAL_STATES,
+    })
+
     if (featureFlags.information_access_person_basic_data) {
       items.push({
         label: 'Dados Básicos',
@@ -163,6 +168,7 @@ export const personRegionTypeButtonTheme = {
   [PersonRegionType.NATIONAL]: 'blue',
   [PersonRegionType.NATIONAL_DB]: 'blue',
   [PersonRegionType.STATES]: 'brown',
+  [PersonRegionType.NATIONAL_STATES]: 'brown',
   [PersonRegionType.BASIC_DATA]: 'blue',
   [PersonRegionType.CNH_BASIC]: 'blue',
   [PersonRegionType.CNH_STATUS]: 'blue',
