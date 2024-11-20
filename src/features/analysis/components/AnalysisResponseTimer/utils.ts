@@ -22,6 +22,8 @@ export function getPersonInitialTime(analysis: PersonAnalysis) {
       return 120
     case PersonRegionType.STATES:
       return 210
+    case PersonRegionType.NATIONAL_STATES:
+      return 180
     default:
       return 120
   }

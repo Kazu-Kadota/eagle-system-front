@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { statusWithStates } from 'src/features/analysis/components'
 import {
   AnalysisType,
   BackRegionPersonAnalysis,
@@ -115,7 +116,7 @@ export const preparePersonAnalysis = (
       }
     }
 
-    if (item.region_types!.includes(PersonRegionType.STATES)) {
+    if (item.region_types?.some((type) => statusWithStates.includes(type))) {
       item.regions = regions
     }
 

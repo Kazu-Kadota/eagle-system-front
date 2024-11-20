@@ -6,13 +6,14 @@ import ReactSelect, {
 import { SelectItem } from 'src/types/select'
 import { cn } from 'src/utils/classNames'
 
-type MultiSelectItem = MultiValue<SelectItem>
+export type MultiSelectItem = MultiValue<SelectItem>
 
 interface MultiSelectProps {
   placeholder: string
   options: MultiSelectItem
   value: MultiSelectItem
   id?: string
+  isMulti?: boolean
   onChange: (values: MultiSelectItem) => void
 }
 
@@ -32,14 +33,20 @@ const classNames: ClassNamesConfig<
   multiValue: () => 'rounded-sm text-dark bg-light-gray px-1',
 }
 
-export function MultiSelect({ id, ...rest }: MultiSelectProps) {
+export function MultiSelect({
+  id,
+  isMulti = true,
+  onChange,
+  ...rest
+}: MultiSelectProps) {
   return (
     <ReactSelect
       {...rest}
-      isMulti
+      isMulti={isMulti || undefined}
       inputId={id}
       unstyled
       classNames={classNames}
+      onChange={(values) => onChange(Array.isArray(values) ? values : [values])}
     />
   )
 }

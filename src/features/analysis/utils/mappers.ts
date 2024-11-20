@@ -23,6 +23,7 @@ export const regionTypes: { [key in PersonRegionType]: string } = {
   [PersonRegionType.BASIC_DATA]: 'Dados Básicos',
   [PersonRegionType.CNH_BASIC]: 'CNH Básica',
   [PersonRegionType.NATIONAL_DB]: 'Nacional Histórico ou Banco de dados',
+  [PersonRegionType.NATIONAL_STATES]: 'Nacional + Estadual',
 }
 
 export const personAnalysis: {
@@ -62,8 +63,10 @@ export const getAnalysisTypeString = (analysis: PersonAnalysis) => {
 }
 
 export const getAnalysisTypeColor = (analysis: PersonAnalysis) => {
-  if (analysis.region_type === PersonRegionType.STATES) {
-    return 'text-brown'
+  switch (analysis.region_type) {
+    case PersonRegionType.STATES:
+    case PersonRegionType.NATIONAL_STATES:
+      return 'text-brown'
   }
 
   return {
