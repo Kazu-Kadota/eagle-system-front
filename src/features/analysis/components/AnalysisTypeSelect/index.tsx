@@ -148,9 +148,9 @@ export const AnalysisTypeSelectItem: React.FC<AnalysisTypeSelectItemProps> =
                 {personAnalysis.analysis_type.includes(
                   radioItem.value as PersonAnalysisType,
                 ) ? (
-                  <span className="min-w-4 min-h-4 bg-link" />
+                  <span className="min-h-4 min-w-4 bg-link" />
                 ) : (
-                  <span className="min-w-4 min-h-4 border border-placeholder" />
+                  <span className="min-h-4 min-w-4 border border-placeholder" />
                 )}
                 <span className="text-left text-sm font-medium text-placeholder">
                   {radioItem.label}
@@ -183,7 +183,9 @@ export const AnalysisTypeSelectItem: React.FC<AnalysisTypeSelectItemProps> =
           </label>
           <MultiSelect
             isMulti={isMulti}
-            placeholder="Selecione o estado"
+            placeholder={
+              isMulti ? 'Selecione os estados' : 'Selecione o estado'
+            }
             options={estadosSelectItems as never}
             value={selectStates}
             onChange={onChangeStates}
