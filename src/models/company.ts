@@ -11,6 +11,7 @@ export enum FeatureFlag {
   INFORMATION_ACCESS_PERSON_BASIC_DATA = 'information_access_person_basic_data',
   INFORMATION_ACCESS_VEHICLE_ANTT = 'information_access_vehicle_antt',
   INFORMATION_ACCESS_VEHICLE_BASIC_DATA = 'information_access_vehicle_basic_data',
+  ACCESS_PERSON_ANALYSIS_REGION_TYPE_NATIONAL_STATE = 'access_person_analysis_region_type_national_state',
 }
 
 export type FeatureFlags = Record<FeatureFlag, boolean>

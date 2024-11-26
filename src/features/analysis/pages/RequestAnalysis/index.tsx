@@ -52,6 +52,7 @@ export function RequestAnalysisPage() {
 
   const modal = useModal()
   const { user } = useAuthStore()
+  const isAdmin = hasUserType(user.user_type, UserType.ADMIN)
 
   const [searchParams] = useSearchParams()
   const analysisTypeFromUrl = searchParams.get('analysisType') as AnalysisType
@@ -78,10 +79,12 @@ export function RequestAnalysisPage() {
     analysisType,
   }
 
-  const { featureFlags, isLoading: myCompanyLoading } = useMyCompany()
+  const { featureFlags, isLoading: myCompanyLoading } = useMyCompany({
+    isAdmin,
+  })
 
   const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
-    enabled: hasUserType(user.user_type, UserType.ADMIN),
+    enabled: isAdmin,
   })
 
   const {
