@@ -12,9 +12,8 @@ export function getPersonInitialTime(analysis: PersonAnalysis) {
     case PersonAnalysisType.BASIC_DATA:
     case PersonAnalysisType.CNH_BASIC:
     case PersonAnalysisType.PROCESS:
-      return 30
     case PersonAnalysisType.CNH_STATUS:
-      return 240
+      return 30
   }
 
   switch (analysis.region_type) {

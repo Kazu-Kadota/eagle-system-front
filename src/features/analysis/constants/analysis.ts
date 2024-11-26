@@ -79,10 +79,12 @@ export const getRegionAnalysisItems = (
   ]
 
   if (analysisType === AnalysisType.PERSON) {
-    items.push({
-      label: 'Análise Nacional + 1 Estado',
-      value: PersonRegionType.NATIONAL_STATES,
-    })
+    if (featureFlags.access_person_analysis_region_type_national_state) {
+      items.push({
+        label: 'Análise Nacional + 1 Estado',
+        value: PersonRegionType.NATIONAL_STATES,
+      })
+    }
 
     if (featureFlags.information_access_person_basic_data) {
       items.push({
