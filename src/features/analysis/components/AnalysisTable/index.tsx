@@ -11,14 +11,13 @@ import { Button, ButtonProps, Input } from 'src/components'
 import { listNumOfItemsPerPage } from 'src/features/analysis/constants/table'
 import { Analysis, AnalysisType } from 'src/models'
 import { useConfigStore } from 'src/store/config'
-import { ValueOf } from 'src/types/utils'
 import { cn } from 'src/utils/classNames'
 
 export interface TableProps<T> {
   analysisType: AnalysisType
   title?: string
   data: T[]
-  columns: ColumnDef<T, ValueOf<T>>[]
+  columns: ColumnDef<T, string>[]
   actions?: ButtonProps[]
   className?: string
   pageCount?: number
