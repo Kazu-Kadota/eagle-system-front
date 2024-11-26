@@ -90,6 +90,33 @@ export const VehicleAnalysisAnswerUI: React.FC<
         </Button>
       </div>
 
+      <InputRow>
+        <Input
+          label="ID da solicitação:"
+          placeholder="ID da solicitação"
+          name="request_id"
+          value={vehicle.request_id}
+          disabled
+          required
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
+          containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
+        />
+        <Input
+          label="ID do veículo:"
+          placeholder="ID do veículo"
+          name="vehicle_id"
+          value={vehicle.vehicle_id}
+          disabled
+          required
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
+          containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
+        />
+      </InputRow>
+
       <Input
         label="Nome do Proprietário"
         placeholder="Nome"
