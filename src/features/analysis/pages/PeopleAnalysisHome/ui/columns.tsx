@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table'
 import dayjs from 'dayjs'
+import { TableLink } from 'src/components'
 import {
   AnalysisResponseHeader,
   AnalysisResponseTimer,
@@ -19,7 +20,18 @@ import {
 import { hasUserType } from 'src/utils/userType'
 
 const createPersonColumns = (userType: UserType) => {
-  const columns: ColumnDef<PersonAnalysis, unknown>[] = [
+  const columns: ColumnDef<PersonAnalysis, string>[] = [
+    {
+      accessorKey: 'request_id',
+      header: 'ID da Solicitação',
+      cell: (props) => (
+        <TableLink
+          text={props.getValue()}
+          placeholder="Copiar ID da Solicitação"
+          successMsg="ID da solicitação copiado com sucesso!"
+        />
+      ),
+    },
     { accessorKey: 'name', header: 'Nome' },
     {
       accessorKey: 'document',
