@@ -14,8 +14,8 @@ import { AnalysisTable } from 'src/features/analysis/components'
 import {
   analysisResultsSelectItems,
   analysisStatusSelectItems,
-  analysisTypeButtonLabel,
   analysisTypeButtonTheme,
+  getAnalysisVehicleTypeLabel,
   vehiclesTypesSelectItems,
 } from 'src/features/analysis/constants/analysis'
 import { estadosVehiclesSelectItems } from 'src/features/analysis/constants/estados'
@@ -155,9 +155,36 @@ export function SearchVehicleAnalysisUI({
               disabled
               shadow="base"
             >
-              {analysisTypeButtonLabel[selectedItem.analysis_type]}
+              {getAnalysisVehicleTypeLabel(selectedItem.vehicle_analysis_type)}
             </Button>
           </div>
+
+          <InputRow>
+            <Input
+              label="ID da solicitação:"
+              placeholder="ID da solicitação"
+              name="request_id"
+              value={selectedItem.request_id}
+              disabled
+              required
+              inputVariants={{ size: 'sm' }}
+              labelVariants={{ size: 'sm' }}
+              containerVariants={{ layout: 'row' }}
+              containerClassName="flex-1"
+            />
+            <Input
+              label="ID do veículo:"
+              placeholder="ID do veículo"
+              name="vehicle_id"
+              value={selectedItem.vehicle_id}
+              disabled
+              required
+              inputVariants={{ size: 'sm' }}
+              labelVariants={{ size: 'sm' }}
+              containerVariants={{ layout: 'row' }}
+              containerClassName="flex-1"
+            />
+          </InputRow>
 
           <Input
             label="Nome do Proprietário"

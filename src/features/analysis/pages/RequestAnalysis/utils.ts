@@ -1,17 +1,18 @@
 import dayjs from 'dayjs'
+import { statusWithStates } from 'src/features/analysis/components'
 import {
   AnalysisType,
   BackRegionPersonAnalysis,
   PersonAnalysisType,
   PersonRegionType,
   RegionPersonAnalysis,
+  regionTypesToAnalysisTypes,
 } from 'src/models'
 import { PersonAnalysisBody, VehicleAnalysisBody } from '../../services/request'
 import {
   AnalysisPersonSchema,
   AnalysisVehiclesSchema,
-  PlateHistorySchema,
-  SecondDriverSchema,
+  BasicVehicleFormSchema,
 } from './schema'
 
 export const defaultVehicle: AnalysisVehiclesSchema = {
@@ -42,15 +43,11 @@ export const defaultPerson: AnalysisPersonSchema = {
   security_number_cnh: '',
 }
 
-export const defaultPlateHistory: PlateHistorySchema = {
+export const defaultBasicForm: BasicVehicleFormSchema = {
   plate: '',
   plate_state: '',
   owner_document: '',
   owner_name: '',
-}
-
-export const defaultSecondDriver: SecondDriverSchema = {
-  ...defaultPlateHistory,
 }
 
 export const preparePersonData = (
@@ -119,7 +116,7 @@ export const preparePersonAnalysis = (
       }
     }
 
-    if (item.region_types!.includes(PersonRegionType.STATES)) {
+    if (item.region_types?.some((type) => statusWithStates.includes(type))) {
       item.regions = regions
     }
 
@@ -130,11 +127,14 @@ export const preparePersonAnalysis = (
     return array
   }, [])
 
-  if (
-    analysisType === AnalysisType.PERSON &&
-    data.some((item) => item.region_type === PersonRegionType.CNH_STATUS)
-  ) {
-    analysis.push({ type: PersonAnalysisType.CNH_STATUS })
+  if (analysisType === AnalysisType.PERSON) {
+    Object.entries(regionTypesToAnalysisTypes).forEach(
+      ([regionType, analysisType]) => {
+        const hasType = data.some((item) => item.region_type === regionType)
+
+        if (hasType) analysis.push({ type: analysisType as never })
+      },
+    )
   }
 
   return analysis

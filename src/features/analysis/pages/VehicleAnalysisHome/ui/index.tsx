@@ -18,17 +18,12 @@ interface AnalysisHomeUIProps {
 const analysisTypeLabel = {
   [AnalysisType.PERSON]: 'de Pessoa',
   [AnalysisType.VEHICLE]: 'de Veículo',
-  [AnalysisType.VEHICLE_PLATE_HISTORY]: 'de Veículo',
-  [AnalysisType.SECOND_DRIVER]: 'de Veículo',
   [AnalysisType.COMBO]: 'Combo',
 }
 
 const analysisSearchRoute = {
   [AnalysisType.PERSON]: RoutePaths.Analysis.SEARCH_PEOPLE_ANALYSIS,
   [AnalysisType.VEHICLE]: RoutePaths.Analysis.SEARCH_VEHICLE_ANALYSIS,
-  [AnalysisType.VEHICLE_PLATE_HISTORY]:
-    RoutePaths.Analysis.SEARCH_VEHICLE_ANALYSIS,
-  [AnalysisType.SECOND_DRIVER]: RoutePaths.Analysis.SEARCH_VEHICLE_ANALYSIS,
   [AnalysisType.COMBO]: RoutePaths.Analysis.SEARCH_PEOPLE_ANALYSIS,
 }
 

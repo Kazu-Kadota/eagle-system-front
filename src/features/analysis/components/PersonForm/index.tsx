@@ -1,5 +1,5 @@
 import { Control } from 'react-hook-form'
-import { AnalysisType, UserType } from 'src/models'
+import { AnalysisType, UserType, VehicleAnalysisType } from 'src/models'
 import { AnalysisPersonSchema } from '../../pages/RequestAnalysis/schema'
 import { SelectItem } from 'src/types/select'
 import { hasUserType } from 'src/utils/userType'
@@ -8,7 +8,7 @@ import { estadosSelectItems } from '../../constants/estados'
 import { cnhTypesSelectItems } from '../../constants/cnh'
 
 interface PersonFormProps {
-  analysisTypeLoading: AnalysisType | null
+  analysisTypeLoading: AnalysisType | VehicleAnalysisType | null
   control: Control<AnalysisPersonSchema>
   analysisType?: AnalysisType
   userType?: UserType

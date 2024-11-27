@@ -92,6 +92,33 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
         </Button>
       </div>
 
+      <InputRow>
+        <Input
+          label="ID da solicitação:"
+          placeholder="ID da solicitação"
+          name="request_id"
+          value={person.request_id}
+          disabled
+          required
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
+          containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
+        />
+        <Input
+          label="ID da pessoa:"
+          placeholder="ID da pessoa"
+          name="person_id"
+          value={person.person_id}
+          disabled
+          required
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
+          containerVariants={{ layout: 'row' }}
+          containerClassName="flex-1"
+        />
+      </InputRow>
+
       <Input
         label="Nome:"
         placeholder="Nome"

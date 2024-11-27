@@ -1,23 +1,25 @@
-import React, { memo } from 'react'
-import { Box, MultiSelect } from 'src/components'
+/* eslint-disable react-refresh/only-export-components */
+import React, { memo, useMemo } from 'react'
+import { Box, MultiSelect, MultiSelectItem } from 'src/components'
 import {
+  AnalysisType,
+  FeatureFlags,
   PersonAnalysisType,
   PersonRegionType,
   RegionPersonAnalysis,
   State,
 } from 'src/models'
+import { SelectItem } from 'src/types/select'
 import {
   getPersonAnalysisItems,
-  regionAnalysisItems,
-  regionAnalysisItemsWithCNH,
+  getRegionAnalysisItems,
 } from '../../constants/analysis'
 import { estadosSelectItems } from '../../constants/estados'
-import { SelectItem } from 'src/types/select'
 
 interface AnalysisTypeSelectProps {
-  isDbEnabled: boolean
+  featureFlags: FeatureFlags
+  analysisType: AnalysisType
   personAnalysis: RegionPersonAnalysis[]
-  showCNHStatus?: boolean
   onChangePersonAnalysis: (
     items:
       | RegionPersonAnalysis[]
@@ -27,7 +29,7 @@ interface AnalysisTypeSelectProps {
 
 interface AnalysisTypeSelectItemProps {
   item: SelectItem
-  isDbEnabled: boolean
+  featureFlags: FeatureFlags
   personAnalysis: RegionPersonAnalysis | undefined
   onChangePersonAnalysis: (
     items:
@@ -36,8 +38,40 @@ interface AnalysisTypeSelectItemProps {
   ) => void
 }
 
+export const statusWithoutOptions = [
+  PersonRegionType.BASIC_DATA,
+  PersonRegionType.CNH_BASIC,
+  PersonRegionType.CNH_STATUS,
+  PersonRegionType.PROCESS,
+]
+
+export const statusWithStates = [
+  PersonRegionType.NATIONAL_STATES,
+  PersonRegionType.STATES,
+]
+
+const minWidthByRegionType = {
+  [PersonRegionType.STATES]: 'max-w-44 w-full',
+  [PersonRegionType.NATIONAL]: 'max-w-40 w-full',
+  [PersonRegionType.NATIONAL_STATES]: 'max-w-56 w-full',
+  [PersonRegionType.NATIONAL_DB]: '',
+  [PersonRegionType.BASIC_DATA]: 'max-w-40 w-full',
+  [PersonRegionType.CNH_BASIC]: 'max-w-40 w-full',
+  [PersonRegionType.CNH_STATUS]: 'max-w-40 w-full',
+  [PersonRegionType.PROCESS]: '',
+}
+
 export const AnalysisTypeSelectItem: React.FC<AnalysisTypeSelectItemProps> =
-  memo(({ item, isDbEnabled, personAnalysis, onChangePersonAnalysis }) => {
+  memo(({ item, featureFlags, personAnalysis, onChangePersonAnalysis }) => {
+    const selectStates = useMemo(
+      () =>
+        personAnalysis?.regions.map((region) => ({
+          label: region,
+          value: region,
+        })) ?? [],
+      [personAnalysis],
+    )
+
     const setRegionType = (values: RegionPersonAnalysis[]) => {
       if (personAnalysis?.region_type) {
         return values.filter(
@@ -85,78 +119,100 @@ export const AnalysisTypeSelectItem: React.FC<AnalysisTypeSelectItemProps> =
         return { ...value, regions: ufs }
       })
 
+    const onChangeStates = (values: MultiSelectItem) =>
+      onChangePersonAnalysis(
+        setStates(values.map((item) => item.value) as State[]),
+      )
+
+    const renderInnerOptions = () => {
+      if (
+        statusWithoutOptions.includes(item.value as PersonRegionType) ||
+        !personAnalysis?.region_type
+      )
+        return null
+
+      return (
+        <div className="mb-3 mt-1 flex max-w-[10rem] flex-col 2xl:mb-0">
+          {getPersonAnalysisItems(personAnalysis.region_type, featureFlags).map(
+            (radioItem) => (
+              <button
+                type="button"
+                key={radioItem.value}
+                onClick={() =>
+                  onChangePersonAnalysis(
+                    setAnalysisType(radioItem.value as PersonAnalysisType),
+                  )
+                }
+                className="flex items-center gap-2 py-1"
+              >
+                {personAnalysis.analysis_type.includes(
+                  radioItem.value as PersonAnalysisType,
+                ) ? (
+                  <span className="min-h-4 min-w-4 bg-link" />
+                ) : (
+                  <span className="min-h-4 min-w-4 border border-placeholder" />
+                )}
+                <span className="text-left text-sm font-medium text-placeholder">
+                  {radioItem.label}
+                </span>
+              </button>
+            ),
+          )}
+        </div>
+      )
+    }
+
+    const renderStates = () => {
+      if (
+        !personAnalysis?.region_type ||
+        !statusWithStates.includes(personAnalysis?.region_type)
+      ) {
+        return null
+      }
+
+      const isMulti = personAnalysis.region_type === PersonRegionType.STATES
+
+      return (
+        <div className="mb-4 max-w-[15rem] 2xl:mb-0 2xl:mt-3">
+          <label
+            className="mb-1 block text-[0.8rem] font-semibold"
+            htmlFor="region_states"
+          >
+            <span className="text-error">*</span>
+            {isMulti ? 'Estados' : 'Estado'}
+          </label>
+          <MultiSelect
+            isMulti={isMulti}
+            placeholder={
+              isMulti ? 'Selecione os estados' : 'Selecione o estado'
+            }
+            options={estadosSelectItems as never}
+            value={selectStates}
+            onChange={onChangeStates}
+          />
+        </div>
+      )
+    }
+
     return (
-      <div className="flex-1">
+      <div className={minWidthByRegionType[item.value as PersonRegionType]}>
         <button
           type="button"
           key={item.value}
           onClick={() => onChangePersonAnalysis(setRegionType)}
-          className="flex items-center gap-2 py-1"
+          className="flex gap-2 py-1"
         >
           {personAnalysis?.region_type ? (
-            <span className="h-4 w-4 bg-link" />
+            <span className="mt-[0.12rem] h-4 w-4 bg-link" />
           ) : (
-            <span className="h-4 w-4 border border-placeholder" />
+            <span className="mt-[0.12rem] h-4 w-4 border border-placeholder" />
           )}
-          <span className="text-sm font-medium text-placeholder">
+          <span className="text-left text-sm font-medium text-placeholder">
             {item.label}
           </span>
         </button>
-        {personAnalysis?.region_type &&
-          personAnalysis.region_type !== PersonRegionType.CNH_STATUS && (
-            <div className="mt-1 flex flex-col">
-              {getPersonAnalysisItems(
-                personAnalysis.region_type,
-                isDbEnabled,
-              ).map((radioItem) => (
-                <button
-                  type="button"
-                  key={radioItem.value}
-                  onClick={() =>
-                    onChangePersonAnalysis(
-                      setAnalysisType(radioItem.value as PersonAnalysisType),
-                    )
-                  }
-                  className="flex items-center gap-2 py-1"
-                >
-                  {personAnalysis.analysis_type.includes(
-                    radioItem.value as PersonAnalysisType,
-                  ) ? (
-                    <span className="h-4 w-4 bg-link" />
-                  ) : (
-                    <span className="h-4 w-4 border border-placeholder" />
-                  )}
-                  <span className="text-sm font-medium text-placeholder">
-                    {radioItem.label}
-                  </span>
-                </button>
-              ))}
-            </div>
-          )}
-        {personAnalysis?.region_type === PersonRegionType.STATES && (
-          <div className="mt-3 max-w-[15rem]">
-            <label
-              className="mb-1 block text-sm font-semibold"
-              htmlFor="region_states"
-            >
-              <span className="text-error">*</span>
-              Estados da ánalise estadual
-            </label>
-            <MultiSelect
-              placeholder="Selecione os estados"
-              options={estadosSelectItems as never}
-              value={personAnalysis.regions.map((region) => ({
-                label: region,
-                value: region,
-              }))}
-              onChange={(values) =>
-                onChangePersonAnalysis(
-                  setStates(values.map((item) => item.value) as State[]),
-                )
-              }
-            />
-          </div>
-        )}
+        {renderInnerOptions()}
+        {renderStates()}
       </div>
     )
   })
@@ -165,11 +221,11 @@ AnalysisTypeSelectItem.displayName = 'AnalysisTypeSelectItem'
 
 export const AnalysisTypeSelect: React.FC<AnalysisTypeSelectProps> = ({
   personAnalysis,
-  isDbEnabled,
-  showCNHStatus,
+  featureFlags,
+  analysisType,
   onChangePersonAnalysis,
 }) => {
-  const items = showCNHStatus ? regionAnalysisItemsWithCNH : regionAnalysisItems
+  const items = getRegionAnalysisItems(analysisType, featureFlags)
 
   return (
     <Box spacing="sm" containerClassName="mb-2">
@@ -179,10 +235,10 @@ export const AnalysisTypeSelect: React.FC<AnalysisTypeSelectProps> = ({
       <small className="mt-0.5 block text-placeholder/80">
         Você deve selecionar ao menos uma opção abaixo
       </small>
-      <div className="mt-3 flex max-w-3xl flex-col gap-[0.65rem] md:flex-row">
+      <div className="mt-3 flex flex-col gap-2 2xl:flex-row 2xl:gap-4">
         {items.map((item) => (
           <AnalysisTypeSelectItem
-            isDbEnabled={isDbEnabled}
+            featureFlags={featureFlags}
             key={item.value}
             item={item}
             onChangePersonAnalysis={onChangePersonAnalysis}

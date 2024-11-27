@@ -14,19 +14,24 @@ const initialCompany: Company = {
   feature_flag: [],
 }
 
-export const useMyCompany = () => {
+interface Options {
+  isAdmin: boolean
+}
+
+export const useMyCompany = ({ isAdmin }: Options) => {
   const { data, isFetching, refetch } = useQuery({
     queryFn: getMyCompany,
     queryKey: ['my-company'],
     refetchOnWindowFocus: false,
     staleTime: Infinity,
+    enabled: !isAdmin,
   })
 
   const company = data ?? initialCompany
 
   const featureFlags = useMemo(
-    () => parseFeatureFlags(company.feature_flag),
-    [company.feature_flag],
+    () => parseFeatureFlags({ flagList: company.feature_flag, isAdmin }),
+    [company.feature_flag, isAdmin],
   )
 
   return {

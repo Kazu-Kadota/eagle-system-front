@@ -26,8 +26,6 @@ export const useConfigStore = createPersist<ConfigStore>(
         case AnalysisType.COMBO:
           return get().numOfItemsPerPagePeople
         case AnalysisType.VEHICLE:
-        case AnalysisType.VEHICLE_PLATE_HISTORY:
-        case AnalysisType.SECOND_DRIVER:
           return get().numOfItemsPerPageVehicles
       }
     },
@@ -38,8 +36,6 @@ export const useConfigStore = createPersist<ConfigStore>(
         case AnalysisType.COMBO:
           return set({ numOfItemsPerPagePeople: value })
         case AnalysisType.VEHICLE:
-        case AnalysisType.VEHICLE_PLATE_HISTORY:
-        case AnalysisType.SECOND_DRIVER:
           return set({ numOfItemsPerPageVehicles: value })
       }
     },

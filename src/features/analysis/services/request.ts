@@ -1,5 +1,5 @@
 import { env } from 'src/config/env'
-import { BackRegionPersonAnalysis } from 'src/models'
+import { BackRegionPersonAnalysis, VehicleAnalysisType } from 'src/models'
 import { requestAuth } from 'src/utils/request'
 
 export type PersonAnalysisBody = {
@@ -35,15 +35,13 @@ type RequestAnalysisPersonBody = {
   person: PersonAnalysisBody
 }
 
-type RequestAnalysisPlateHistoryBody = {
+type RequestAnalysisBasicVehicleBody = {
   company_name?: string
   plate_state: string
   plate: string
   owner_name: string
   owner_document: string
 }
-
-type RequestAnalysisSecondDriver = RequestAnalysisPlateHistoryBody
 
 type RequestAnalysisComboBody = {
   combo_number: number
@@ -68,24 +66,19 @@ export const requestAnalysisVehicle = async (body: VehicleAnalysisBody) => {
   return data
 }
 
-export const requestAnalysisPlateHistory = async (
-  body: RequestAnalysisPlateHistoryBody,
+export const requestBasicVehicleAnalysis = async (
+  body: RequestAnalysisBasicVehicleBody,
+  type: VehicleAnalysisType,
 ) => {
-  await requestAuth.post(
-    env.VITE_API_REQUEST_URL,
-    `/analysis/vehicle/plate-history`,
-    { body },
-  )
-}
+  const path = {
+    [VehicleAnalysisType.VEHICLE_PLATE_HISTORY]: `/analysis/vehicle/plate-history`,
+    [VehicleAnalysisType.VEHICLE_SECOND_DRIVER]: `/analysis/vehicle/second-driver`,
+    [VehicleAnalysisType.ANTT]: `/analysis/vehicle/antt`,
+    [VehicleAnalysisType.SIMPLE]: `/analysis/vehicle/simples`,
+    [VehicleAnalysisType.BASIC_DATA]: `/analysis/vehicle/basic-data`,
+  }[type]
 
-export const requestAnalysisSecondDriver = async (
-  body: RequestAnalysisSecondDriver,
-) => {
-  await requestAuth.post(
-    env.VITE_API_REQUEST_URL,
-    `/analysis/vehicle/second-driver`,
-    { body },
-  )
+  await requestAuth.post(env.VITE_API_REQUEST_URL, path, { body })
 }
 
 export const requestAnalysisCombo = async (body: RequestAnalysisComboBody) => {

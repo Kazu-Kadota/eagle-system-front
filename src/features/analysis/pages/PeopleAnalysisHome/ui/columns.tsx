@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table'
 import dayjs from 'dayjs'
+import { TableLink } from 'src/components'
 import {
   AnalysisResponseHeader,
   AnalysisResponseTimer,
@@ -7,19 +8,30 @@ import {
 } from 'src/features/analysis/components'
 import {
   analysisStatus,
+  getAnalysisTypeColor,
   getAnalysisTypeString,
 } from 'src/features/analysis/utils/mappers'
 import {
   AnalysisStatus,
   AnalysisType,
   PersonAnalysis,
-  PersonRegionType,
   UserType,
 } from 'src/models'
 import { hasUserType } from 'src/utils/userType'
 
 const createPersonColumns = (userType: UserType) => {
-  const columns: ColumnDef<PersonAnalysis, unknown>[] = [
+  const columns: ColumnDef<PersonAnalysis, string>[] = [
+    {
+      accessorKey: 'request_id',
+      header: 'ID da Solicitação',
+      cell: (props) => (
+        <TableLink
+          text={props.getValue()}
+          placeholder="Copiar ID da Solicitação"
+          successMsg="ID da solicitação copiado com sucesso!"
+        />
+      ),
+    },
     { accessorKey: 'name', header: 'Nome' },
     {
       accessorKey: 'document',
@@ -34,11 +46,7 @@ const createPersonColumns = (userType: UserType) => {
       accessorKey: 'region_type',
       header: 'Tipo',
       cell: (props) => (
-        <span
-          className={
-            props.getValue() === PersonRegionType.STATES ? 'text-brown' : ''
-          }
-        >
+        <span className={getAnalysisTypeColor(props.row.original)}>
           {getAnalysisTypeString(props.row.original)}
         </span>
       ),

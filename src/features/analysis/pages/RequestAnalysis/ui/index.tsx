@@ -3,21 +3,22 @@ import { Box, LoadingContainer, SelectGroup } from 'src/components'
 import {
   AnalysisTypeSelect,
   PersonForm,
+  statusWithoutOptions,
   VehiclesForm,
 } from 'src/features/analysis/components'
 import { analysisTypesItems } from 'src/features/analysis/constants/analysis'
 import {
   AnalysisType,
-  PersonRegionType,
+  FeatureFlags,
   RegionPersonAnalysis,
   UserType,
+  VehicleAnalysisType,
 } from 'src/models'
 import { SelectItem } from 'src/types/select'
 import {
   AnalysisArrayVehicleSchema,
   AnalysisPersonSchema,
-  PlateHistorySchema,
-  SecondDriverSchema,
+  BasicVehicleFormSchema,
 } from '../schema'
 
 type VehicleField = FieldArrayWithId<
@@ -28,11 +29,11 @@ type VehicleField = FieldArrayWithId<
 
 export interface RequestAnalysisUIProps {
   isLoading: boolean
-  isDbEnabled: boolean
+  featureFlags: FeatureFlags
   analysisType?: AnalysisType
-  analysisTypeLoading: AnalysisType | null
-  vehicleAnalysisType: AnalysisType
-  onChangeVehicleAnalysisType: (value: AnalysisType) => void
+  analysisTypeLoading: AnalysisType | VehicleAnalysisType | null
+  vehicleAnalysisType: VehicleAnalysisType
+  onChangeVehicleAnalysisType: (value: VehicleAnalysisType) => void
   fieldsVehicle: VehicleField[]
   userType?: UserType
   companiesSelectItems: SelectItem[]
@@ -40,22 +41,20 @@ export interface RequestAnalysisUIProps {
   onChangeAnalysisType: (value: AnalysisType) => void
   controlPerson: Control<AnalysisPersonSchema>
   controlVehicle: Control<AnalysisArrayVehicleSchema>
-  controlPlateHistory: Control<PlateHistorySchema>
-  controlSecondDriver: Control<SecondDriverSchema>
+  controlBasicFormVehicle: Control<BasicVehicleFormSchema>
   personAnalysis: RegionPersonAnalysis[]
   onChangePersonAnalysis: (value: RegionPersonAnalysis[]) => void
   addVehicleForm: () => void
   removeVehicleForm: (index: number) => void
   onRequestPersonAnalysis: () => void
   onRequestVehicleAnalysis: () => void
-  onRequestPlateHistoryAnalysis: () => void
-  onRequestSecondDriverAnalysis: () => void
+  onRequestBasicFormVehicleAnalysis: () => void
   onRequestComboAnalysis: (e: React.FormEvent<HTMLFormElement>) => void
 }
 
 export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
   isLoading,
-  isDbEnabled,
+  featureFlags,
   analysisType,
   analysisTypeLoading,
   fieldsVehicle,
@@ -66,8 +65,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
   personAnalysis,
   controlPerson,
   controlVehicle,
-  controlPlateHistory,
-  controlSecondDriver,
+  controlBasicFormVehicle,
   onChangeVehicleAnalysisType,
   onChangePersonAnalysis,
   onRequestPersonAnalysis,
@@ -76,22 +74,22 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
   addVehicleForm,
   removeVehicleForm,
   onRequestComboAnalysis,
-  onRequestPlateHistoryAnalysis,
-  onRequestSecondDriverAnalysis,
+  onRequestBasicFormVehicleAnalysis,
 }) => {
   const showPersonForm = () =>
     personAnalysis?.some(
       (personAnalysis) =>
         personAnalysis.analysis_type.length > 0 ||
-        personAnalysis.region_type === PersonRegionType.CNH_STATUS,
+        (analysisType !== AnalysisType.COMBO &&
+          statusWithoutOptions.includes(personAnalysis.region_type)),
     )
 
   const renderPersonForm = () => (
     <>
       <AnalysisTypeSelect
-        isDbEnabled={isDbEnabled}
+        analysisType={AnalysisType.PERSON}
+        featureFlags={featureFlags}
         personAnalysis={personAnalysis}
-        showCNHStatus
         onChangePersonAnalysis={onChangePersonAnalysis as never}
       />
       {showPersonForm() && (
@@ -111,10 +109,10 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
   const renderVehicleForm = () =>
     fieldsVehicle.map((field: VehicleField, index: number) => (
       <VehiclesForm
+        featureFlags={featureFlags}
         key={field.id + analysisType}
         controlVehicle={controlVehicle}
-        controlPlateHistory={controlPlateHistory}
-        controlSecondDriver={controlSecondDriver}
+        controlBasicFormVehicle={controlBasicFormVehicle}
         userType={userType}
         analysisTypeLoading={analysisTypeLoading}
         companiesLoading={companiesLoading}
@@ -126,8 +124,7 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
         vehiclesLength={fieldsVehicle.length}
         vehicleAnalysisType={vehicleAnalysisType}
         onChangeVehicleAnalysisType={onChangeVehicleAnalysisType}
-        onRequestPlateHistoryAnalysis={onRequestPlateHistoryAnalysis}
-        onRequestSecondDriverAnalysis={onRequestSecondDriverAnalysis}
+        onRequestBasicFormVehicleAnalysis={onRequestBasicFormVehicleAnalysis}
         index={index}
       />
     ))
@@ -135,7 +132,8 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
   const renderComboForm = () => (
     <>
       <AnalysisTypeSelect
-        isDbEnabled={isDbEnabled}
+        featureFlags={featureFlags}
+        analysisType={AnalysisType.COMBO}
         personAnalysis={personAnalysis}
         onChangePersonAnalysis={onChangePersonAnalysis as never}
       />
@@ -153,22 +151,23 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
           />
           {fieldsVehicle.map((field: VehicleField, index: number) => (
             <VehiclesForm
+              featureFlags={featureFlags}
               key={field.id + analysisType}
               controlVehicle={controlVehicle}
               userType={userType}
               analysisTypeLoading={analysisTypeLoading}
               companiesLoading={companiesLoading}
               companiesSelectItems={companiesSelectItems}
-              controlSecondDriver={controlSecondDriver}
+              controlBasicFormVehicle={controlBasicFormVehicle}
               onRequestAnalysis={onRequestComboAnalysis}
               analysisType={analysisType}
               addVehicleForm={addVehicleForm}
               removeVehicleForm={removeVehicleForm}
               vehiclesLength={fieldsVehicle.length}
-              onRequestPlateHistoryAnalysis={onRequestPlateHistoryAnalysis}
-              controlPlateHistory={controlPlateHistory}
+              onRequestBasicFormVehicleAnalysis={
+                onRequestBasicFormVehicleAnalysis
+              }
               onChangeVehicleAnalysisType={onChangeVehicleAnalysisType}
-              onRequestSecondDriverAnalysis={onRequestSecondDriverAnalysis}
               vehicleAnalysisType={vehicleAnalysisType}
               index={index}
             />
@@ -197,8 +196,6 @@ export const RequestAnalysisUI: React.FC<RequestAnalysisUIProps> = ({
         {
           [AnalysisType.PERSON]: renderPersonForm,
           [AnalysisType.VEHICLE]: renderVehicleForm,
-          [AnalysisType.VEHICLE_PLATE_HISTORY]: renderVehicleForm,
-          [AnalysisType.SECOND_DRIVER]: renderVehicleForm,
           [AnalysisType.COMBO]: renderComboForm,
         }[analysisType]()}
     </>

@@ -1,12 +1,25 @@
 import { ColumnDef } from '@tanstack/react-table'
 import dayjs from 'dayjs'
+import { TableLink } from 'src/components'
 import {
   analysisStatus,
+  getAnalysisTypeColor,
   getAnalysisTypeString,
 } from 'src/features/analysis/utils/mappers'
-import { AnalysisStatus, PersonAnalysis, PersonRegionType } from 'src/models'
+import { AnalysisStatus, PersonAnalysis } from 'src/models'
 
-export const columns: ColumnDef<PersonAnalysis, unknown>[] = [
+export const columns: ColumnDef<PersonAnalysis, string>[] = [
+  {
+    accessorKey: 'request_id',
+    header: 'ID da Solicitação',
+    cell: (props) => (
+      <TableLink
+        text={props.getValue()}
+        placeholder="Copiar ID da Solicitação"
+        successMsg="ID da solicitação copiado com sucesso!"
+      />
+    ),
+  },
   { accessorKey: 'name', header: 'Nome' },
   {
     accessorKey: 'document',
@@ -21,11 +34,7 @@ export const columns: ColumnDef<PersonAnalysis, unknown>[] = [
     accessorKey: 'region_type',
     header: 'Tipo',
     cell: (props) => (
-      <span
-        className={
-          props.getValue() === PersonRegionType.STATES ? 'text-brown' : ''
-        }
-      >
+      <span className={getAnalysisTypeColor(props.row.original)}>
         {getAnalysisTypeString(props.row.original)}
       </span>
     ),

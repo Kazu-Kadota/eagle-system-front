@@ -1,11 +1,12 @@
 import dayjs from 'dayjs'
 import {
   AnalysisStatus,
-  AnalysisType,
   PersonAnalysis,
   PersonAnalysisType,
   PersonRegionType,
+  regionTypesToAnalysisTypes,
   VehicleAnalysis,
+  VehicleAnalysisType,
 } from 'src/models'
 
 export const analysisStatus: { [key in AnalysisStatus]: string } = {
@@ -18,7 +19,11 @@ export const regionTypes: { [key in PersonRegionType]: string } = {
   [PersonRegionType.NATIONAL]: 'Nacional',
   [PersonRegionType.STATES]: 'Estadual',
   [PersonRegionType.CNH_STATUS]: 'Status da CNH',
+  [PersonRegionType.PROCESS]: 'Processo',
+  [PersonRegionType.BASIC_DATA]: 'Dados Básicos',
+  [PersonRegionType.CNH_BASIC]: 'CNH Básica',
   [PersonRegionType.NATIONAL_DB]: 'Nacional Histórico ou Banco de dados',
+  [PersonRegionType.NATIONAL_STATES]: 'Nacional + Estadual',
 }
 
 export const personAnalysis: {
@@ -27,12 +32,19 @@ export const personAnalysis: {
   [PersonAnalysisType.HISTORY]: 'Histórico',
   [PersonAnalysisType.SIMPLE]: 'Simples',
   [PersonAnalysisType.CNH_STATUS]: 'Status da CNH',
+  [PersonAnalysisType.PROCESS]: 'Processo',
+  [PersonAnalysisType.BASIC_DATA]: 'Dados Básicos',
+  [PersonAnalysisType.CNH_BASIC]: 'CNH Básica',
   [PersonAnalysisType.NATIONAL_DB]: 'Nacional Histórico ou Banco de dados',
 }
 
 export const getAnalysisTypeString = (analysis: PersonAnalysis) => {
-  if (analysis.person_analysis_type === PersonAnalysisType.CNH_STATUS) {
-    return personAnalysis[PersonAnalysisType.CNH_STATUS]
+  if (
+    Object.keys(regionTypesToAnalysisTypes).includes(
+      analysis.person_analysis_type,
+    )
+  ) {
+    return personAnalysis[analysis.person_analysis_type]
   }
 
   if (analysis.region_type === PersonRegionType.NATIONAL_DB) {
@@ -50,6 +62,25 @@ export const getAnalysisTypeString = (analysis: PersonAnalysis) => {
   return string
 }
 
+export const getAnalysisTypeColor = (analysis: PersonAnalysis) => {
+  switch (analysis.region_type) {
+    case PersonRegionType.STATES:
+    case PersonRegionType.NATIONAL_STATES:
+      return 'text-brown'
+  }
+
+  return {
+    [PersonRegionType.NATIONAL]: '',
+    [PersonRegionType.CNH_STATUS]: 'text-blue',
+    [PersonRegionType.PROCESS]: 'text-blue',
+    [PersonRegionType.BASIC_DATA]: 'text-blue',
+    [PersonRegionType.CNH_BASIC]: 'text-blue',
+    [PersonRegionType.NATIONAL_DB]: '',
+    [PersonAnalysisType.HISTORY]: '',
+    [PersonAnalysisType.SIMPLE]: '',
+  }[analysis.person_analysis_type]
+}
+
 export const preparePersonDataFromApi = (
   person: PersonAnalysis,
 ): PersonAnalysis => ({
@@ -62,11 +93,11 @@ export const preparePersonDataFromApi = (
     : '',
 })
 
-export const getVehicleAnalysisType = (analysis: VehicleAnalysis) => {
-  const analysisTypeString = {
-    [AnalysisType.VEHICLE_PLATE_HISTORY]: 'Histórico de placa',
-    [AnalysisType.SECOND_DRIVER]: 'Segundo dono',
-  }[analysis.analysis_type as never]
-
-  return analysisTypeString ?? analysis.vehicle_type
-}
+export const getVehicleAnalysisType = (analysis: VehicleAnalysis) =>
+  ({
+    [VehicleAnalysisType.ANTT]: 'ANTT',
+    [VehicleAnalysisType.BASIC_DATA]: 'Dados Básicos',
+    [VehicleAnalysisType.VEHICLE_PLATE_HISTORY]: 'Histórico de Placa',
+    [VehicleAnalysisType.VEHICLE_SECOND_DRIVER]: 'Segundo Motorista',
+    [VehicleAnalysisType.SIMPLE]: analysis.vehicle_type,
+  })[analysis.vehicle_analysis_type ?? VehicleAnalysisType.SIMPLE]

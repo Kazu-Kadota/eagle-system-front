@@ -1,10 +1,13 @@
-import { FeatureFlag } from 'src/models'
+import { FeatureFlag, FeatureFlags } from 'src/models'
 
-export const parseFeatureFlags = (flagList: FeatureFlag[]) =>
-  flagList.reduce(
-    (flagObj, flag) => ({
-      ...flagObj,
-      [flag]: flagList.includes(flag),
-    }),
-    {} as Record<FeatureFlag, boolean>,
-  )
+interface Options {
+  flagList: FeatureFlag[]
+  isAdmin: boolean
+}
+
+export const parseFeatureFlags = ({ flagList, isAdmin }: Options) => {
+  return Object.values(FeatureFlag).reduce((acc, flag) => {
+    acc[flag] = isAdmin || flagList.includes(flag)
+    return acc
+  }, {} as FeatureFlags)
+}

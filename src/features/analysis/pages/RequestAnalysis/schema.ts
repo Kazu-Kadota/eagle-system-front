@@ -66,7 +66,7 @@ export const analysisArrayVehicleSchema = z.object({
   vehicles: z.array(analysisVehiclesSchema),
 })
 
-export const plateHistorySchema = z
+export const basicVehicleFormSchema = z
   .object({
     company_name: z.string().optional(),
     plate_state: requiredValidator,
@@ -90,12 +90,9 @@ export const plateHistorySchema = z
     }
   })
 
-export const secondDriverSchema = plateHistorySchema
-
 export type AnalysisVehiclesSchema = z.infer<typeof analysisVehiclesSchema>
 export type AnalysisArrayVehicleSchema = z.infer<
   typeof analysisArrayVehicleSchema
 >
 export type AnalysisPersonSchema = z.infer<typeof analysisPersonSchema>
-export type PlateHistorySchema = z.infer<typeof plateHistorySchema>
-export type SecondDriverSchema = PlateHistorySchema
+export type BasicVehicleFormSchema = z.infer<typeof basicVehicleFormSchema>

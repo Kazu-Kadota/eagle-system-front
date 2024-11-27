@@ -11,14 +11,13 @@ import { Button, ButtonProps, Input } from 'src/components'
 import { listNumOfItemsPerPage } from 'src/features/analysis/constants/table'
 import { Analysis, AnalysisType } from 'src/models'
 import { useConfigStore } from 'src/store/config'
-import { ValueOf } from 'src/types/utils'
 import { cn } from 'src/utils/classNames'
 
 export interface TableProps<T> {
   analysisType: AnalysisType
   title?: string
   data: T[]
-  columns: ColumnDef<T, ValueOf<T>>[]
+  columns: ColumnDef<T, string>[]
   actions?: ButtonProps[]
   className?: string
   pageCount?: number
@@ -120,13 +119,13 @@ export const AnalysisTable = <T extends Analysis>({
                   onClick={onClick ? () => onClick(row.original) : undefined}
                   className={
                     onClick &&
-                    'cursor-pointer transition-opacity hover:opacity-50'
+                    'cursor-pointer transition-colors hover:bg-primary/10'
                   }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className="w-28 border-b border-line-light px-0.5 py-[0.375rem] text-[0.8125rem] font-medium uppercase"
+                      className="w-28 overflow-hidden text-ellipsis border-b border-line-light px-0.5 py-[0.375rem] text-[0.8125rem] font-medium uppercase"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

@@ -8,43 +8,46 @@ import {
   InputRow,
   SelectGroup,
 } from 'src/components'
-import { AnalysisType, UserType } from 'src/models'
+import {
+  AnalysisType,
+  FeatureFlags,
+  UserType,
+  VehicleAnalysisType,
+} from 'src/models'
 import { SelectItem } from 'src/types/select'
 import { cn } from 'src/utils/classNames'
 import { hasUserType } from 'src/utils/userType'
-import { returnNull } from 'src/utils/utils'
 import {
-  vehicleAnalysisSelectItems,
+  getVehicleAnalysisSelectItems,
   vehiclesTypesSelectItems,
 } from '../../constants/analysis'
 import { estadosVehiclesSelectItems } from '../../constants/estados'
 import {
   AnalysisArrayVehicleSchema,
-  PlateHistorySchema,
-  SecondDriverSchema,
+  BasicVehicleFormSchema,
 } from '../../pages/RequestAnalysis/schema'
 
 interface VehiclesFormProps {
-  analysisTypeLoading: AnalysisType | null
+  featureFlags: FeatureFlags
+  analysisTypeLoading: AnalysisType | VehicleAnalysisType | null
   controlVehicle: Control<AnalysisArrayVehicleSchema>
-  controlPlateHistory: Control<PlateHistorySchema>
-  controlSecondDriver: Control<SecondDriverSchema>
-  vehicleAnalysisType: AnalysisType
+  controlBasicFormVehicle: Control<BasicVehicleFormSchema>
+  vehicleAnalysisType: VehicleAnalysisType
   analysisType?: AnalysisType
   userType?: UserType
   companiesSelectItems: SelectItem[]
   companiesLoading: boolean
   vehiclesLength: number
   index: number
-  onChangeVehicleAnalysisType: (value: AnalysisType) => void
+  onChangeVehicleAnalysisType: (value: VehicleAnalysisType) => void
   onRequestAnalysis: (e: React.FormEvent<HTMLFormElement>) => void
-  onRequestPlateHistoryAnalysis: () => void
-  onRequestSecondDriverAnalysis: () => void
+  onRequestBasicFormVehicleAnalysis: () => void
   addVehicleForm: () => void
   removeVehicleForm: (index: number) => void
 }
 
 export const VehiclesForm: React.FC<VehiclesFormProps> = ({
+  featureFlags,
   analysisTypeLoading,
   userType,
   companiesLoading,
@@ -53,15 +56,13 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
   analysisType,
   index,
   vehiclesLength,
-  controlPlateHistory,
   controlVehicle,
-  controlSecondDriver,
+  controlBasicFormVehicle,
   onChangeVehicleAnalysisType,
   onRequestAnalysis,
   addVehicleForm,
   removeVehicleForm,
-  onRequestPlateHistoryAnalysis,
-  onRequestSecondDriverAnalysis,
+  onRequestBasicFormVehicleAnalysis,
 }) => {
   const renderVehicleForm = () => (
     <div className="flex">
@@ -230,20 +231,20 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
     </div>
   )
 
-  const renderPlateHistoryForm = () => (
+  const renderBasicForm = () => (
     <form
-      key={AnalysisType.VEHICLE_PLATE_HISTORY}
+      key={analysisType}
       className={cn(
         'flex flex-col gap-3 sm:gap-4',
         analysisType !== AnalysisType.COMBO && 'mt-4',
       )}
-      onSubmit={onRequestPlateHistoryAnalysis}
+      onSubmit={onRequestBasicFormVehicleAnalysis}
     >
       <InputRow>
         {hasUserType(userType, UserType.ADMIN) &&
           analysisType !== AnalysisType.COMBO && (
             <ControlledInput
-              control={controlPlateHistory}
+              control={controlBasicFormVehicle}
               label="Empresa"
               placeholder="Selecione uma empresa"
               name="company_name"
@@ -257,7 +258,7 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
             />
           )}
         <ControlledInput
-          control={controlPlateHistory}
+          control={controlBasicFormVehicle}
           label="Nome do Proprietário"
           placeholder="Nome"
           name="owner_name"
@@ -271,7 +272,7 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
 
       <InputRow>
         <ControlledInput
-          control={controlPlateHistory}
+          control={controlBasicFormVehicle}
           label="CPF/CNPJ do Proprietário"
           placeholder="XX.XXX.XXX/XXXX-XX"
           name="owner_document"
@@ -283,7 +284,7 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           containerClassName="flex-1"
         />
         <ControlledInput
-          control={controlPlateHistory}
+          control={controlBasicFormVehicle}
           label="Placa"
           placeholder="XXXXXXX"
           name="plate"
@@ -295,7 +296,7 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           containerClassName="flex-1"
         />
         <ControlledInput
-          control={controlPlateHistory}
+          control={controlBasicFormVehicle}
           label="Estado da Placa do veículo"
           name="plate_state"
           required
@@ -312,98 +313,8 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
         size="xsStrong"
         shadow="base"
         className="mt-2 min-w-[10rem] self-center"
-        loading={analysisTypeLoading === AnalysisType.VEHICLE_PLATE_HISTORY}
-        onClick={onRequestPlateHistoryAnalysis}
-      >
-        Solicitar
-      </Button>
-    </form>
-  )
-
-  const renderSecondDriverForm = () => (
-    <form
-      key={AnalysisType.SECOND_DRIVER}
-      className={cn(
-        'flex flex-col gap-3 sm:gap-4',
-        analysisType !== AnalysisType.COMBO && 'mt-4',
-      )}
-      onSubmit={onRequestSecondDriverAnalysis}
-    >
-      <InputRow>
-        {hasUserType(userType, UserType.ADMIN) &&
-          analysisType !== AnalysisType.COMBO && (
-            <ControlledInput
-              control={controlSecondDriver}
-              label="Empresa"
-              placeholder="Selecione uma empresa"
-              name="company_name"
-              required
-              items={companiesSelectItems}
-              loading={companiesLoading}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-          )}
-        <ControlledInput
-          control={controlSecondDriver}
-          label="Nome do Proprietário"
-          placeholder="Nome"
-          name="owner_name"
-          required
-          inputVariants={{ size: 'sm' }}
-          labelVariants={{ size: 'sm' }}
-          containerVariants={{ layout: 'row' }}
-          containerClassName="flex-[3]"
-        />
-      </InputRow>
-
-      <InputRow>
-        <ControlledInput
-          control={controlSecondDriver}
-          label="CPF/CNPJ do Proprietário"
-          placeholder="XX.XXX.XXX/XXXX-XX"
-          name="owner_document"
-          type="cpfOrCnpj"
-          required
-          inputVariants={{ size: 'sm' }}
-          labelVariants={{ size: 'sm' }}
-          containerVariants={{ layout: 'row' }}
-          containerClassName="flex-1"
-        />
-        <ControlledInput
-          control={controlSecondDriver}
-          label="Placa"
-          placeholder="XXXXXXX"
-          name="plate"
-          required
-          type="plate"
-          inputVariants={{ size: 'sm' }}
-          labelVariants={{ size: 'sm' }}
-          containerVariants={{ layout: 'row' }}
-          containerClassName="flex-1"
-        />
-        <ControlledInput
-          control={controlSecondDriver}
-          label="Estado da Placa do veículo"
-          name="plate_state"
-          required
-          items={estadosVehiclesSelectItems}
-          inputVariants={{ size: 'sm' }}
-          labelVariants={{ size: 'sm' }}
-          containerVariants={{ layout: 'row' }}
-          containerClassName="flex-1"
-        />
-      </InputRow>
-
-      <Button
-        theme="success"
-        size="xsStrong"
-        shadow="base"
-        className="mt-2 min-w-[10rem] self-center"
-        loading={analysisTypeLoading === AnalysisType.SECOND_DRIVER}
-        onClick={onRequestSecondDriverAnalysis}
+        loading={analysisTypeLoading === vehicleAnalysisType}
+        onClick={onRequestBasicFormVehicleAnalysis}
       >
         Solicitar
       </Button>
@@ -436,17 +347,17 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           layout="row"
           value={vehicleAnalysisType}
           onChange={onChangeVehicleAnalysisType}
-          items={vehicleAnalysisSelectItems}
+          items={getVehicleAnalysisSelectItems(featureFlags)}
           containerClassName="sm:mb-2"
         />
       )}
 
       {{
-        [AnalysisType.VEHICLE]: renderVehicleForm,
-        [AnalysisType.VEHICLE_PLATE_HISTORY]: renderPlateHistoryForm,
-        [AnalysisType.SECOND_DRIVER]: renderSecondDriverForm,
-        [AnalysisType.COMBO]: returnNull,
-        [AnalysisType.PERSON]: returnNull,
+        [VehicleAnalysisType.SIMPLE]: renderVehicleForm,
+        [VehicleAnalysisType.ANTT]: renderBasicForm,
+        [VehicleAnalysisType.BASIC_DATA]: renderBasicForm,
+        [VehicleAnalysisType.VEHICLE_PLATE_HISTORY]: renderBasicForm,
+        [VehicleAnalysisType.VEHICLE_SECOND_DRIVER]: renderBasicForm,
       }[vehicleAnalysisType]()}
     </Box>
   )

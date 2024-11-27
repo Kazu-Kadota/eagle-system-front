@@ -10,22 +10,42 @@ export enum AnalysisType {
   COMBO = 'combo',
   PERSON = 'person',
   VEHICLE = 'vehicle',
+}
+
+export enum VehicleAnalysisType {
+  SIMPLE = 'simple',
+  BASIC_DATA = 'basic-data',
+  ANTT = 'antt',
   VEHICLE_PLATE_HISTORY = 'vehicle-plate-history',
-  SECOND_DRIVER = 'vehicle-second-driver',
+  VEHICLE_SECOND_DRIVER = 'vehicle-second-driver',
 }
 
 export enum PersonAnalysisType {
   SIMPLE = 'simple',
   HISTORY = 'history',
-  CNH_STATUS = 'cnh-status',
   NATIONAL_DB = 'national + db',
+  BASIC_DATA = 'basic-data',
+  CNH_STATUS = 'cnh-status',
+  CNH_BASIC = 'cnh-basic',
+  PROCESS = 'process',
 }
 
 export enum PersonRegionType {
   STATES = 'states',
   NATIONAL = 'national',
-  CNH_STATUS = 'cnh-status',
   NATIONAL_DB = 'national + db',
+  NATIONAL_STATES = 'national + state',
+  BASIC_DATA = 'basic-data',
+  CNH_STATUS = 'cnh-status',
+  CNH_BASIC = 'cnh-basic',
+  PROCESS = 'process',
+}
+
+export const regionTypesToAnalysisTypes = {
+  [PersonRegionType.BASIC_DATA]: PersonAnalysisType.BASIC_DATA,
+  [PersonRegionType.CNH_STATUS]: PersonAnalysisType.CNH_STATUS,
+  [PersonRegionType.CNH_BASIC]: PersonAnalysisType.CNH_BASIC,
+  [PersonRegionType.PROCESS]: PersonAnalysisType.PROCESS,
 }
 
 export enum AnalysisResult {
@@ -77,6 +97,7 @@ export type VehicleAnalysis = Analysis & {
   chassis: string
   vehicle_id: string
   owner_document: string
+  vehicle_analysis_type: VehicleAnalysisType
 }
 
 export interface RegionPersonAnalysis {

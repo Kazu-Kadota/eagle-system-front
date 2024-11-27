@@ -1,5 +1,10 @@
 import dayjs from 'dayjs'
+import { toast } from 'react-toastify'
 import { Analysis, PersonAnalysis, VehicleAnalysis } from 'src/models'
+
+interface CopyStringOptions {
+  successMsg: string
+}
 
 export const personNameKeys: { [key in keyof PersonAnalysis]: string } = {
   analysis_info: 'Descrição da análise',
@@ -52,6 +57,7 @@ export const vehicleNameKeys: { [key in keyof VehicleAnalysis]: string } = {
   vehicle_type: 'Tipo de veículo',
   updated_at: 'Data de atualização',
   from_db: 'Resposta do banco de dados',
+  vehicle_analysis_type: 'Tipo de análise de veículo',
 }
 
 export const keysToRemove = [
@@ -110,3 +116,17 @@ export const copyPersonToClipboard = (person: Analysis) =>
 
 export const copyVehicleToClipboard = (vehicle: Analysis) =>
   navigator.clipboard.writeText(getClipboardString(vehicle, vehicleNameKeys))
+
+export const copyString = (text: string, { successMsg }: CopyStringOptions) => {
+  try {
+    navigator.clipboard.writeText(text)
+
+    toast.success(successMsg, {
+      autoClose: 1000,
+      hideProgressBar: true,
+      toastId: text,
+    })
+  } catch (error) {
+    toast.error('Houve um erro ao copiar os dados, tente novamente.')
+  }
+}

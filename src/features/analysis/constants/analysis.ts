@@ -2,8 +2,10 @@ import {
   AnalysisResult,
   AnalysisStatus,
   AnalysisType,
+  FeatureFlags,
   PersonAnalysisType,
   PersonRegionType,
+  VehicleAnalysisType,
 } from 'src/models'
 import { SelectItem } from 'src/types/select'
 
@@ -35,7 +37,7 @@ export const simpleAnalysisTypesItems: SelectItem<AnalysisType>[] = [
 
 export const getPersonAnalysisItems = (
   regionType: PersonRegionType,
-  isDbEnabled: boolean,
+  featureFlags: FeatureFlags,
 ): SelectItem[] => {
   const items = [
     {
@@ -48,7 +50,10 @@ export const getPersonAnalysisItems = (
     },
   ]
 
-  if (regionType === PersonRegionType.NATIONAL && isDbEnabled) {
+  if (
+    regionType === PersonRegionType.NATIONAL &&
+    featureFlags.database_access_consult
+  ) {
     items.push({
       label: 'Histórico ou Banco de dados',
       value: PersonAnalysisType.NATIONAL_DB,
@@ -58,35 +63,87 @@ export const getPersonAnalysisItems = (
   return items
 }
 
-export const regionAnalysisItems: SelectItem[] = [
-  {
-    label: 'Análise Estadual',
-    value: PersonRegionType.STATES,
-  },
-  {
-    label: 'Análise Nacional',
-    value: PersonRegionType.NATIONAL,
-  },
-]
+export const getRegionAnalysisItems = (
+  analysisType: AnalysisType,
+  featureFlags: FeatureFlags,
+): SelectItem[] => {
+  const items = [
+    {
+      label: 'Análise Estadual',
+      value: PersonRegionType.STATES,
+    },
+    {
+      label: 'Análise Nacional',
+      value: PersonRegionType.NATIONAL,
+    },
+  ]
 
-export const regionAnalysisItemsWithCNH: SelectItem[] = [
-  ...regionAnalysisItems,
-  {
-    label: 'Status da CNH',
-    value: PersonRegionType.CNH_STATUS,
-  },
-]
+  if (analysisType === AnalysisType.PERSON) {
+    if (featureFlags.access_person_analysis_region_type_national_state) {
+      items.push({
+        label: 'Análise Nacional + 1 Estado',
+        value: PersonRegionType.NATIONAL_STATES,
+      })
+    }
+
+    if (featureFlags.information_access_person_basic_data) {
+      items.push({
+        label: 'Dados Básicos',
+        value: PersonRegionType.BASIC_DATA,
+      })
+    }
+    if (featureFlags.information_access_person_cnh_basic) {
+      items.push({
+        label: 'CNH Básica',
+        value: PersonRegionType.CNH_BASIC,
+      })
+    }
+    if (featureFlags.information_access_person_cnh_status) {
+      items.push({
+        label: 'Status da CNH',
+        value: PersonRegionType.CNH_STATUS,
+      })
+    }
+    if (featureFlags.information_access_person_process) {
+      items.push({
+        label: 'Processo',
+        value: PersonRegionType.PROCESS,
+      })
+    }
+  }
+
+  return items
+}
 
 export const vehiclesTypesSelectItems: SelectItem[] = [
   { label: 'Cavalo', value: 'CAVALO' },
   { label: 'Carreta', value: 'CARRETA' },
 ]
 
-export const vehicleAnalysisSelectItems: SelectItem<AnalysisType>[] = [
-  { label: 'Veículo', value: AnalysisType.VEHICLE },
-  { label: 'Histórico de placa', value: AnalysisType.VEHICLE_PLATE_HISTORY },
-  { label: 'Segundo dono', value: AnalysisType.SECOND_DRIVER },
-]
+export const getVehicleAnalysisSelectItems = (
+  featureFlags: FeatureFlags,
+): SelectItem<VehicleAnalysisType>[] => {
+  const items = [
+    { label: 'Veículo', value: VehicleAnalysisType.SIMPLE },
+    {
+      label: 'Histórico de placa',
+      value: VehicleAnalysisType.VEHICLE_PLATE_HISTORY,
+    },
+    { label: 'Segundo dono', value: VehicleAnalysisType.VEHICLE_SECOND_DRIVER },
+  ]
+
+  if (featureFlags.information_access_vehicle_basic_data) {
+    items.push({
+      label: 'Dados Básicos',
+      value: VehicleAnalysisType.BASIC_DATA,
+    })
+  }
+  if (featureFlags.information_access_vehicle_antt) {
+    items.push({ label: 'ANTT', value: VehicleAnalysisType.ANTT })
+  }
+
+  return items
+}
 
 export const analysisResultsSelectItems: SelectItem<AnalysisResult>[] = [
   { label: 'Nada consta', value: AnalysisResult.APPROVED },
@@ -99,25 +156,29 @@ export const analysisStatusSelectItems: SelectItem<AnalysisStatus>[] = [
   { label: 'Finalizado', value: AnalysisStatus.FINISHED },
 ]
 
-export const analysisTypeButtonLabel = {
-  [AnalysisType.PERSON]: 'Análise de Pessoa',
-  [AnalysisType.VEHICLE]: 'Análise de Veículo',
-  [AnalysisType.VEHICLE_PLATE_HISTORY]: 'Análise de Histórico de placa',
-  [AnalysisType.SECOND_DRIVER]: 'Análise de Segundo dono',
-  [AnalysisType.COMBO]: 'Análise de Combo',
-} as const
+export const getAnalysisVehicleTypeLabel = (type: VehicleAnalysisType) =>
+  ({
+    [VehicleAnalysisType.ANTT]: 'Análise ANTT',
+    [VehicleAnalysisType.BASIC_DATA]: 'Análise de Dados Básicos',
+    [VehicleAnalysisType.VEHICLE_PLATE_HISTORY]:
+      'Análise de Histórico de Placa',
+    [VehicleAnalysisType.VEHICLE_SECOND_DRIVER]: 'Análise de Segundo Motorista',
+    [VehicleAnalysisType.SIMPLE]: 'Análise de Veículo',
+  })[type ?? VehicleAnalysisType.SIMPLE]
 
 export const personRegionTypeButtonTheme = {
   [PersonRegionType.NATIONAL]: 'blue',
   [PersonRegionType.NATIONAL_DB]: 'blue',
   [PersonRegionType.STATES]: 'brown',
-  [PersonRegionType.CNH_STATUS]: 'placeholder',
+  [PersonRegionType.NATIONAL_STATES]: 'brown',
+  [PersonRegionType.BASIC_DATA]: 'blue',
+  [PersonRegionType.CNH_BASIC]: 'blue',
+  [PersonRegionType.CNH_STATUS]: 'blue',
+  [PersonRegionType.PROCESS]: 'blue',
 } as const
 
 export const analysisTypeButtonTheme = {
   [AnalysisType.PERSON]: 'blue',
   [AnalysisType.VEHICLE]: 'blue',
-  [AnalysisType.VEHICLE_PLATE_HISTORY]: 'brown',
-  [AnalysisType.SECOND_DRIVER]: 'brown',
   [AnalysisType.COMBO]: 'brown',
 } as const

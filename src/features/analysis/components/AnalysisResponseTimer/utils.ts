@@ -1,16 +1,19 @@
 import dayjs, { Dayjs } from 'dayjs'
 import {
-  AnalysisType,
   PersonAnalysis,
   PersonAnalysisType,
   PersonRegionType,
   VehicleAnalysis,
+  VehicleAnalysisType,
 } from 'src/models'
 
 export function getPersonInitialTime(analysis: PersonAnalysis) {
   switch (analysis.person_analysis_type) {
+    case PersonAnalysisType.BASIC_DATA:
+    case PersonAnalysisType.CNH_BASIC:
+    case PersonAnalysisType.PROCESS:
     case PersonAnalysisType.CNH_STATUS:
-      return 240
+      return 30
   }
 
   switch (analysis.region_type) {
@@ -18,19 +21,21 @@ export function getPersonInitialTime(analysis: PersonAnalysis) {
       return 120
     case PersonRegionType.STATES:
       return 210
+    case PersonRegionType.NATIONAL_STATES:
+      return 180
     default:
       return 120
   }
 }
 
 function getVehicleInitialTime(analysis: VehicleAnalysis) {
-  switch (analysis.analysis_type) {
-    case AnalysisType.VEHICLE_PLATE_HISTORY:
-    case AnalysisType.SECOND_DRIVER:
-      return 240
-    default:
-      return 120
-  }
+  return {
+    [VehicleAnalysisType.SIMPLE]: 120,
+    [VehicleAnalysisType.BASIC_DATA]: 30,
+    [VehicleAnalysisType.ANTT]: 30,
+    [VehicleAnalysisType.VEHICLE_PLATE_HISTORY]: 240,
+    [VehicleAnalysisType.VEHICLE_SECOND_DRIVER]: 240,
+  }[analysis.vehicle_analysis_type ?? VehicleAnalysisType.SIMPLE]
 }
 
 function getInitialTime(analysis: PersonAnalysis | VehicleAnalysis) {
