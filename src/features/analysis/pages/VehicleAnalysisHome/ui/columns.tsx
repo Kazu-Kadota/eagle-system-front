@@ -21,6 +21,7 @@ import { hasUserType } from 'src/utils/userType'
 const createVehicleColumns = (userType: UserType) => {
   const columns: ColumnDef<VehicleAnalysis, string>[] = [
     {
+      id: 'request_id',
       accessorKey: 'request_id',
       header: 'ID da Solicitação',
       cell: (props) => (
@@ -31,34 +32,34 @@ const createVehicleColumns = (userType: UserType) => {
         />
       ),
     },
-    { accessorKey: 'owner_name', header: 'Nome' },
+    { id: 'owner_name', accessorKey: 'owner_name', header: 'Nome' },
     {
-      accessorKey: 'status',
+      id: 'status',
+      accessorFn: (row) => analysisStatus[row.status as AnalysisStatus],
       header: 'Status',
-      cell: (props) => analysisStatus[props.getValue() as AnalysisStatus],
     },
     {
-      accessorKey: 'plate',
+      id: 'plate',
+      accessorFn: (row) => `${row.plate} - ${row.plate_state}`,
       header: 'Placa',
-      cell: (props) =>
-        `${props.row.original.plate} - ${props.row.original.plate_state}`,
     },
     {
-      accessorKey: 'combo_number',
+      id: 'combo_number',
+      accessorFn: (row) => (row.combo_number ? 'Sim' : 'Não'),
       header: 'Combo',
-      cell: (props) => (props.getValue() ? 'Sim' : 'Não'),
     },
     {
-      accessorKey: 'vehicle_type',
+      id: 'vehicle_type',
+      accessorFn: (row) => getVehicleAnalysisType(row),
       header: 'Tipo',
-      cell: (props) => getVehicleAnalysisType(props.cell.row.original),
     },
     {
-      accessorKey: 'created_at',
+      id: 'created_at',
+      accessorFn: (row) => dayjs(row.created_at as string).format('DD/MM/YYYY'),
       header: 'Data',
-      cell: (props) => dayjs(props.getValue() as string).format('DD/MM/YYYY'),
     },
     {
+      id: 'company_name',
       accessorKey: 'company_name',
       header: 'Cliente Solicitante',
     },

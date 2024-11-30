@@ -2,15 +2,19 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { useMemo } from 'react'
 import ReactPaginate from 'react-paginate'
 import { PageArrowLeftIcon, PageArrowRightIcon } from 'src/assets/icons'
 import { Button, ButtonProps, Input } from 'src/components'
+import { fuzzyFilter } from 'src/features/analysis/components/AnalysisTable/utils'
 import { listNumOfItemsPerPage } from 'src/features/analysis/constants/table'
 import { Analysis, AnalysisType } from 'src/models'
-import { useConfigStore } from 'src/store/config'
+import { useConfigStoreActions } from 'src/store/config'
 import { cn } from 'src/utils/classNames'
 
 export interface TableProps<T> {
@@ -34,12 +38,13 @@ export const AnalysisTable = <T extends Analysis>({
   pageCount,
   onClick,
 }: TableProps<T>) => {
-  const initialPageSize =
-    pageCount ||
-    useConfigStore.getState().getNumOfItemsPerPage(analysisType) ||
-    25
+  const { getNumOfItemsPerPage, setNumOfItemsPerPage: savePageSize } =
+    useConfigStoreActions()
 
-  const savePageSize = useConfigStore.getState().setNumOfItemsPerPage
+  const initialPageSize = useMemo(
+    () => pageCount || getNumOfItemsPerPage(analysisType) || 25,
+    [pageCount, analysisType, getNumOfItemsPerPage],
+  )
 
   const table = useReactTable<T>({
     data,
@@ -47,13 +52,21 @@ export const AnalysisTable = <T extends Analysis>({
     initialState: {
       pagination: { pageSize: initialPageSize },
     },
+    filterFns: { fuzzy: fuzzyFilter },
+    globalFilterFn: 'fuzzy',
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   })
 
-  const { pageIndex, pageSize } = table.getState().pagination
-  const numOfItemsSeen = Math.min((pageIndex + 1) * pageSize, data.length)
+  const {
+    pagination: { pageIndex, pageSize },
+  } = table.getState()
+
+  const rowCount = table.getRowCount()
   const currentPageCount = table.getPageCount()
+  const numOfItemsSeen = Math.min((pageIndex + 1) * pageSize, rowCount)
 
   const handleOnChangePageSize = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPageSize = parseInt(e.target.value)
@@ -65,11 +78,25 @@ export const AnalysisTable = <T extends Analysis>({
     }
   }
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    table.setGlobalFilter(e.target.value)
+
   return (
     <div className={className}>
       {!!title && (
-        <div className="flex flex-col flex-wrap items-center justify-center gap-x-5 gap-y-2 rounded-t-sm border-b border-line-light bg-light-gray px-4 py-2 md:flex-row md:justify-start">
-          <h3 className="text-white text-3xl font-extrabold">{title}</h3>
+        <div className="flex flex-col flex-wrap items-center justify-center gap-x-5 gap-y-6 rounded-t-sm border-b border-line-light bg-light-gray px-4 py-4 sm:gap-y-3 sm:py-2 md:flex-row md:justify-between">
+          <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-5">
+            <h3 className="text-white text-3xl font-extrabold">{title}</h3>
+            <Input
+              placeholder="Pesquisar na tabela"
+              name="itemsPerPage"
+              inputVariants={{ size: 'sm' }}
+              labelVariants={{ size: 'xs' }}
+              containerVariants={{ layout: 'row' }}
+              onChange={handleSearchChange}
+              containerClassName="-mb-1 flex-1 min-w-[15rem]"
+            />
+          </div>
           {actions && actions.length > 0 && (
             <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
               {actions.map((action, index) => (
@@ -142,7 +169,7 @@ export const AnalysisTable = <T extends Analysis>({
 
       <div className="flex flex-col-reverse items-center justify-between gap-5 rounded-b-[3px] bg-light px-4 pb-3 pt-4 sm:flex-row sm:gap-6 sm:py-2">
         <p className="flex-1 text-xs font-bold text-primary">
-          Mostrando {numOfItemsSeen} de {data.length} solicitações
+          Mostrando {numOfItemsSeen} de {rowCount} solicitações
         </p>
 
         <Input
