@@ -10,6 +10,7 @@ import { AnalysisStatus, PersonAnalysis } from 'src/models'
 
 export const columns: ColumnDef<PersonAnalysis, string>[] = [
   {
+    id: 'request_id',
     accessorKey: 'request_id',
     header: 'ID da Solicitação',
     cell: (props) => (
@@ -20,36 +21,45 @@ export const columns: ColumnDef<PersonAnalysis, string>[] = [
       />
     ),
   },
-  { accessorKey: 'name', header: 'Nome' },
+  { id: 'name', accessorKey: 'name', header: 'Nome' },
   {
+    id: 'document',
     accessorKey: 'document',
     header: 'CPF',
   },
   {
-    accessorKey: 'status',
+    id: 'status',
+    accessorFn: (row) => analysisStatus[row.status as AnalysisStatus],
     header: 'Status',
-    cell: (props) => analysisStatus[props.getValue() as AnalysisStatus],
   },
   {
-    accessorKey: 'region_type',
+    id: 'region_type',
+    accessorFn: (row) => getAnalysisTypeString(row),
     header: 'Tipo',
     cell: (props) => (
       <span className={getAnalysisTypeColor(props.row.original)}>
-        {getAnalysisTypeString(props.row.original)}
+        {props.getValue()}
       </span>
     ),
   },
   {
-    accessorKey: 'combo_number',
+    id: 'combo_number',
+    accessorFn: (row) => (row.combo_number ? 'Sim' : 'Não'),
     header: 'Combo',
-    cell: (props) => (props.getValue() ? 'Sim' : 'Não'),
+    meta: {
+      className: 'max-w-16 pl-2',
+    },
   },
   {
-    accessorKey: 'created_at',
+    id: 'created_at',
+    accessorFn: (row) => dayjs(row.created_at as string).format('DD/MM/YYYY'),
     header: 'Data',
-    cell: (props) => dayjs(props.getValue() as string).format('DD/MM/YYYY'),
+    meta: {
+      className: 'max-w-24 pl-2',
+    },
   },
   {
+    id: 'company_name',
     accessorKey: 'company_name',
     header: 'Cliente Solicitante',
   },
