@@ -6,6 +6,7 @@ import {
   VehicleAnalysis,
   VehicleAnalysisType,
 } from 'src/models'
+import { formatTimeDifference } from 'src/utils/date'
 
 export function getPersonInitialTime(analysis: PersonAnalysis) {
   switch (analysis.person_analysis_type) {
@@ -49,6 +50,14 @@ export function getInitialState(analysis: PersonAnalysis | VehicleAnalysis) {
   const currentDate = dayjs(analysis.created_at).add(time, 'minute')
 
   return { startDate, currentDate }
+}
+
+export const getInitialStateAndFormat = (
+  analysis: PersonAnalysis | VehicleAnalysis,
+) => {
+  const { startDate, currentDate } = getInitialState(analysis)
+
+  return formatTimeDifference(startDate, currentDate)
 }
 
 export function getTimeColorClass(currentDate: Dayjs, startDate: Dayjs) {

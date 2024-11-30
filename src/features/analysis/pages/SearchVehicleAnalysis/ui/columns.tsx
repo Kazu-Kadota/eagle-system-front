@@ -35,16 +35,25 @@ export const columns: ColumnDef<VehicleAnalysis, string>[] = [
     id: 'combo_number',
     accessorFn: (row) => (row.combo_number ? 'Sim' : 'Não'),
     header: 'Combo',
+    meta: {
+      className: 'max-w-16 pl-2',
+    },
   },
   {
     id: 'vehicle_type',
     accessorFn: (row) => getVehicleAnalysisType(row),
     header: 'Tipo',
+    meta: {
+      className: 'max-w-24 pl-2',
+    },
   },
   {
     id: 'created_at',
     accessorFn: (row) => dayjs(row.created_at as string).format('DD/MM/YYYY'),
     header: 'Data',
+    meta: {
+      className: 'max-w-24 pl-2',
+    },
   },
   {
     id: 'company_name',
