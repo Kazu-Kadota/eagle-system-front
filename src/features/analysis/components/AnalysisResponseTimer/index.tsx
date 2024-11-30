@@ -30,16 +30,8 @@ export function AnalysisResponseTimer({
   }, [])
 
   return (
-    <span className={`${colorClass} font-semibold lowercase 2xl:-mr-[3vw]`}>
+    <span className={`${colorClass} font-semibold lowercase`}>
       {formatTimeDifference(startDate, currentDate)}
-    </span>
-  )
-}
-
-export function AnalysisResponseHeader() {
-  return (
-    <span className="2xl:-mr-[3vw] 2xl:whitespace-nowrap">
-      Tempo de resposta
     </span>
   )
 }

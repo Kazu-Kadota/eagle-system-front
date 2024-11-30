@@ -42,3 +42,14 @@ export const useConfigStore = createPersist<ConfigStore>(
   }),
   { name: 'config-store' },
 )
+
+export const useConfigStoreActions = () => {
+  const getNumOfItemsPerPage = useConfigStore(
+    (state) => state.getNumOfItemsPerPage,
+  )
+  const setNumOfItemsPerPage = useConfigStore(
+    (state) => state.setNumOfItemsPerPage,
+  )
+
+  return { getNumOfItemsPerPage, setNumOfItemsPerPage }
+}
