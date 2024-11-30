@@ -2,10 +2,10 @@ import { ColumnDef } from '@tanstack/react-table'
 import dayjs from 'dayjs'
 import { TableLink } from 'src/components'
 import {
-  AnalysisResponseHeader,
   AnalysisResponseTimer,
   AnalysisTableActions,
 } from 'src/features/analysis/components'
+import { getInitialStateAndFormat } from 'src/features/analysis/components/AnalysisResponseTimer/utils'
 import {
   analysisStatus,
   getVehicleAnalysisType,
@@ -47,16 +47,25 @@ const createVehicleColumns = (userType: UserType) => {
       id: 'combo_number',
       accessorFn: (row) => (row.combo_number ? 'Sim' : 'Não'),
       header: 'Combo',
+      meta: {
+        className: 'max-w-16 pl-2',
+      },
     },
     {
       id: 'vehicle_type',
       accessorFn: (row) => getVehicleAnalysisType(row),
       header: 'Tipo',
+      meta: {
+        className: 'max-w-24 pl-2',
+      },
     },
     {
       id: 'created_at',
       accessorFn: (row) => dayjs(row.created_at as string).format('DD/MM/YYYY'),
       header: 'Data',
+      meta: {
+        className: 'max-w-24 pl-2',
+      },
     },
     {
       id: 'company_name',
@@ -68,13 +77,18 @@ const createVehicleColumns = (userType: UserType) => {
   if (hasUserType(userType, UserType.ADMIN, UserType.OPERATOR)) {
     columns.push({
       id: 'response-time',
-      header: AnalysisResponseHeader,
+      accessorFn: (row) => getInitialStateAndFormat(row),
+      header: 'Tempo de resposta',
       cell: ({ row }) => <AnalysisResponseTimer analysis={row.original} />,
+      meta: {
+        className: 'max-w-24 pl-2',
+      },
     })
   }
 
   columns.push({
     id: 'actions',
+    enableSorting: false,
     header: 'Ações',
     cell: ({ row }) => (
       <AnalysisTableActions
@@ -83,6 +97,9 @@ const createVehicleColumns = (userType: UserType) => {
         type={AnalysisType.VEHICLE}
       />
     ),
+    meta: {
+      className: 'max-w-20 pr-3',
+    },
   })
 
   return columns

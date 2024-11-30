@@ -9,7 +9,12 @@ import {
 } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import ReactPaginate from 'react-paginate'
-import { PageArrowLeftIcon, PageArrowRightIcon } from 'src/assets/icons'
+import {
+  PageArrowLeftIcon,
+  PageArrowRightIcon,
+  SortArrowDownIcon,
+  SortArrowUpIcon,
+} from 'src/assets/icons'
 import { Button, ButtonProps, Input } from 'src/components'
 import { fuzzyFilter } from 'src/features/analysis/components/AnalysisTable/utils'
 import { listNumOfItemsPerPage } from 'src/features/analysis/constants/table'
@@ -88,7 +93,7 @@ export const AnalysisTable = <T extends Analysis>({
           <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-5">
             <h3 className="text-white text-3xl font-extrabold">{title}</h3>
             <Input
-              placeholder="Pesquisar na tabela"
+              placeholder="Pesquisar na tabela..."
               name="itemsPerPage"
               inputVariants={{ size: 'sm' }}
               labelVariants={{ size: 'xs' }}
@@ -98,7 +103,7 @@ export const AnalysisTable = <T extends Analysis>({
             />
           </div>
           {actions && actions.length > 0 && (
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 md:pr-2">
               {actions.map((action, index) => (
                 <Button
                   key={index}
@@ -126,13 +131,30 @@ export const AnalysisTable = <T extends Analysis>({
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
-                      className="xs:text-sm h-10 w-28 p-0.5 text-base font-bold text-light"
+                      onClick={header.column.getToggleSortingHandler()}
+                      className={cn(
+                        'xs:text-sm h-10 w-28 text-base font-bold text-light',
+                        header.column.getCanSort() && 'cursor-pointer',
+                        header.column.columnDef.meta?.className,
+                      )}
                     >
-                      {!header.isPlaceholder &&
-                        flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                      <span className="flex items-center justify-center p-0.5">
+                        {!header.isPlaceholder &&
+                          flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                        {
+                          {
+                            asc: (
+                              <SortArrowUpIcon className="w-6 min-w-6 text-light" />
+                            ),
+                            desc: (
+                              <SortArrowDownIcon className="w-6 min-w-6 text-light" />
+                            ),
+                          }[header.column.getIsSorted() as string]
+                        }
+                      </span>
                     </th>
                   ))}
                 </tr>
@@ -152,7 +174,10 @@ export const AnalysisTable = <T extends Analysis>({
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className="w-28 overflow-hidden text-ellipsis border-b border-line-light px-0.5 py-[0.375rem] text-[0.8125rem] font-medium uppercase"
+                      className={cn(
+                        'w-28 overflow-hidden text-ellipsis border-b border-line-light px-0.5 py-[0.375rem] text-[0.8125rem] font-medium uppercase',
+                        cell.column.columnDef.meta?.className,
+                      )}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
