@@ -103,7 +103,7 @@ export const AnalysisTable = <T extends Analysis>({
             />
           </div>
           {actions && actions.length > 0 && (
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 md:pr-2">
               {actions.map((action, index) => (
                 <Button
                   key={index}
