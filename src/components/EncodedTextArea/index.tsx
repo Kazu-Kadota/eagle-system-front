@@ -84,13 +84,11 @@ export function EncodedTextArea({
   }
 
   return (
-    <div className="gap-4">
-      <TextArea
-        {...rest}
-        label={label}
-        value={decodedValue ?? valueToCheck}
-        labelRightElement={renderButtons()}
-      />
-    </div>
+    <TextArea
+      {...rest}
+      label={label}
+      value={decodedValue ?? valueToCheck}
+      labelRightElement={renderButtons()}
+    />
   )
 }
