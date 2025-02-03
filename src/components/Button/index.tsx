@@ -52,10 +52,12 @@ export function Button({
   size,
   shadow,
   loading,
+  disabled,
   children,
   ...rest
 }: ButtonProps) {
   const commonProps = {
+    disabled: disabled || loading,
     className: style({ theme, size, shadow, className }),
     children: loading ? <Spinner className="w-5 fill-light" /> : children,
   }
