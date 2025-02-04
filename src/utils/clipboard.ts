@@ -75,6 +75,7 @@ export const keysToRemove = [
   'combo_number',
   'region',
   'from_db',
+  'third_party',
 ]
 
 export const keysDateToFormat = [
