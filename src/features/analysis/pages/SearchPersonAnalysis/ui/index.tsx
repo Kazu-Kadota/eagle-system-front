@@ -5,10 +5,10 @@ import {
   Box,
   Button,
   ControlledInput,
-  EncodedTextArea,
   Input,
   InputRow,
   SelectGroup,
+  TextArea,
 } from 'src/components'
 import { AnalysisTable } from 'src/features/analysis/components'
 import {
@@ -362,7 +362,7 @@ export function SearchPersonAnalysisUI({
                 containerClassName="mb-2"
                 disabled
               />
-              <EncodedTextArea
+              <TextArea
                 label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
                 name="analysis_info"
                 disabled
