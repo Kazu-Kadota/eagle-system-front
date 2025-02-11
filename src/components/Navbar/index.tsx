@@ -37,7 +37,6 @@ const navlinks: NavbarLinks[] = [
     userTypes: [UserType.ADMIN],
   },
   { label: 'Minha Conta', path: RoutePaths.Auth.ACCOUNT_HOME },
-  { label: 'Decodificador', path: RoutePaths.Decoder.BASE_64_DECODER },
 ]
 
 export function Navbar() {
