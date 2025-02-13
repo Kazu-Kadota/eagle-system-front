@@ -1,0 +1,28 @@
+@import 'react-toastify/dist/ReactToastify.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --toastify-color-success: theme(colors.success);
+  --toastify-color-error: theme(colors.error);
+}
+
+.remove-auto-fill {
+  transition-delay: 9999s;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: theme(colors.dark);
+}
+
+input[type='checkbox'] {
+  accent-color: theme(colors.blue);
+}
