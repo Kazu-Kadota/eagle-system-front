@@ -6,5 +6,5 @@
   "bracketSpacing": true,
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindFunctions": ["tv", "cn", "twCn"],
-  "tailwingAttributes": ["containerClassName"]
+  "tailwindAttributes": ["containerClassName"]
 }

@@ -1,7 +1,4 @@
 import { FlatCompat } from '@eslint/eslintrc';
-import pluginQuery from '@tanstack/eslint-plugin-query';
-import configPrettier from 'eslint-config-prettier';
-import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -13,18 +10,7 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
-  ...pluginQuery.configs['flat/recommended'],
-  {
-    plugins: {
-      'simple-import-sort': simpleImportSort,
-    },
-    rules: {
-      'simple-import-sort/imports': 'error',
-      'simple-import-sort/exports': 'error',
-    },
-  },
-  configPrettier,
+  ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
 ];
 
 export default eslintConfig;
