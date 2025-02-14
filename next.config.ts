@@ -1,3 +1,5 @@
+import 'src/env/client';
+
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
