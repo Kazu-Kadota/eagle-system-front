@@ -1,4 +1,4 @@
-import { env } from '@/env/client';
+import { env } from '@/env';
 import { getPersonFileName, getVehicleFileName } from '@/utils/report/files';
 import { requestDownloadAuth } from '@/utils/request';
 

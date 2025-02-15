@@ -47,12 +47,13 @@ const navlinks: NavbarLinks[] = [
   { label: 'Minha Conta', path: RoutePaths.ACCOUNT_HOME },
 ];
 
-export const Navbar = memo(() => {
+interface NavbarProps {
+  userType: UserType;
+}
+
+export const Navbar = memo(({ userType }: NavbarProps) => {
   const pathname = usePathname();
   const router = useRouter();
-
-  const session = useSession();
-  const userType = session.data?.user.user_type;
 
   const [isNavbarOpen, toggleNavbarOpen] = useToggle(false);
 

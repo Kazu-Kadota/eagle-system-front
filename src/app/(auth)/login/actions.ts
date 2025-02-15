@@ -17,7 +17,7 @@ export async function loginAction(data: LoginSchema) {
 
 export async function logoutAction() {
   try {
-    await signOut();
+    await signOut({ redirect: false });
   } catch (error) {
     if (error instanceof AuthError && error.cause?.err) {
       throw error.cause.err;

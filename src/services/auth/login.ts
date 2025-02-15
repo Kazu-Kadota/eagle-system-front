@@ -1,4 +1,4 @@
-import { env } from '@/env/client';
+import { env } from '@/env';
 import type { AuthResponse } from '@/models';
 import { request } from '@/utils/request';
 

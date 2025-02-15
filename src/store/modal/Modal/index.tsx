@@ -1,3 +1,5 @@
+'use client';
+
 import { TimesIcon } from '@/assets/icons/TimesIcon';
 import { Button } from '@/components/Button';
 import { Clickable } from '@/components/Clickable';

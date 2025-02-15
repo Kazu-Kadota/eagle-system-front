@@ -1,4 +1,4 @@
-import { env } from '@/env/client';
+import { env } from '@/env';
 import { request } from '@/utils/request';
 
 type RecoveryPasswordSendBody = {

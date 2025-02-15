@@ -5,6 +5,7 @@ import { SessionProvider } from 'next-auth/react';
 import { Inter, Poppins } from 'next/font/google';
 import { QueryProvider } from '@/config/query';
 import { Toast } from '@/config/toast';
+import { Modal } from '@/store/modal/Modal';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -30,7 +31,10 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
     <html lang="pt-BR">
       <body className={`${inter.variable} ${poppings.variable}`}>
         <SessionProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            {children}
+            <Modal />
+          </QueryProvider>
         </SessionProvider>
 
         <Toast />

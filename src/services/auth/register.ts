@@ -1,4 +1,4 @@
-import { env } from '@/env/client';
+import { env } from '@/env';
 import { CompanyType, UserType } from '@/models';
 import { requestAuth } from '@/utils/request';
 

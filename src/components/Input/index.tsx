@@ -43,6 +43,7 @@ const inputStyleSlots = tv({
     containerInput: 'relative flex flex-1 flex-row overflow-hidden',
     input:
       'remove-auto-fill font-poppings w-full min-w-0 flex-1 !bg-[transparent] font-light text-dark placeholder:text-placeholder disabled:opacity-100',
+    loadingContainer: 'absolute right-0 flex h-full w-4 items-center',
   },
   variants: {
     size: {
@@ -66,9 +67,11 @@ const inputStyleSlots = tv({
     disabled: {
       true: {
         containerInput: 'rounded bg-light-primary',
+        loadingContainer: 'bg-light-primary',
       },
       false: {
         containerInput: 'rounded-[1px] border border-placeholder bg-light',
+        loadingContainer: 'bg-light',
       },
     },
   },
@@ -138,8 +141,11 @@ export function Input({
   onChange,
   ...rest
 }: InputProps) {
-  const { input: inputStyle, containerInput: containerInputStyle } =
-    inputStyleSlots({ ...inputVariants, disabled });
+  const {
+    input: inputStyle,
+    containerInput: containerInputStyle,
+    loadingContainer: loadingContainerStyle,
+  } = inputStyleSlots({ ...inputVariants, disabled });
 
   const commonProps = {
     id: name,
@@ -195,7 +201,7 @@ export function Input({
         <div className={containerInputStyle()}>
           {items ? renderSelect() : renderInput()}
           {loading && (
-            <div className="absolute right-0 flex h-full w-4 items-center bg-light">
+            <div className={loadingContainerStyle()}>
               <Spinner className="w-3 fill-placeholder" />
             </div>
           )}

@@ -1,4 +1,4 @@
-import { env } from '@/env/client';
+import { env } from '@/env';
 import type { PersonAnalysis, VehicleAnalysis } from '@/models/analysis';
 import { requestAuth } from '@/utils/request';
 
