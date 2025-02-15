@@ -15,10 +15,8 @@ export const constructHeaders = (options: RequestOptions) => {
 export const constructAuthHeaders = (options: RequestOptions) => {
   const headers: Record<string, string> = constructHeaders(options);
 
-  const token = ''; // TODO: Use token from auth
-
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+  if (options.token) {
+    headers['Authorization'] = `Bearer ${options.token}`;
   }
 
   return headers;

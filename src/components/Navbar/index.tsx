@@ -17,10 +17,8 @@ import { RoutePaths } from '@/constants/paths';
 import { useToggle } from '@/hooks/useToggle';
 import { UserType } from '@/models';
 import { cn } from '@/utils/classNames';
-import { getErrorMsg } from '@/utils/errors';
 import { hasUserType } from '@/utils/userType';
 import { useMutation } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
 
 interface NavbarLinks extends NavbarItemProps {
   userTypes?: UserType[];
@@ -56,13 +54,11 @@ export const Navbar = memo(() => {
   const session = useSession();
   const userType = session.data?.user.user_type;
 
-  console.log(userType);
   const [isNavbarOpen, toggleNavbarOpen] = useToggle(false);
 
   const { isPending: isLogoutLoading, mutate: handleLogout } = useMutation({
     mutationFn: logoutAction,
     onSuccess: () => router.push(RoutePaths.login()),
-    onError: (error) => toast.error(getErrorMsg(error)),
   });
 
   const links = useMemo(

@@ -1,9 +1,10 @@
 import './globals.css';
 
 import type { Metadata } from 'next';
-import { Inter, Poppins } from 'next/font/google';
 import { SessionProvider } from 'next-auth/react';
+import { Inter, Poppins } from 'next/font/google';
 import { QueryProvider } from '@/config/query';
+import { Toast } from '@/config/toast';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -31,6 +32,8 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
         <SessionProvider>
           <QueryProvider>{children}</QueryProvider>
         </SessionProvider>
+
+        <Toast />
       </body>
     </html>
   );

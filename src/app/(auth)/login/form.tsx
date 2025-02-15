@@ -24,6 +24,7 @@ export function LoginForm() {
     isPending,
     mutate: loginMutate,
   } = useMutation({
+    meta: { disableErrorToastMsg: true },
     mutationFn: loginAction,
     onSuccess: () => {
       router.push(RoutePaths.HOME);
