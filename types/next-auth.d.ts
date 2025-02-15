@@ -1,8 +1,7 @@
-import { type DefaultSession } from 'next-auth';
-import { type JWT } from 'next-auth/jwt';
+import type { User as ApiUser } from '@/models';
 
 declare module 'next-auth' {
-  interface User extends DefaultUser {
+  interface User {
     user: ApiUser;
     jwt: {
       token: string;
@@ -11,13 +10,7 @@ declare module 'next-auth' {
   }
 
   interface Session {
-    user: {
-      user: ApiUser;
-      jwt: {
-        token: string;
-        expiresIn: string;
-      };
-    } & DefaultSession['user'];
+    user: ApiUser;
     jwt: {
       token: string;
       expiresIn: string;
@@ -26,8 +19,8 @@ declare module 'next-auth' {
 }
 
 declare module 'next-auth/jwt' {
-  interface JWT extends DefaultJWT {
-    user: ApiUser;
+  interface JWT {
+    user: User;
     jwt: {
       token: string;
       expiresIn: string;

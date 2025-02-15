@@ -33,7 +33,6 @@ export const requestAuthCreator =
     }
 
     if (isTokenNotAuthorized(data.name, res.status)) {
-      // TODO: Logout
       throw new TokenExpiredError();
     }
 
@@ -56,7 +55,6 @@ export const requestDownloadAuthCreator =
       const data = await res.json();
 
       if (isTokenNotAuthorized(data.name, res.status)) {
-        // TODO: Logout
         throw new TokenExpiredError();
       }
 

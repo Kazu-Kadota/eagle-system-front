@@ -2,9 +2,11 @@ import NextLink, { type LinkProps as NextLinkProps } from 'next/link';
 
 import { cn } from '@/utils/classNames';
 
-type LinkProps = NextLinkProps & {
-  className?: string;
-};
+type LinkProps = React.PropsWithChildren<
+  NextLinkProps & {
+    className?: string;
+  }
+>;
 
 export function Link({ className, ...rest }: LinkProps) {
   return (

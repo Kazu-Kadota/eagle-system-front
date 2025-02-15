@@ -1,13 +1,26 @@
+import type {
+  AnalysisType,
+  PersonAnalysis,
+  PersonRegionType,
+  VehicleAnalysis,
+} from '@/models';
 import queryString from 'query-string';
 
 export type LoginParams = {
   callbackUrl?: string;
 };
 
+export type RequestAnalysisParams = {
+  analysisType: AnalysisType;
+  regionType?: PersonRegionType;
+};
+
 export const RoutePaths = {
   HOME: '/',
   PEOPLE_ANALYSIS_HOME: '/analises/pessoas',
   VEHICLE_ANALYSIS_HOME: '/analises/veiculos',
+  SEARCH_PEOPLE_ANALYSIS: '/analises/pessoas/consultar',
+  SEARCH_VEHICLE_ANALYSIS: '/analises/veiculos/consultar',
   REPORT_HOME: '/relatorios',
   FORGOT_PASSWORD: '/esqueci-minha-senha',
   RESET_PASSWORD: '/redefinir-senha',
@@ -17,4 +30,19 @@ export const RoutePaths = {
   ACCOUNT_HOME: '/minha-conta',
   login: (query?: LoginParams) =>
     queryString.stringifyUrl({ url: '/login', query }),
+  requestAnalysis: (params?: RequestAnalysisParams) =>
+    queryString.stringifyUrl({
+      url: '/analises/solicitar/',
+      query: params,
+    }),
+  peopleAnalysisDetail: (item?: PersonAnalysis) =>
+    queryString.stringifyUrl({
+      url: `/analises/pessoas/${item?.request_id ?? ':id'}/`,
+      query: { personId: item?.person_id },
+    }),
+  vehicleAnalysisDetail: (item?: VehicleAnalysis) =>
+    queryString.stringifyUrl({
+      url: `/analises/veiculos/${item?.request_id ?? ':id'}/`,
+      query: { vehicleId: item?.vehicle_id },
+    }),
 };

@@ -2,6 +2,8 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import { Inter, Poppins } from 'next/font/google';
+import { SessionProvider } from 'next-auth/react';
+import { QueryProvider } from '@/config/query';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -26,7 +28,9 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html lang="pt-BR">
       <body className={`${inter.variable} ${poppings.variable}`}>
-        {children}
+        <SessionProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </SessionProvider>
       </body>
     </html>
   );

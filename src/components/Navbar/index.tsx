@@ -1,6 +1,10 @@
-import { usePathname } from 'next/navigation';
-import { useMemo } from 'react';
+'use client';
 
+import { useSession } from 'next-auth/react';
+import { usePathname, useRouter } from 'next/navigation';
+import { memo, useMemo } from 'react';
+
+import { logoutAction } from '@/app/(auth)/login/actions';
 import { Logo } from '@/assets/icons/Logo';
 import { LogoutIcon } from '@/assets/icons/LogoutIcon';
 import { MobileTopbar } from '@/components/Navbar/MobileTopbar';
@@ -13,7 +17,10 @@ import { RoutePaths } from '@/constants/paths';
 import { useToggle } from '@/hooks/useToggle';
 import { UserType } from '@/models';
 import { cn } from '@/utils/classNames';
+import { getErrorMsg } from '@/utils/errors';
 import { hasUserType } from '@/utils/userType';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 interface NavbarLinks extends NavbarItemProps {
   userTypes?: UserType[];
@@ -42,15 +49,21 @@ const navlinks: NavbarLinks[] = [
   { label: 'Minha Conta', path: RoutePaths.ACCOUNT_HOME },
 ];
 
-export function Navbar() {
+export const Navbar = memo(() => {
   const pathname = usePathname();
+  const router = useRouter();
 
-  const userType = UserType.ADMIN; // TODO: Use from auth
+  const session = useSession();
+  const userType = session.data?.user.user_type;
+
+  console.log(userType);
   const [isNavbarOpen, toggleNavbarOpen] = useToggle(false);
 
-  const handleLogout = () => {
-    // TODO: Do logout
-  };
+  const { isPending: isLogoutLoading, mutate: handleLogout } = useMutation({
+    mutationFn: logoutAction,
+    onSuccess: () => router.push(RoutePaths.login()),
+    onError: (error) => toast.error(getErrorMsg(error)),
+  });
 
   const links = useMemo(
     () =>
@@ -92,10 +105,11 @@ export function Navbar() {
         <NavButton
           label="Sair"
           icon={<LogoutIcon className="w-8 fill-light" />}
+          loading={isLogoutLoading}
           onClick={handleLogout}
         />
       </nav>
       <div className="w-48" />
     </>
   );
-}
+});
