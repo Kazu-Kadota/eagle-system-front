@@ -1,3 +1,9 @@
+import queryString from 'query-string';
+
+export type LoginParams = {
+  callbackUrl?: string;
+};
+
 export const RoutePaths = {
   HOME: '/',
   PEOPLE_ANALYSIS_HOME: '/analises/pessoas',
@@ -9,4 +15,6 @@ export const RoutePaths = {
   REGISTER_USER: '/gerenciamento-de-usuarios/cadastrar-usuario',
   REGISTER_COMPANY: '/gerenciamento-de-usuarios/cadastrar-empresa',
   ACCOUNT_HOME: '/minha-conta',
+  login: (query?: LoginParams) =>
+    queryString.stringifyUrl({ url: '/login', query }),
 };
