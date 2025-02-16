@@ -3,9 +3,7 @@ import NextLink, { type LinkProps as NextLinkProps } from 'next/link';
 import { cn } from '@/utils/classNames';
 
 type LinkProps = React.PropsWithChildren<
-  NextLinkProps & {
-    className?: string;
-  }
+  React.ComponentPropsWithoutRef<'a'> & NextLinkProps
 >;
 
 export function Link({ className, ...rest }: LinkProps) {
