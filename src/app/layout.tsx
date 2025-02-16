@@ -24,11 +24,14 @@ const poppings = Poppins({
 export const metadata: Metadata = {
   title: 'Eagles System',
   description: 'Eagles System',
+  other: {
+    google: 'notranslate',
+  },
 };
 
 export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" translate="no">
       <body className={`${inter.variable} ${poppings.variable}`}>
         <SessionProvider>
           <QueryProvider>

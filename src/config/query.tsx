@@ -34,7 +34,6 @@ export function QueryProvider({ children }: React.PropsWithChildren) {
 
     const mutationCache = new MutationCache({
       onError: async (error, _, _2, m) => {
-        console.log(error);
         if (error instanceof TokenExpiredError) {
           await logoutAction();
           useModalStore.getState().actions.close();

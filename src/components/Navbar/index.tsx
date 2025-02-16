@@ -61,6 +61,12 @@ export const Navbar = memo(({ userType }: NavbarProps) => {
     onSuccess: () => router.push(RoutePaths.login()),
   });
 
+  const isLinkActive = (href: string) => {
+    if (href === '/') return href === pathname;
+
+    return pathname.startsWith(href);
+  };
+
   const links = useMemo(
     () =>
       navlinks
@@ -72,7 +78,7 @@ export const Navbar = memo(({ userType }: NavbarProps) => {
           <NavbarItem
             key={navlink.label}
             closeNavbar={toggleNavbarOpen}
-            isActive={navlink.path === pathname}
+            isActive={isLinkActive(navlink.path)}
             {...navlink}
           />
         )),
