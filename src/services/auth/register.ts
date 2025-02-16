@@ -18,19 +18,14 @@ type RegisterCompanyBody = {
   type: CompanyType;
 };
 
-export const registerUser = async (token: string, body: RegisterUserBody) => {
+export const registerUser = async (body: RegisterUserBody) => {
   await requestAuth.post(env.NEXT_PUBLIC_API_USER_URL, `/register/user`, {
     body,
-    token,
   });
 };
 
-export const registerCompany = async (
-  token: string,
-  body: RegisterCompanyBody,
-) => {
+export const registerCompany = async (body: RegisterCompanyBody) => {
   await requestAuth.post(env.NEXT_PUBLIC_API_USER_URL, `/register/company`, {
     body,
-    token,
   });
 };

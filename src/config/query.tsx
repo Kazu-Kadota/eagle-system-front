@@ -19,12 +19,16 @@ export function QueryProvider({ children }: React.PropsWithChildren) {
   const router = useRouter();
 
   const [queryClient] = useState(() => {
+    const logout = async () => {
+      await logoutAction();
+      router.push(RoutePaths.login());
+      useModalStore.getState().actions.close();
+    };
+
     const queryCache = new QueryCache({
       onError: async (error) => {
         if (error instanceof TokenExpiredError) {
-          await logoutAction();
-          useModalStore.getState().actions.close();
-          router.push(RoutePaths.login());
+          await logout();
         }
 
         const message = getErrorMsg(error);
@@ -35,9 +39,7 @@ export function QueryProvider({ children }: React.PropsWithChildren) {
     const mutationCache = new MutationCache({
       onError: async (error, _, _2, m) => {
         if (error instanceof TokenExpiredError) {
-          await logoutAction();
-          useModalStore.getState().actions.close();
-          router.push(RoutePaths.login());
+          await logout();
         }
 
         if (!m?.meta?.disableErrorToastMsg) {

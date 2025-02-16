@@ -9,7 +9,6 @@ import { registerCompany } from '@/services/auth/register';
 import { useModal } from '@/store/modal/store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { CompanyType } from 'src/models';
@@ -19,7 +18,6 @@ export const RegisterCompanyForm = () => {
   const modal = useModal();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const session = useSession();
 
   const { control, reset, handleSubmit } = useForm<RegisterCompanySchema>({
     resolver: zodResolver(registerCompanySchema),
@@ -31,8 +29,7 @@ export const RegisterCompanyForm = () => {
   });
 
   const { mutate: onSubmit, isPending } = useMutation({
-    mutationFn: (data: RegisterCompanySchema) =>
-      registerCompany(session.data?.jwt.token ?? ' ', data),
+    mutationFn: (data: RegisterCompanySchema) => registerCompany(data),
     onSuccess: () => {
       modal.open({
         title: 'Empresa criada com\nsucesso!',

@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { customDayJs } from '@/config/dayjs';
 import {
   AnalysisStatus,
   type PersonAnalysis,
@@ -86,10 +86,10 @@ export const preparePersonDataFromApi = (
 ): PersonAnalysis => ({
   ...person,
   birth_date: person.birth_date
-    ? dayjs(person.birth_date).format('YYYY-MM-DD')
+    ? customDayJs(person.birth_date).format('YYYY-MM-DD')
     : '',
   expire_at_cnh: person.expire_at_cnh
-    ? dayjs(person.expire_at_cnh).format('YYYY-MM-DD')
+    ? customDayJs(person.expire_at_cnh).format('YYYY-MM-DD')
     : '',
 });
 

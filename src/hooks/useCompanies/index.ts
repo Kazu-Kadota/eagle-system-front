@@ -6,16 +6,15 @@ import { useMemo } from 'react';
 
 export interface UseCompaniesOptions {
   enabled?: boolean;
-  token: string;
 }
 
 const initialCompanies: Company[] = [];
 
-export const useCompanies = ({ enabled, token }: UseCompaniesOptions) => {
+export const useCompanies = ({ enabled }: UseCompaniesOptions) => {
   const { data, isFetching, refetch } = useQuery({
-    queryFn: () => getCompanies({ token }),
+    queryFn: () => getCompanies(),
     queryKey: ['companies'],
-    enabled: enabled && !!token,
+    enabled: enabled,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });

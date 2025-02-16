@@ -12,17 +12,15 @@ import {
 import { useCompanies } from '@/hooks/useCompanies';
 import { UserType } from '@/models';
 import { useModal } from '@/store/modal/store';
+import { useSessionUser } from '@/store/session';
 import { hasUserType } from '@/utils/userType';
-import { useSession } from 'next-auth/react';
 
 export function AccountHomeForm() {
   const modal = useModal();
-  const session = useSession();
-  const user = session.data?.user;
+  const user = useSessionUser();
 
   const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
     enabled: hasUserType(user?.user_type, UserType.ADMIN),
-    token: session.data?.jwt.token ?? '',
   });
 
   const onChangePassword = () => {

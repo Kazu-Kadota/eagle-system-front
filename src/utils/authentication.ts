@@ -1,8 +1,8 @@
-import { auth } from '@/auth';
+import { cachedAuth } from '@/auth';
+import { customDayJs } from '@/config/dayjs';
 import { RoutePaths } from '@/constants/paths';
 import type { UserType } from '@/models';
 import { hasUserType } from '@/utils/userType';
-import dayjs from 'dayjs';
 import type { Session } from 'next-auth';
 import { type JWT } from 'next-auth/jwt';
 import { redirect } from 'next/navigation';
@@ -12,12 +12,13 @@ type GetSessionParams = {
 };
 
 export const isAuthenticated = (jwt?: JWT['jwt']) =>
-  !!(jwt?.token && jwt.expiresIn) && dayjs().isBefore(dayjs(jwt.expiresIn));
+  !!(jwt?.token && jwt.expiresIn) &&
+  customDayJs().isBefore(customDayJs(jwt.expiresIn));
 
-export const getSession = async ({
+export const getSessionOrRedirect = async ({
   allowedUserTypes,
 }: GetSessionParams = {}): Promise<Session> => {
-  const session = await auth();
+  const session = await cachedAuth();
 
   if (!session) {
     redirect(RoutePaths.login({ callbackUrl: RoutePaths.HOME }));

@@ -1,10 +1,10 @@
 import { UserType } from '@/models';
-import { getSession } from '@/utils/authentication';
+import { getSessionOrRedirect } from '@/utils/authentication';
 
 export default async function RegisterHomeLayout({
   children,
 }: React.PropsWithChildren) {
-  await getSession({
+  await getSessionOrRedirect({
     allowedUserTypes: [UserType.ADMIN],
   });
 

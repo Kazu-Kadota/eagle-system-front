@@ -15,6 +15,7 @@ import { NavButton } from '@/components/Navbar/NavButton';
 import { RoutePaths } from '@/constants/paths';
 import { useToggle } from '@/hooks/useToggle';
 import { UserType } from '@/models';
+import { useSessionUserType } from '@/store/session';
 import { cn } from '@/utils/classNames';
 import { hasUserType } from '@/utils/userType';
 import { useMutation } from '@tanstack/react-query';
@@ -46,13 +47,16 @@ const navlinks: NavbarLinks[] = [
   { label: 'Minha Conta', path: RoutePaths.ACCOUNT_HOME },
 ];
 
-interface NavbarProps {
-  userType: UserType;
-}
+const isLinkActive = (pathname: string, href: string) => {
+  if (href === '/') return href === pathname;
 
-export const Navbar = memo(({ userType }: NavbarProps) => {
+  return pathname.startsWith(href);
+};
+
+export const Navbar = memo(() => {
   const pathname = usePathname();
   const router = useRouter();
+  const userType = useSessionUserType();
 
   const [isNavbarOpen, toggleNavbarOpen] = useToggle(false);
 
@@ -60,12 +64,6 @@ export const Navbar = memo(({ userType }: NavbarProps) => {
     mutationFn: logoutAction,
     onSuccess: () => router.push(RoutePaths.login()),
   });
-
-  const isLinkActive = (href: string) => {
-    if (href === '/') return href === pathname;
-
-    return pathname.startsWith(href);
-  };
 
   const links = useMemo(
     () =>
@@ -78,11 +76,11 @@ export const Navbar = memo(({ userType }: NavbarProps) => {
           <NavbarItem
             key={navlink.label}
             closeNavbar={toggleNavbarOpen}
-            isActive={isLinkActive(navlink.path)}
+            isActive={isLinkActive(pathname, navlink.path)}
             {...navlink}
           />
         )),
-    [userType, pathname, toggleNavbarOpen],
+    [userType, pathname],
   );
 
   return (

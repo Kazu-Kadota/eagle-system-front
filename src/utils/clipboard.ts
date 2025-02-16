@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { customDayJs } from '@/config/dayjs';
 import { toast } from 'react-toastify';
 import type { Analysis, PersonAnalysis, VehicleAnalysis } from 'src/models';
 
@@ -88,7 +88,7 @@ export const keysDateToFormat = [
 
 const formatValue = (key: string, value: string) => {
   if (keysDateToFormat.includes(key)) {
-    return dayjs(value).format('DD/MM/YYYY');
+    return customDayJs(value).format('DD/MM/YYYY');
   }
 
   return value;

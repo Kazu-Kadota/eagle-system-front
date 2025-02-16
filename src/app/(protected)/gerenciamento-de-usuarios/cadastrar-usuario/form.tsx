@@ -16,10 +16,10 @@ import { useCompanies } from '@/hooks/useCompanies';
 import { UserType } from '@/models';
 import { registerUser } from '@/services/auth/register';
 import { useModal } from '@/store/modal/store';
+import { useSessionUserType } from '@/store/session';
 import { hasUserType } from '@/utils/userType';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
@@ -27,9 +27,7 @@ export const RegisterUserForm = () => {
   const modal = useModal();
   const router = useRouter();
 
-  const session = useSession();
-  const user = session.data?.user;
-  const token = session.data?.jwt.token ?? '';
+  const userType = useSessionUserType();
 
   const { control, reset, handleSubmit } = useForm<RegisterUserSchema>({
     resolver: zodResolver(registerUserSchema),
@@ -46,13 +44,12 @@ export const RegisterUserForm = () => {
   });
 
   const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
-    token,
-    enabled: hasUserType(user?.user_type, UserType.ADMIN),
+    enabled: hasUserType(userType, UserType.ADMIN),
   });
 
   const { mutate: onSubmit, isPending } = useMutation({
     mutationFn: (data: RegisterUserSchema) =>
-      registerUser(token, {
+      registerUser({
         company_name: data.company_name,
         email: data.email,
         user_first_name: data.user_first_name,

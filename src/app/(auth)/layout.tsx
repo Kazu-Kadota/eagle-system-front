@@ -1,6 +1,7 @@
 import { LogoTriangle } from '@/assets/icons/LogoTriangle';
-import { auth } from '@/auth';
+import { cachedAuth } from '@/auth';
 import { RoutePaths } from '@/constants/paths';
+import { LogoutSessionClient } from '@/store/session/LogoutSessionClient';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import bgAuthImg from 'src/assets/images/bg-auth.jpg';
@@ -8,7 +9,7 @@ import bgAuthImg from 'src/assets/images/bg-auth.jpg';
 export default async function AuthLayout({
   children,
 }: React.PropsWithChildren) {
-  const session = await auth();
+  const session = await cachedAuth();
 
   if (session) {
     redirect(RoutePaths.HOME);
@@ -16,6 +17,8 @@ export default async function AuthLayout({
 
   return (
     <>
+      <LogoutSessionClient />
+
       <Image
         src={bgAuthImg}
         alt="Eagle System"

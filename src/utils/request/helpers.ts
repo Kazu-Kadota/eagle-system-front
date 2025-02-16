@@ -1,5 +1,6 @@
 import queryString from 'query-string';
 
+import { useSessionStore } from '@/store/session';
 import type { RequestOptions } from '@/utils/request/types';
 
 export const constructHeaders = (options: RequestOptions) => {
@@ -15,8 +16,10 @@ export const constructHeaders = (options: RequestOptions) => {
 export const constructAuthHeaders = (options: RequestOptions) => {
   const headers: Record<string, string> = constructHeaders(options);
 
-  if (options.token) {
-    headers['Authorization'] = `Bearer ${options.token}`;
+  const token = useSessionStore.getState().session?.jwt.token;
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   return headers;

@@ -5,11 +5,11 @@ import {
 } from '@/app/(protected)/links';
 import { LinksBox } from '@/components/LinksBox';
 import { UserType } from '@/models';
-import { getSession } from '@/utils/authentication';
+import { getSessionOrRedirect } from '@/utils/authentication';
 import { hasUserType } from '@/utils/userType';
 
 export default async function HomePage() {
-  const { user } = await getSession();
+  const { user } = await getSessionOrRedirect();
 
   return (
     <>

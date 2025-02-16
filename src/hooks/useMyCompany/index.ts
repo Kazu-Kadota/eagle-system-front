@@ -16,16 +16,15 @@ const initialCompany: Company = {
 
 interface Options {
   isAdmin: boolean;
-  token: string;
 }
 
-export const useMyCompany = ({ isAdmin, token }: Options) => {
+export const useMyCompany = ({ isAdmin }: Options) => {
   const { data, isFetching, refetch } = useQuery({
-    queryFn: () => getMyCompany({ token }),
+    queryFn: () => getMyCompany(),
     queryKey: ['my-company'],
     refetchOnWindowFocus: false,
     staleTime: Infinity,
-    enabled: !isAdmin && !!token,
+    enabled: !isAdmin,
   });
 
   const company = data ?? initialCompany;

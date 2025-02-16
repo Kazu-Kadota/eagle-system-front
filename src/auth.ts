@@ -2,6 +2,7 @@ import { login } from '@/services/auth/login';
 import { isAuthenticated } from '@/utils/authentication';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import { cache } from 'react';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -46,3 +47,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   debug: process.env.NODE_ENV === 'development',
 });
+
+export const cachedAuth = cache(auth);

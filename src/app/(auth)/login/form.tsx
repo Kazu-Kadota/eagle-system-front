@@ -8,13 +8,11 @@ import { RoutePaths } from '@/constants/paths';
 import { getErrorMsg } from '@/utils/errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 export function LoginForm() {
   const router = useRouter();
-  const session = useSession();
   const searchParams = useSearchParams();
 
   const { control, handleSubmit } = useForm<LoginSchema>({
@@ -30,7 +28,6 @@ export function LoginForm() {
     meta: { disableErrorToastMsg: true },
     mutationFn: loginAction,
     onSuccess: () => {
-      session.update();
       router.push(searchParams.get('callbackUrl') || RoutePaths.HOME);
     },
   });
