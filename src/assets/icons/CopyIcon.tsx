@@ -1,4 +1,4 @@
-import { SvgIconProps } from '@/types/svg';
+import type { SvgIconProps } from '@/types/svg';
 
 export function CopyIcon({ className }: SvgIconProps) {
   return (

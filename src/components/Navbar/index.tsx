@@ -1,6 +1,5 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { memo, useMemo } from 'react';
 
@@ -110,3 +109,5 @@ export const Navbar = memo(({ userType }: NavbarProps) => {
     </>
   );
 });
+
+Navbar.displayName = 'Navbar';

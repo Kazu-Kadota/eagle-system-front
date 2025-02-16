@@ -6,7 +6,9 @@ import { RoutePaths } from '@/constants/paths';
 import recoveryPasswordSend from '@/services/auth/recovery-password';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
+import forgotPasswordSuccessImg from 'src/assets/images/forget-password-success.png';
 import { type ForgotPasswordSchema, schema } from './schema';
 
 export function ForgotPasswordForm() {
@@ -29,10 +31,11 @@ export function ForgotPasswordForm() {
         <p className="text-center text-lg font-bold">
           Acesse seu e-mail para redefinir a senha!
         </p>
-        <img
-          src="/images/forget-password-success.png"
+        <Image
+          src={forgotPasswordSuccessImg}
+          alt="Acesse seu e-mail para redefinir a senha!"
           className="w-80 self-center"
-        ></img>
+        />
         <Button
           size="xsx"
           theme="accent"

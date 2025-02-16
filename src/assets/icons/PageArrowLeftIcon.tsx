@@ -1,4 +1,4 @@
-import { SvgIconProps } from 'src/types/svg';
+import type { SvgIconProps } from '@/types/svg';
 
 export function PageArrowLeftIcon({ className }: SvgIconProps) {
   return (

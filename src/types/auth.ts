@@ -1,3 +1,3 @@
-export type WithToken<T extends object = {}> = T & {
+export type WithToken<T extends object = object> = T & {
   token: string;
 };
