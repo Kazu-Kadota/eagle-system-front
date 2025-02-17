@@ -1,27 +1,29 @@
 import { cachedAuth } from '@/auth';
-import { customDayJs } from '@/config/dayjs';
 import { RoutePaths } from '@/constants/paths';
 import type { UserType } from '@/models';
 import { hasUserType } from '@/utils/userType';
 import type { Session } from 'next-auth';
 import { type JWT } from 'next-auth/jwt';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 type GetSessionParams = {
   allowedUserTypes?: UserType[];
 };
 
-export const isAuthenticated = (jwt?: JWT['jwt']) =>
-  !!(jwt?.token && jwt.expiresIn) &&
-  customDayJs().isBefore(customDayJs(jwt.expiresIn));
+export const isTokenValid = (jwt: JWT['jwt']) =>
+  new Date() < new Date(jwt.expiresIn);
 
 export const getSessionOrRedirect = async ({
   allowedUserTypes,
 }: GetSessionParams = {}): Promise<Session> => {
   const session = await cachedAuth();
 
-  if (!session) {
-    redirect(RoutePaths.login({ callbackUrl: RoutePaths.HOME }));
+  if (!session || !isTokenValid(session.jwt)) {
+    const headerList = await headers();
+    const pathname = headerList.get('x-current-path');
+
+    redirect(RoutePaths.login({ callbackUrl: pathname ?? RoutePaths.HOME }));
   }
 
   if (
@@ -32,4 +34,10 @@ export const getSessionOrRedirect = async ({
   }
 
   return session;
+};
+
+export const verifyIsLoggedIn = async () => {
+  const session = await cachedAuth();
+
+  return session && isTokenValid(session.jwt);
 };

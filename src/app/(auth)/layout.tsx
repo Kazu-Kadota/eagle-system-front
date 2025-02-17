@@ -1,7 +1,7 @@
 import { LogoTriangle } from '@/assets/icons/LogoTriangle';
-import { cachedAuth } from '@/auth';
 import { RoutePaths } from '@/constants/paths';
 import { LogoutSessionClient } from '@/store/session/LogoutSessionClient';
+import { verifyIsLoggedIn } from '@/utils/authentication';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import bgAuthImg from 'src/assets/images/bg-auth.jpg';
@@ -9,9 +9,9 @@ import bgAuthImg from 'src/assets/images/bg-auth.jpg';
 export default async function AuthLayout({
   children,
 }: React.PropsWithChildren) {
-  const session = await cachedAuth();
+  const isLoggedIn = await verifyIsLoggedIn();
 
-  if (session) {
+  if (isLoggedIn) {
     redirect(RoutePaths.HOME);
   }
 

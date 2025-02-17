@@ -1,5 +1,5 @@
+import { RoutePaths } from '@/constants/paths';
 import { login } from '@/services/auth/login';
-import { isAuthenticated } from '@/utils/authentication';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { cache } from 'react';
@@ -40,10 +40,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session;
     },
-    authorized: ({ auth }) => isAuthenticated(auth?.jwt),
   },
   pages: {
-    signIn: '/login',
+    signIn: RoutePaths.login(),
+  },
+  session: {
+    strategy: 'jwt',
+    maxAge: 3.154e10, // Relies on external API token expiration
   },
   debug: process.env.NODE_ENV === 'development',
 });
