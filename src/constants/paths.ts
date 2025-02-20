@@ -38,12 +38,12 @@ export const RoutePaths = {
     }),
   peopleAnalysisDetail: (item?: PersonAnalysis) =>
     queryString.stringifyUrl({
-      url: `/analises/pessoas/${item?.request_id ?? ':id'}/`,
+      url: `/analises/pessoas/${item?.request_id}`,
       query: { personId: item?.person_id },
     }),
   vehicleAnalysisDetail: (item?: VehicleAnalysis) =>
     queryString.stringifyUrl({
-      url: `/analises/veiculos/${item?.request_id ?? ':id'}/`,
+      url: `/analises/veiculos/${item?.request_id}`,
       query: { vehicleId: item?.vehicle_id },
     }),
 };
