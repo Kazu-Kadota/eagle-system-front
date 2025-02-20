@@ -4,7 +4,6 @@ import type { UserType } from '@/models';
 import { hasUserType } from '@/utils/userType';
 import type { Session } from 'next-auth';
 import { type JWT } from 'next-auth/jwt';
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 type GetSessionParams = {
@@ -20,10 +19,7 @@ export const getSessionOrRedirect = async ({
   const session = await cachedAuth();
 
   if (!session || !isTokenValid(session.jwt)) {
-    const headerList = await headers();
-    const pathname = headerList.get('x-current-path');
-
-    redirect(RoutePaths.login({ callbackUrl: pathname ?? RoutePaths.HOME }));
+    redirect(RoutePaths.login({ callbackUrl: RoutePaths.HOME }));
   }
 
   if (

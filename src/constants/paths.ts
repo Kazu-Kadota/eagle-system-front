@@ -29,6 +29,7 @@ export const RoutePaths = {
   REGISTER_COMPANY: '/gerenciamento-de-usuarios/cadastrar-empresa',
   ACCOUNT_HOME: '/minha-conta',
   ACCESS_DENIED: '/acesso-negado',
+  BASE_64_DECODER: '/decodificador',
   login: (query?: LoginParams) =>
     queryString.stringifyUrl({ url: '/login', query }),
   requestAnalysis: (params?: RequestAnalysisParams) =>
