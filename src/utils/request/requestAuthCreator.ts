@@ -24,6 +24,7 @@ export const requestAuthCreator =
       method,
       body: prepareBody(options),
       headers: constructAuthHeaders(options),
+      cache: 'no-store',
     });
 
     const data = await res.json();

@@ -5,10 +5,10 @@ import { AnalysisTable } from '@/components/AnalysisTable';
 import { Box } from '@/components/Box';
 import { Button } from '@/components/Button';
 import { ControlledInput } from '@/components/ControlledInput';
+import { EncodedTextArea } from '@/components/EncodedTextArea';
 import { Input } from '@/components/Input';
 import { InputRow } from '@/components/InputRow';
 import { SelectGroup } from '@/components/SelectGroup';
-import { TextArea } from '@/components/TextArea';
 import { customDayJs } from '@/config/dayjs';
 import {
   analysisResultsSelectItems,
@@ -308,7 +308,7 @@ export function SearchVehicleAnalysisUI({
                 containerClassName="mb-2"
                 disabled
               />
-              <TextArea
+              <EncodedTextArea
                 label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
                 name="analysis_info"
                 disabled
