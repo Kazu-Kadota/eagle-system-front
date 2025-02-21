@@ -147,7 +147,8 @@ export function ReportHomeForm() {
             className="mt-4 min-w-[12rem] self-center xl:-mt-1 xl:self-start"
             loading={isPending}
           >
-            Gerar relatório <DownloadIcon className="ml-1 w-6 fill-light" />
+            <span>Gerar relatório </span>
+            <DownloadIcon className="ml-1 w-6 fill-light" />
           </Button>
         </form>
       </Box>

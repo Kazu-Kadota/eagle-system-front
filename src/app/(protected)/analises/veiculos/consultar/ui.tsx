@@ -100,7 +100,7 @@ export function SearchVehicleAnalysisUI({
             type="submit"
             loading={isLoading}
           >
-            Pesquisar
+            <span>Pesquisar</span>
             <SearchIcon className="ml-1 w-4 fill-light" />
           </Button>
         </form>
