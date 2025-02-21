@@ -1,3 +1,4 @@
+import LoaderProvider from '@/config/loader';
 import './globals.css';
 
 import { QueryProvider } from '@/config/query';
@@ -33,7 +34,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
     <html lang="pt-BR" translate="no">
       <body className={`${inter.variable} ${poppings.variable}`}>
         <QueryProvider>
-          {children}
+          <LoaderProvider>{children}</LoaderProvider>
           <Modal />
         </QueryProvider>
 

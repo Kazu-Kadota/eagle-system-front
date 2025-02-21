@@ -7,7 +7,7 @@ const LoaderProvider = ({ children }: React.PropsWithChildren) => {
     <ProgressProvider
       height="3px"
       color="#9B6B0F"
-      delay={80}
+      delay={100}
       options={{ showSpinner: false }}
       shallowRouting
     >

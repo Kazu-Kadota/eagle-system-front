@@ -10,7 +10,7 @@ export const env = createEnv({
   },
   server: {
     AUTH_SECRET: z.string().min(1),
-    AUTH_TRUST_HOST: z.string().url(),
+    AUTH_TRUST_HOST: z.union([z.literal('true'), z.literal('false')]),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_API_USER_URL: process.env.NEXT_PUBLIC_API_USER_URL,
