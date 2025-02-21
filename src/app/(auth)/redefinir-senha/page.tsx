@@ -1,6 +1,8 @@
 import { Box } from '@/components/Box';
 import { ResetPasswordForm } from './form';
 
+export const dynamic = 'force-dynamic';
+
 export default function ResetPasswordPage() {
   return (
     <Box>
