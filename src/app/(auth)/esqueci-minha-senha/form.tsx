@@ -32,6 +32,7 @@ export function ForgotPasswordForm() {
           Acesse seu e-mail para redefinir a senha!
         </p>
         <Image
+          quality={100}
           src={forgotPasswordSuccessImg}
           alt="Acesse seu e-mail para redefinir a senha!"
           className="w-80 self-center"

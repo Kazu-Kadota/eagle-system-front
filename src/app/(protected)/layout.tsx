@@ -14,6 +14,7 @@ export default async function ProtectedLayout({
       <SessionClient session={session} />
 
       <Image
+        quality={100}
         src={bgProtectedImg}
         alt="Eagle System"
         className="fixed h-full w-full object-cover"

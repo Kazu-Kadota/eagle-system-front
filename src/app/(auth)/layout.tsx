@@ -11,6 +11,7 @@ export default async function AuthLayout({
       <LogoutSessionClient />
 
       <Image
+        quality={1000}
         src={bgAuthImg}
         alt="Eagle System"
         className="absolute h-full w-full object-cover"

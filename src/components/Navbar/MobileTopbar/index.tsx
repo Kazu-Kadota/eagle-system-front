@@ -25,6 +25,7 @@ export const MobileTopbar = memo(
         <div className="top fixed z-0 flex h-12 w-full items-center justify-between bg-dark shadow-2xl md:hidden">
           <div className="w-10" />
           <Image
+            quality={100}
             src={logoImg}
             alt="Eagle System"
             className="w-12 object-contain"
