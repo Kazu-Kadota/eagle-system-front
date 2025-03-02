@@ -40,14 +40,12 @@ export function QueryProvider({ children }: React.PropsWithChildren) {
     });
 
     const mutationCache = new MutationCache({
-      onError: async (error, _, _2, m) => {
+      onError: async (error) => {
         if (error instanceof TokenExpiredError) {
           await logout();
         }
 
-        if (!m?.meta?.disableErrorToastMsg) {
-          toast.error(getErrorMsg(error));
-        }
+        toast.error(getErrorMsg(error));
       },
     });
 

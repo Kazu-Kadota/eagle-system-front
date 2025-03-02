@@ -5,34 +5,30 @@ import { schema, type LoginSchema } from '@/app/(auth)/login/schema';
 import { Button } from '@/components/Button';
 import { ControlledInput } from '@/components/ControlledInput';
 import { RoutePaths } from '@/constants/paths';
-import { getErrorMsg } from '@/utils/errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [errorMsg, setErrorMsg] = useState('');
 
   const { control, handleSubmit } = useForm<LoginSchema>({
     resolver: zodResolver(schema),
     defaultValues: { email: '', password: '' },
   });
 
-  const {
-    error,
-    isPending,
-    mutate: loginMutate,
-  } = useMutation({
-    meta: { disableErrorToastMsg: true },
-    mutationFn: async (data: LoginSchema) => {
-      const { error } = await loginAction(data);
-
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      router.push(searchParams.get('callbackUrl') || RoutePaths.HOME);
+  const { isPending, mutate: loginMutate } = useMutation({
+    mutationFn: loginAction,
+    onSuccess: ({ error }) => {
+      if (error) {
+        setErrorMsg(error);
+      } else {
+        router.push(searchParams.get('callbackUrl') || RoutePaths.HOME);
+      }
     },
   });
 
@@ -57,10 +53,8 @@ export function LoginForm() {
         type="password"
         labelVariants={{ size: '2xl' }}
       />
-      {error && (
-        <p className="-mb-1 -mt-2 text-center text-sm text-error">
-          {getErrorMsg(error)}
-        </p>
+      {errorMsg && (
+        <p className="-mb-1 -mt-2 text-center text-sm text-error">{errorMsg}</p>
       )}
       <Button type="submit" loading={isPending}>
         Entrar

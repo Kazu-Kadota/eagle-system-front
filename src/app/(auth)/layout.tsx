@@ -1,7 +1,7 @@
 import { LogoTriangle } from '@/assets/icons/LogoTriangle';
 import { LogoutSessionClient } from '@/store/session/LogoutSessionClient';
 import Image from 'next/image';
-import bgAuthImg from 'src/assets/images/bg-auth.jpg';
+import bgAuthImg from '@/assets/images/bg-auth.jpg';
 
 export default async function AuthLayout({
   children,
@@ -11,7 +11,7 @@ export default async function AuthLayout({
       <LogoutSessionClient />
 
       <Image
-        quality={1000}
+        quality={100}
         src={bgAuthImg}
         alt="Eagle System"
         className="absolute h-full w-full object-cover"
