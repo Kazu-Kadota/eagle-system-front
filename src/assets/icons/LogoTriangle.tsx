@@ -1,4 +1,4 @@
-import { SvgIconProps } from 'src/types/svg'
+import type { SvgIconProps } from '@/types/svg';
 
 export function LogoTriangle({ className }: SvgIconProps) {
   return (
@@ -91,5 +91,5 @@ export function LogoTriangle({ className }: SvgIconProps) {
         </linearGradient>
       </defs>
     </svg>
-  )
+  );
 }

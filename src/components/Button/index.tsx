@@ -1,12 +1,13 @@
-import { Link, LinkProps } from 'react-router-dom'
-import { VariantProps, tv } from 'tailwind-variants'
-import { Spinner } from '..'
+import Link, { type LinkProps } from 'next/link';
+import { type VariantProps, tv } from 'tailwind-variants';
+
+import { Spinner } from '@/components/Spinner';
 
 const style = tv({
   base: 'flex min-w-0 max-w-full items-center justify-center rounded-[0.1875rem] px-3 text-center text-light transition-opacity hover:opacity-80 disabled:opacity-100',
   variants: {
     theme: {
-      primary: 'bg-primary ',
+      primary: 'bg-primary',
       dark: 'bg-dark',
       placeholder: 'bg-placeholder',
       success: 'bg-success',
@@ -36,16 +37,16 @@ const style = tv({
     size: 'md',
     shadow: 'none',
   },
-})
+});
 
 export type ButtonProps = VariantProps<typeof style> &
   React.ComponentProps<'button'> &
   Partial<LinkProps> & {
-    loading?: boolean
-  }
+    loading?: boolean;
+  };
 
 export function Button({
-  to,
+  href,
   className,
   type,
   theme,
@@ -60,11 +61,11 @@ export function Button({
     disabled: disabled || loading,
     className: style({ theme, size, shadow, className }),
     children: loading ? <Spinner className="w-5 fill-light" /> : children,
+  };
+
+  if (href) {
+    return <Link {...commonProps} href={href} />;
   }
 
-  if (to) {
-    return <Link {...commonProps} to={to} />
-  }
-
-  return <button {...commonProps} {...rest} type={type ?? 'button'} />
+  return <button {...commonProps} {...rest} type={type ?? 'button'} />;
 }

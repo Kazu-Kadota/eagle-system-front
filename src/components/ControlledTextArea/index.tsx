@@ -3,13 +3,14 @@ import {
   type Control,
   type FieldValues,
   type Path,
-} from 'react-hook-form'
-import { TextArea, TextAreaProps } from '..'
+} from 'react-hook-form';
+
+import { TextArea, type TextAreaProps } from '@/components/TextArea';
 
 export interface ControlledTextAreaProps<T extends FieldValues>
   extends Omit<TextAreaProps, 'value' | 'onChange' | 'name' | 'error'> {
-  name: Path<T>
-  control: Control<T>
+  name: Path<T>;
+  control: Control<T>;
 }
 
 export const ControlledTextArea = <T extends FieldValues>({
@@ -20,7 +21,7 @@ export const ControlledTextArea = <T extends FieldValues>({
   const {
     field,
     fieldState: { error },
-  } = useController({ name, control })
+  } = useController({ name, control });
 
   return (
     <TextArea
@@ -31,5 +32,5 @@ export const ControlledTextArea = <T extends FieldValues>({
       name={name}
       error={error?.message}
     />
-  )
-}
+  );
+};

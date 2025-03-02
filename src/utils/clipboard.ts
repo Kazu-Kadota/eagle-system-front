@@ -1,9 +1,9 @@
-import dayjs from 'dayjs'
-import { toast } from 'react-toastify'
-import { Analysis, PersonAnalysis, VehicleAnalysis } from 'src/models'
+import { customDayJs } from '@/config/dayjs';
+import { toast } from 'react-toastify';
+import type { Analysis, PersonAnalysis, VehicleAnalysis } from 'src/models';
 
 interface CopyStringOptions {
-  successMsg: string
+  successMsg: string;
 }
 
 export const personNameKeys: { [key in keyof PersonAnalysis]: string } = {
@@ -35,7 +35,7 @@ export const personNameKeys: { [key in keyof PersonAnalysis]: string } = {
   region: 'Região',
   updated_at: 'Data de atualização',
   from_db: 'Resposta do banco de dados',
-}
+};
 
 export const vehicleNameKeys: { [key in keyof VehicleAnalysis]: string } = {
   analysis_info: 'Descrição da análise',
@@ -58,7 +58,7 @@ export const vehicleNameKeys: { [key in keyof VehicleAnalysis]: string } = {
   updated_at: 'Data de atualização',
   from_db: 'Resposta do banco de dados',
   vehicle_analysis_type: 'Tipo de análise de veículo',
-}
+};
 
 export const keysToRemove = [
   'created_at',
@@ -76,7 +76,7 @@ export const keysToRemove = [
   'region',
   'from_db',
   'third_party',
-]
+];
 
 export const keysDateToFormat = [
   'birth_date',
@@ -84,15 +84,15 @@ export const keysDateToFormat = [
   'finished_at',
   'created_at',
   'updated_at',
-]
+];
 
 const formatValue = (key: string, value: string) => {
   if (keysDateToFormat.includes(key)) {
-    return dayjs(value).format('DD/MM/YYYY')
+    return customDayJs(value).format('DD/MM/YYYY');
   }
 
-  return value
-}
+  return value;
+};
 
 const getClipboardString = <T extends Analysis>(
   item: T,
@@ -100,34 +100,34 @@ const getClipboardString = <T extends Analysis>(
 ) =>
   Object.entries(item).reduce((string, [key, value]) => {
     if (keysToRemove.includes(key)) {
-      return string
+      return string;
     }
 
-    const name = nameKeys[key] ?? key
+    const name = nameKeys[key] ?? key;
 
-    const label = `${string}${name.toUpperCase()}`
-    const uppercaseValue = String(value).toUpperCase()
-    const formattedValue = formatValue(key, uppercaseValue)
+    const label = `${string}${name.toUpperCase()}`;
+    const uppercaseValue = String(value).toUpperCase();
+    const formattedValue = formatValue(key, uppercaseValue);
 
-    return `${label}: ${formattedValue}\n`
-  }, '')
+    return `${label}: ${formattedValue}\n`;
+  }, '');
 
 export const copyPersonToClipboard = (person: Analysis) =>
-  navigator.clipboard.writeText(getClipboardString(person, personNameKeys))
+  navigator.clipboard.writeText(getClipboardString(person, personNameKeys));
 
 export const copyVehicleToClipboard = (vehicle: Analysis) =>
-  navigator.clipboard.writeText(getClipboardString(vehicle, vehicleNameKeys))
+  navigator.clipboard.writeText(getClipboardString(vehicle, vehicleNameKeys));
 
 export const copyString = (text: string, { successMsg }: CopyStringOptions) => {
   try {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText(text);
 
     toast.success(successMsg, {
       autoClose: 1000,
       hideProgressBar: true,
       toastId: text,
-    })
+    });
   } catch (error) {
-    toast.error('Houve um erro ao copiar os dados, tente novamente.')
+    toast.error(`Houve um erro ao copiar os dados. Erro: ${error}`);
   }
-}
+};

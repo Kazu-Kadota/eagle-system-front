@@ -1,4 +1,4 @@
-import { SvgIconProps } from 'src/types/svg'
+import type { SvgIconProps } from '@/types/svg';
 
 export function MenuIcon({ className }: SvgIconProps) {
   return (
@@ -14,5 +14,5 @@ export function MenuIcon({ className }: SvgIconProps) {
         fill="currentFill"
       />
     </svg>
-  )
+  );
 }

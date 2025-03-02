@@ -1,20 +1,21 @@
 import {
-  Control,
-  FieldValues,
-  Path,
-  PathValue,
+  type Control,
+  type FieldValues,
+  type Path,
+  type PathValue,
   useController,
-} from 'react-hook-form'
-import { SelectGroup, SelectGroupProps } from '..'
+} from 'react-hook-form';
+
+import { SelectGroup, type SelectGroupProps } from '@/components/SelectGroup';
 
 interface ControlledSelectGroupProps<T extends FieldValues, I extends string>
   extends Omit<
     SelectGroupProps<I>,
     'error' | 'value' | 'onChangeText' | 'onChange'
   > {
-  name: Path<T>
-  control: Control<T>
-  defaultValue?: PathValue<T, Path<T>>
+  name: Path<T>;
+  control: Control<T>;
+  defaultValue?: PathValue<T, Path<T>>;
 }
 
 export function ControlledSelectGroup<T extends FieldValues, I extends string>({
@@ -27,7 +28,7 @@ export function ControlledSelectGroup<T extends FieldValues, I extends string>({
     control,
     name,
     defaultValue,
-  })
+  });
 
   return (
     <SelectGroup
@@ -36,5 +37,5 @@ export function ControlledSelectGroup<T extends FieldValues, I extends string>({
       error={fieldState.error?.message}
       onChange={field.onChange}
     />
-  )
+  );
 }

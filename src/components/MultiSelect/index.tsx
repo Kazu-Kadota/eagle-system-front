@@ -1,20 +1,21 @@
 import ReactSelect, {
-  ClassNamesConfig,
-  GroupBase,
-  MultiValue,
-} from 'react-select'
-import { SelectItem } from 'src/types/select'
-import { cn } from 'src/utils/classNames'
+  type ClassNamesConfig,
+  type GroupBase,
+  type MultiValue,
+} from 'react-select';
 
-export type MultiSelectItem = MultiValue<SelectItem>
+import { type SelectItem } from '@/types/select';
+import { cn } from '@/utils/classNames';
+
+export type MultiSelectItem = MultiValue<SelectItem>;
 
 interface MultiSelectProps {
-  placeholder: string
-  options: MultiSelectItem
-  value: MultiSelectItem
-  id?: string
-  isMulti?: boolean
-  onChange: (values: MultiSelectItem) => void
+  placeholder: string;
+  options: MultiSelectItem;
+  value: MultiSelectItem;
+  id?: string;
+  isMulti?: boolean;
+  onChange: (values: MultiSelectItem) => void;
 }
 
 const classNames: ClassNamesConfig<
@@ -31,7 +32,7 @@ const classNames: ClassNamesConfig<
     cn('cursor-pointer px-3 py-1 text-dark', isFocused && 'bg-light-gray'),
   valueContainer: () => 'flex flex-wrap gap-1',
   multiValue: () => 'rounded-sm text-dark bg-light-gray px-1',
-}
+};
 
 export function MultiSelect({
   id,
@@ -48,5 +49,5 @@ export function MultiSelect({
       classNames={classNames}
       onChange={(values) => onChange(Array.isArray(values) ? values : [values])}
     />
-  )
+  );
 }

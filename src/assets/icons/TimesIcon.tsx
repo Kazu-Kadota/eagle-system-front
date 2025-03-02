@@ -1,4 +1,4 @@
-import { SvgIconProps } from 'src/types/svg'
+import type { SvgIconProps } from '@/types/svg';
 
 export function TimesIcon({ className }: SvgIconProps) {
   return (
@@ -15,5 +15,5 @@ export function TimesIcon({ className }: SvgIconProps) {
         fill="currentColor"
       />
     </svg>
-  )
+  );
 }

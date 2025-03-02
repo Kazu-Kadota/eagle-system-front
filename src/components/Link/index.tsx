@@ -1,13 +1,16 @@
-import { Link as RRDLink, LinkProps as RRDLinkProps } from 'react-router-dom'
-import { cn } from 'src/utils/classNames'
+import NextLink, { type LinkProps as NextLinkProps } from 'next/link';
 
-interface LinkProps extends RRDLinkProps {}
+import { cn } from '@/utils/classNames';
+
+type LinkProps = React.PropsWithChildren<
+  React.ComponentPropsWithoutRef<'a'> & NextLinkProps
+>;
 
 export function Link({ className, ...rest }: LinkProps) {
   return (
-    <RRDLink
+    <NextLink
       className={cn('transition-opacity hover:opacity-60', className)}
       {...rest}
     />
-  )
+  );
 }

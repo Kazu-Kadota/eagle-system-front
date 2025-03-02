@@ -1,56 +1,70 @@
-import { useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Logo, LogoutIcon } from 'src/assets/icons'
-import { useToggle } from 'src/hooks'
-import { UserType } from 'src/models'
-import { RoutePaths } from 'src/routes/paths'
-import { useAuthStore } from 'src/store/auth'
-import { cn } from 'src/utils/classNames'
-import { clearStorage } from 'src/utils/logout'
-import { hasUserType } from 'src/utils/userType'
-import { MobileTopbar } from './MobileTopbar'
-import { NavButton } from './NavButton'
-import { NavbarItem, NavbarItemProps } from './NavbarItem'
+'use client';
+
+import { usePathname, useRouter } from 'next/navigation';
+import { memo, useMemo } from 'react';
+
+import { logoutAction } from '@/app/(auth)/login/actions';
+import { Logo } from '@/assets/icons/Logo';
+import { LogoutIcon } from '@/assets/icons/LogoutIcon';
+import { MobileTopbar } from '@/components/Navbar/MobileTopbar';
+import {
+  NavbarItem,
+  type NavbarItemProps,
+} from '@/components/Navbar/NavbarItem';
+import { NavButton } from '@/components/Navbar/NavButton';
+import { RoutePaths } from '@/constants/paths';
+import { useToggle } from '@/hooks/useToggle';
+import { UserType } from '@/models';
+import { useSessionUserType } from '@/store/session';
+import { cn } from '@/utils/classNames';
+import { hasUserType } from '@/utils/userType';
+import { useMutation } from '@tanstack/react-query';
 
 interface NavbarLinks extends NavbarItemProps {
-  userTypes?: UserType[]
+  userTypes?: UserType[];
 }
 
 const navlinks: NavbarLinks[] = [
-  { label: 'Home', path: RoutePaths.Common.HOME },
+  { label: 'Home', path: RoutePaths.HOME },
   {
     label: 'Análises de Pessoas',
-    path: RoutePaths.Analysis.PEOPLE_ANALYSIS_HOME,
+    path: RoutePaths.PEOPLE_ANALYSIS_HOME,
   },
   {
     label: 'Análises de Véiculos',
-    path: RoutePaths.Analysis.VEHICLE_ANALYSIS_HOME,
+    path: RoutePaths.VEHICLE_ANALYSIS_HOME,
   },
   {
     label: 'Relatórios',
-    path: RoutePaths.Report.REPORT_HOME,
+    path: RoutePaths.REPORT_HOME,
     userTypes: [UserType.ADMIN, UserType.CLIENT],
   },
   {
     label: 'Gerenciamento\nde Usuários',
-    path: RoutePaths.Auth.REGISTER_HOME,
+    path: RoutePaths.REGISTER_HOME,
     userTypes: [UserType.ADMIN],
   },
-  { label: 'Minha Conta', path: RoutePaths.Auth.ACCOUNT_HOME },
-]
+  { label: 'Minha Conta', path: RoutePaths.ACCOUNT_HOME },
+  { label: 'Decodificador', path: RoutePaths.BASE_64_DECODER },
+];
 
-export function Navbar() {
-  const navigate = useNavigate()
+const isLinkActive = (pathname: string, href: string) => {
+  if (href === '/') return href === pathname;
 
-  const userType = useAuthStore((state) => state.user.user_type)
-  const [isNavbarOpen, toggleNavbarOpen, setNavbarOpen] = useToggle(false)
+  return pathname.startsWith(href);
+};
 
-  const closeNavbar = () => setNavbarOpen(false)
+export const Navbar = memo(() => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const userType = useSessionUserType();
 
-  const handleLogout = () => {
-    clearStorage()
-    navigate(RoutePaths.Auth.login())
-  }
+  const [isNavbarOpen, toggleNavbarOpen] = useToggle(false);
+
+  const { isPending: isLogoutLoading, mutate: handleLogout } = useMutation({
+    mutationFn: logoutAction,
+    onSuccess: () => router.push(RoutePaths.login()),
+  });
 
   const links = useMemo(
     () =>
@@ -62,12 +76,13 @@ export function Navbar() {
         .map((navlink) => (
           <NavbarItem
             key={navlink.label}
-            closeNavbar={closeNavbar}
+            closeNavbar={toggleNavbarOpen}
+            isActive={isLinkActive(pathname, navlink.path)}
             {...navlink}
           />
         )),
-    [userType],
-  )
+    [userType, pathname],
+  );
 
   return (
     <>
@@ -91,10 +106,13 @@ export function Navbar() {
         <NavButton
           label="Sair"
           icon={<LogoutIcon className="w-8 fill-light" />}
+          loading={isLogoutLoading}
           onClick={handleLogout}
         />
       </nav>
       <div className="w-48" />
     </>
-  )
-}
+  );
+});
+
+Navbar.displayName = 'Navbar';

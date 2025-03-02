@@ -1,4 +1,4 @@
-import { SvgIconProps } from 'src/types/svg'
+import type { SvgIconProps } from '@/types/svg';
 
 export function SearchIcon({ className }: SvgIconProps) {
   return (
@@ -13,5 +13,5 @@ export function SearchIcon({ className }: SvgIconProps) {
         fill="currentColor"
       />
     </svg>
-  )
+  );
 }

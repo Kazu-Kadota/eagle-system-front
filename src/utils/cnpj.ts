@@ -19,7 +19,7 @@ const verifierDigit = (digits: string): number => {
     .split('')
     .reduce(
       (buffer: number[], number: string) => [Number(number)].concat(buffer),
-      []
+      [],
     );
 
   const sum = reverse.reduce((buffer, number) => {

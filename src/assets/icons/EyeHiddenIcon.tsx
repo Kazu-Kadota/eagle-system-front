@@ -1,4 +1,4 @@
-import { SvgIconProps } from 'src/types/svg'
+import type { SvgIconProps } from '@/types/svg';
 
 export function EyeHiddenIcon({ className }: SvgIconProps) {
   return (
@@ -12,5 +12,5 @@ export function EyeHiddenIcon({ className }: SvgIconProps) {
         fill="currentFill"
       />
     </svg>
-  )
+  );
 }

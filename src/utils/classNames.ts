@@ -1,9 +1,9 @@
-import { twJoin, twMerge, ClassNameValue } from 'tailwind-merge'
+import { twJoin, twMerge, type ClassNameValue } from 'tailwind-merge';
 
 export function cn(...classes: ClassNameValue[]) {
-  return twJoin(...classes)
+  return twJoin(...classes);
 }
 
 export function twCn(...classes: ClassNameValue[]) {
-  return twMerge(...classes)
+  return twMerge(...classes);
 }

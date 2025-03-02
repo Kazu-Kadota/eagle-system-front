@@ -1,3 +1,3 @@
-import { requiredValidator } from './required'
+import { requiredValidator } from './required';
 
-export const emailValidator = requiredValidator.email('Email inválido')
+export const emailValidator = requiredValidator.email('Email inválido');

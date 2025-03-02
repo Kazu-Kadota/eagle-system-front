@@ -1,4 +1,4 @@
 export interface SelectItem<T = string> {
-  label: string
-  value: T
+  label: string;
+  value: T;
 }

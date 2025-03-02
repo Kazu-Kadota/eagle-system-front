@@ -1,4 +1,4 @@
-import { SvgIconProps } from 'src/types/svg'
+import type { SvgIconProps } from '@/types/svg';
 
 export function DownloadIcon({ className }: SvgIconProps) {
   return (
@@ -16,5 +16,5 @@ export function DownloadIcon({ className }: SvgIconProps) {
         strokeLinejoin="round"
       />
     </svg>
-  )
+  );
 }
