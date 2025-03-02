@@ -20,7 +20,10 @@ export function QueryProvider({ children }: React.PropsWithChildren) {
 
   const [queryClient] = useState(() => {
     const logout = async () => {
-      await logoutAction();
+      const { error } = await logoutAction();
+
+      if (error) throw error;
+
       router.push(RoutePaths.login());
       useModalStore.getState().actions.close();
     };
