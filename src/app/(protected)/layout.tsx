@@ -2,7 +2,7 @@ import { Navbar } from '@/components/Navbar';
 import { SessionClient } from '@/store/session/SessionClient';
 import { getSessionOrRedirect } from '@/utils/authentication';
 import Image from 'next/image';
-import bgProtectedImg from 'src/assets/images/bg-protected.jpg';
+import bgProtectedImg from '@/assets/images/bg-protected.jpg';
 
 export default async function ProtectedLayout({
   children,

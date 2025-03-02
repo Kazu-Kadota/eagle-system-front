@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
-import forgotPasswordSuccessImg from 'src/assets/images/forget-password-success.png';
+import forgotPasswordSuccessImg from '@/assets/images/forget-password-success.png';
 import { type ForgotPasswordSchema, schema } from './schema';
 
 export function ForgotPasswordForm() {

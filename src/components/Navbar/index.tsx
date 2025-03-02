@@ -19,6 +19,7 @@ import { useSessionUserType } from '@/store/session';
 import { cn } from '@/utils/classNames';
 import { hasUserType } from '@/utils/userType';
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 interface NavbarLinks extends NavbarItemProps {
   userTypes?: UserType[];
@@ -45,7 +46,6 @@ const navlinks: NavbarLinks[] = [
     userTypes: [UserType.ADMIN],
   },
   { label: 'Minha Conta', path: RoutePaths.ACCOUNT_HOME },
-  { label: 'Decodificador', path: RoutePaths.BASE_64_DECODER },
 ];
 
 const isLinkActive = (pathname: string, href: string) => {
@@ -63,7 +63,13 @@ export const Navbar = memo(() => {
 
   const { isPending: isLogoutLoading, mutate: handleLogout } = useMutation({
     mutationFn: logoutAction,
-    onSuccess: () => router.push(RoutePaths.login()),
+    onSuccess: ({ error }) => {
+      if (error) {
+        toast.error(error);
+      } else {
+        router.push(RoutePaths.login());
+      }
+    },
   });
 
   const links = useMemo(
