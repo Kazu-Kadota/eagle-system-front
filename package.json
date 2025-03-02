@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "build-env": "./scripts/create-env.sh",
     "lint": "prettier --check . && next lint",
     "format": "pnpm exec prettier . --write"
   },
