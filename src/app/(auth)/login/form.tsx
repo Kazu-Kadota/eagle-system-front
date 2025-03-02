@@ -26,7 +26,11 @@ export function LoginForm() {
     mutate: loginMutate,
   } = useMutation({
     meta: { disableErrorToastMsg: true },
-    mutationFn: loginAction,
+    mutationFn: async (data: LoginSchema) => {
+      const { error } = await loginAction(data);
+
+      if (error) throw error;
+    },
     onSuccess: () => {
       router.push(searchParams.get('callbackUrl') || RoutePaths.HOME);
     },
