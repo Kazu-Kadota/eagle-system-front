@@ -2,6 +2,7 @@
 
 import type { LoginSchema } from '@/app/(auth)/login/schema';
 import { signIn, signOut } from '@/auth';
+import { getErrorMsg } from '@/utils/errors';
 import { AuthError } from 'next-auth';
 
 export async function loginAction(data: LoginSchema) {
@@ -11,9 +12,9 @@ export async function loginAction(data: LoginSchema) {
     return { error: null };
   } catch (error) {
     if (error instanceof AuthError && error.cause?.err) {
-      return { error: error.cause.err };
+      return { error: getErrorMsg(error.cause.err) };
     }
-    return { error };
+    return { error: getErrorMsg(error) };
   }
 }
 
@@ -24,8 +25,8 @@ export async function logoutAction() {
     return { error: null };
   } catch (error) {
     if (error instanceof AuthError && error.cause?.err) {
-      return { error: error.cause.err };
+      return { error: getErrorMsg(error.cause.err) };
     }
-    return { error };
+    return { error: getErrorMsg(error) };
   }
 }
