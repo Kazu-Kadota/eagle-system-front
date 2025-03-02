@@ -1,5 +1,6 @@
-import { SelectItem } from 'src/types/select'
-import { VariantProps, tv } from 'tailwind-variants'
+import { tv, type VariantProps } from 'tailwind-variants';
+
+import type { SelectItem } from '@/types/select';
 
 const style = tv({
   slots: {
@@ -21,17 +22,17 @@ const style = tv({
   defaultVariants: {
     layout: 'column',
   },
-})
+});
 
 export interface SelectGroupProps<T> extends VariantProps<typeof style> {
-  title: string
-  error?: string
-  items: SelectItem<T>[]
-  value: T | undefined
-  containerClassName?: string
-  disabled?: boolean
-  required?: boolean
-  onChange?: (value: T) => void
+  title: string;
+  error?: string;
+  items: SelectItem<T>[];
+  value: T | undefined;
+  containerClassName?: string;
+  disabled?: boolean;
+  required?: boolean;
+  onChange?: (value: T) => void;
 }
 
 export const SelectGroup = <T extends string>({
@@ -45,7 +46,7 @@ export const SelectGroup = <T extends string>({
   required,
   onChange,
 }: SelectGroupProps<T>) => {
-  const { container: containerStyle, title: titleStyle } = style({ layout })
+  const { container: containerStyle, title: titleStyle } = style({ layout });
 
   return (
     <div className={containerStyle({ className: containerClassName })}>
@@ -58,6 +59,7 @@ export const SelectGroup = <T extends string>({
           key={item.value}
           role="radio"
           type="button"
+          aria-checked={item.value === value}
           className="flex items-center gap-2 py-1"
           onClick={onChange ? () => onChange(item.value) : undefined}
         >
@@ -74,5 +76,5 @@ export const SelectGroup = <T extends string>({
       {!!error && <p className="-mb-1 mt-1 text-xs text-error">{error}</p>}
       {disabled && <span className="absolute inset-0 bg-[transparent]" />}
     </div>
-  )
-}
+  );
+};

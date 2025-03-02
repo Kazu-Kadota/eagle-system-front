@@ -1,23 +1,23 @@
-import { ButtonProps } from 'src/components'
-import { create } from 'zustand'
+import type { ButtonProps } from '@/components/Button';
+import { create } from 'zustand';
 
 interface ModalState {
-  title?: string
-  buttons?: Omit<ButtonProps, 'to'>[]
-  disableOverlayClose?: boolean
-  content?: React.ReactNode
-  showCloseIcon?: boolean
+  title?: string;
+  buttons?: Omit<ButtonProps, 'to'>[];
+  disableOverlayClose?: boolean;
+  content?: React.ReactNode;
+  showCloseIcon?: boolean;
 }
 
 interface ModalActions {
-  open: (state: ModalState) => void
-  update: (state: ModalState) => void
-  close: () => void
+  open: (state: ModalState) => void;
+  update: (state: ModalState) => void;
+  close: () => void;
 }
 
 interface ModalStore extends ModalState {
-  isOpen: boolean
-  actions: ModalActions
+  isOpen: boolean;
+  actions: ModalActions;
 }
 
 const initialState: ModalState = {
@@ -26,7 +26,7 @@ const initialState: ModalState = {
   disableOverlayClose: false,
   content: null,
   showCloseIcon: false,
-}
+};
 
 export const useModalStore = create<ModalStore>((set) => ({
   ...initialState,
@@ -36,6 +36,6 @@ export const useModalStore = create<ModalStore>((set) => ({
     update: (state) => set(state),
     close: () => set({ isOpen: false }),
   },
-}))
+}));
 
-export const useModal = () => useModalStore((state) => state.actions)
+export const useModal = () => useModalStore((state) => state.actions);

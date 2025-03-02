@@ -1,4 +1,4 @@
-import { VariantProps, tv } from 'tailwind-variants'
+import { type VariantProps, tv } from 'tailwind-variants';
 
 const style = tv({
   slots: {
@@ -21,12 +21,12 @@ const style = tv({
     radius: 'md',
     spacing: 'md',
   },
-})
+});
 
 type BoxProps = React.ComponentProps<'div'> &
   VariantProps<typeof style> & {
-    containerClassName?: string
-  }
+    containerClassName?: string;
+  };
 
 export function Box({
   containerClassName,
@@ -45,7 +45,7 @@ export function Box({
     radius,
     spacing: title ? 'sm' : spacing,
     className,
-  })
+  });
 
   return (
     <>
@@ -57,5 +57,5 @@ export function Box({
         <div className={boxStyle({ className })}>{children}</div>
       </div>
     </>
-  )
+  );
 }

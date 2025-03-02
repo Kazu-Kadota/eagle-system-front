@@ -1,10 +1,10 @@
 {
   "singleQuote": true,
-  "semi": false,
+  "semi": true,
   "tabWidth": 2,
   "trailingComma": "all",
   "bracketSpacing": true,
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindFunctions": ["tv", "cn", "twCn"],
-  "tailwingAttributes": ["containerClassName"]
+  "tailwindAttributes": ["containerClassName"]
 }

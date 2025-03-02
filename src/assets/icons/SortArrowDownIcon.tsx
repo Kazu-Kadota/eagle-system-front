@@ -1,4 +1,4 @@
-import { SvgIconProps } from 'src/types/svg'
+import type { SvgIconProps } from '@/types/svg';
 
 export function SortArrowDownIcon({ className }: SvgIconProps) {
   return (
@@ -10,5 +10,5 @@ export function SortArrowDownIcon({ className }: SvgIconProps) {
     >
       <path d="M480-360 280-560h400L480-360Z" />
     </svg>
-  )
+  );
 }

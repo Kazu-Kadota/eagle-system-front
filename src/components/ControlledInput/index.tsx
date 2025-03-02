@@ -1,17 +1,18 @@
 import {
-  Control,
-  FieldValues,
-  Path,
-  PathValue,
+  type Control,
+  type FieldValues,
+  type Path,
+  type PathValue,
   useController,
-} from 'react-hook-form'
-import { Input, InputProps } from 'src/components/Input'
+} from 'react-hook-form';
+
+import { Input, type InputProps } from '@/components/Input';
 
 interface ControlledInputProps<T extends FieldValues>
   extends Omit<InputProps, 'error' | 'value' | 'onChange'> {
-  name: Path<T>
-  control: Control<T>
-  defaultValue?: PathValue<T, Path<T>>
+  name: Path<T>;
+  control: Control<T>;
+  defaultValue?: PathValue<T, Path<T>>;
 }
 
 export function ControlledInput<T extends FieldValues>({
@@ -24,7 +25,7 @@ export function ControlledInput<T extends FieldValues>({
     control,
     name,
     defaultValue,
-  })
+  });
 
   return (
     <Input
@@ -35,5 +36,5 @@ export function ControlledInput<T extends FieldValues>({
       onBlur={field.onBlur}
       onChange={field.onChange}
     />
-  )
+  );
 }

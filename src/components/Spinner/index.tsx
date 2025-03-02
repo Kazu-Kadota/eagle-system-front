@@ -1,7 +1,7 @@
-import { cn } from 'src/utils/classNames'
+import { cn } from '@/utils/classNames';
 
 interface SpinnerProps {
-  className?: string
+  className?: string;
 }
 
 export const Spinner = ({ className }: SpinnerProps) => (
@@ -12,4 +12,4 @@ export const Spinner = ({ className }: SpinnerProps) => (
   >
     <path d="M10,1V3a7,7,0,1,1-7,7H1a9,9,0,1,0,9-9Z" fill="currentFill" />
   </svg>
-)
+);

@@ -1,7 +1,11 @@
-import { memo } from 'react'
-import { Button, Clickable, Fade } from 'src/components'
-import { useModalStore } from '..'
-import { TimesIcon } from 'src/assets/icons'
+'use client';
+
+import { TimesIcon } from '@/assets/icons/TimesIcon';
+import { Button } from '@/components/Button';
+import { Clickable } from '@/components/Clickable';
+import { Fade } from '@/components/Fade';
+import { useModalStore } from '@/store/modal/store';
+import { memo } from 'react';
 
 export const Modal = memo(() => {
   const {
@@ -12,7 +16,7 @@ export const Modal = memo(() => {
     content,
     showCloseIcon,
     actions,
-  } = useModalStore()
+  } = useModalStore();
 
   const renderDefaultContent = () => (
     <>
@@ -29,8 +33,8 @@ export const Modal = memo(() => {
               theme="accent"
               className="max-w-[18rem] flex-1"
               onClick={(e) => {
-                onClick?.(e as never)
-                actions.close()
+                onClick?.(e as never);
+                actions.close();
               }}
               {...rest}
             >
@@ -39,7 +43,7 @@ export const Modal = memo(() => {
           ))}
       </div>
     </>
-  )
+  );
 
   return (
     <Fade
@@ -62,5 +66,7 @@ export const Modal = memo(() => {
         )}
       </div>
     </Fade>
-  )
-})
+  );
+});
+
+Modal.displayName = 'Modal';

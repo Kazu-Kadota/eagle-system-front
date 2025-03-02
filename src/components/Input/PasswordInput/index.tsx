@@ -1,6 +1,8 @@
-import { useState } from 'react'
-import { EyeHiddenIcon, EyeIcon } from 'src/assets/icons'
-import { VariantProps, tv } from 'tailwind-variants'
+import { useState } from 'react';
+import { type VariantProps, tv } from 'tailwind-variants';
+
+import { EyeHiddenIcon } from '@/assets/icons/EyeHiddenIcon';
+import { EyeIcon } from '@/assets/icons/EyeIcon';
 
 const iconSlotsStyle = tv({
   slots: {
@@ -17,18 +19,18 @@ const iconSlotsStyle = tv({
   defaultVariants: {
     size: 'base',
   },
-})
+});
 
 interface PasswordInputProps
   extends Omit<React.ComponentProps<'input'>, 'size'>,
     VariantProps<typeof iconSlotsStyle> {}
 
 export function PasswordInput({ size, ...props }: PasswordInputProps) {
-  const [passwordShown, setPasswordShown] = useState(false)
+  const [passwordShown, setPasswordShown] = useState(false);
 
   const { icon: iconStyle, containerIcon: containerIconStyle } = iconSlotsStyle(
     { size },
-  )
+  );
 
   return (
     <>
@@ -45,5 +47,5 @@ export function PasswordInput({ size, ...props }: PasswordInputProps) {
         )}
       </button>
     </>
-  )
+  );
 }

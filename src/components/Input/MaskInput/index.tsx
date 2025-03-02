@@ -4,12 +4,12 @@ import {
   maskCpfOrCnpj,
   maskDate,
   maskPlate,
-} from 'src/utils/masks'
-import { identity } from 'src/utils/utils'
-import { InputType } from '..'
+} from '@/utils/masks';
+import { identity } from '@/utils/utils';
+import { type InputType } from '@/components/Input';
 
 interface MaskInputProps extends React.ComponentProps<'input'> {
-  type: InputType
+  type: InputType;
 }
 
 const maskFnByType: { [key in InputType]: (value: string) => string } = {
@@ -21,15 +21,15 @@ const maskFnByType: { [key in InputType]: (value: string) => string } = {
   password: identity,
   text: identity,
   email: identity,
-}
+};
 
 export function MaskInput({ onChange, type, ...rest }: MaskInputProps) {
-  const maskFn = maskFnByType[type]
+  const maskFn = maskFnByType[type];
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.value = maskFn(e.target.value)
-    onChange!(e)
-  }
+    e.target.value = maskFn(e.target.value);
+    onChange!(e);
+  };
 
-  return <input {...rest} type="text" onChange={handleOnChange} />
+  return <input {...rest} type="text" onChange={handleOnChange} />;
 }

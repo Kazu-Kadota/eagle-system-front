@@ -1,4 +1,4 @@
-import { SvgIconProps } from 'src/types/svg'
+import type { SvgIconProps } from '@/types/svg';
 
 export function CopyIcon({ className }: SvgIconProps) {
   return (
@@ -30,5 +30,5 @@ export function CopyIcon({ className }: SvgIconProps) {
         strokeLinejoin="round"
       />
     </svg>
-  )
+  );
 }

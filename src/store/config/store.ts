@@ -1,20 +1,20 @@
-import { AnalysisType } from 'src/models'
-import { createPersist } from 'src/utils/zustand'
+import { AnalysisType } from '@/models';
+import { createPersist } from '@/utils/zustand';
 
 interface ConfigState {
-  numOfItemsPerPagePeople: number
-  numOfItemsPerPageVehicles: number
+  numOfItemsPerPagePeople: number;
+  numOfItemsPerPageVehicles: number;
 }
 
 export interface ConfigStore extends ConfigState {
-  getNumOfItemsPerPage: (type: AnalysisType) => number
-  setNumOfItemsPerPage: (type: AnalysisType, value: number) => void
+  getNumOfItemsPerPage: (type: AnalysisType) => number;
+  setNumOfItemsPerPage: (type: AnalysisType, value: number) => void;
 }
 
 const initialState: ConfigState = {
   numOfItemsPerPagePeople: 25,
   numOfItemsPerPageVehicles: 25,
-}
+};
 
 export const useConfigStore = createPersist<ConfigStore>(
   (set, get) => ({
@@ -24,9 +24,9 @@ export const useConfigStore = createPersist<ConfigStore>(
       switch (type) {
         case AnalysisType.PERSON:
         case AnalysisType.COMBO:
-          return get().numOfItemsPerPagePeople
+          return get().numOfItemsPerPagePeople;
         case AnalysisType.VEHICLE:
-          return get().numOfItemsPerPageVehicles
+          return get().numOfItemsPerPageVehicles;
       }
     },
 
@@ -34,22 +34,22 @@ export const useConfigStore = createPersist<ConfigStore>(
       switch (type) {
         case AnalysisType.PERSON:
         case AnalysisType.COMBO:
-          return set({ numOfItemsPerPagePeople: value })
+          return set({ numOfItemsPerPagePeople: value });
         case AnalysisType.VEHICLE:
-          return set({ numOfItemsPerPageVehicles: value })
+          return set({ numOfItemsPerPageVehicles: value });
       }
     },
   }),
   { name: 'config-store' },
-)
+);
 
 export const useConfigStoreActions = () => {
   const getNumOfItemsPerPage = useConfigStore(
     (state) => state.getNumOfItemsPerPage,
-  )
+  );
   const setNumOfItemsPerPage = useConfigStore(
     (state) => state.setNumOfItemsPerPage,
-  )
+  );
 
-  return { getNumOfItemsPerPage, setNumOfItemsPerPage }
-}
+  return { getNumOfItemsPerPage, setNumOfItemsPerPage };
+};

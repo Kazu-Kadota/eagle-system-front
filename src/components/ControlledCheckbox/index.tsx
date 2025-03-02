@@ -3,16 +3,17 @@ import {
   type Control,
   type FieldValues,
   type Path,
-} from 'react-hook-form'
-import { CheckIcon } from 'src/assets/icons'
-import { cn } from 'src/utils/classNames'
+} from 'react-hook-form';
+
+import { cn } from '@/utils/classNames';
+import { CheckIcon } from '@/assets/icons/CheckIcon';
 
 interface ControlledCheckboxProps<T extends FieldValues> {
-  label: string
-  name: Path<T>
-  control: Control<T>
-  error?: string
-  containerClassName?: string
+  label: string;
+  name: Path<T>;
+  control: Control<T>;
+  error?: string;
+  containerClassName?: string;
 }
 
 export const ControlledCheckbox = <T extends FieldValues>({
@@ -24,7 +25,7 @@ export const ControlledCheckbox = <T extends FieldValues>({
   const {
     field: { value, onChange },
     fieldState: { error },
-  } = useController({ name, control })
+  } = useController({ name, control });
 
   return (
     <button
@@ -52,5 +53,5 @@ export const ControlledCheckbox = <T extends FieldValues>({
         {label}
       </span>
     </button>
-  )
-}
+  );
+};

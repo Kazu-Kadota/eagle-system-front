@@ -14,14 +14,14 @@ export enum FeatureFlag {
   ACCESS_PERSON_ANALYSIS_REGION_TYPE_NATIONAL_STATE = 'access_person_analysis_region_type_national_state',
 }
 
-export type FeatureFlags = Record<FeatureFlag, boolean>
+export type FeatureFlags = Record<FeatureFlag, boolean>;
 
 export interface Company {
-  company_id: string
-  updated_at: string
-  cnpj: string
-  created_at: string
-  name: string
-  type: CompanyType
-  feature_flag: FeatureFlag[]
+  company_id: string;
+  updated_at: string;
+  cnpj: string;
+  created_at: string;
+  name: string;
+  type: CompanyType;
+  feature_flag: FeatureFlag[];
 }

@@ -1,4 +1,4 @@
-import { SvgIconProps } from 'src/types/svg'
+import type { SvgIconProps } from '@/types/svg';
 
 export function PageArrowRightIcon({ className }: SvgIconProps) {
   return (
@@ -23,5 +23,5 @@ export function PageArrowRightIcon({ className }: SvgIconProps) {
         strokeLinejoin="round"
       />
     </svg>
-  )
+  );
 }

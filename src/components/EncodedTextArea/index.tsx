@@ -1,10 +1,12 @@
-import { useMemo, useState } from 'react'
-import { toast } from 'react-toastify'
-import { Button } from 'src/components/Button'
-import { TextArea, TextAreaProps } from 'src/components/TextArea'
-import { gunzipBase64, isBase64, sanitizeBase64 } from 'src/utils/base64'
-import { copyString } from 'src/utils/clipboard'
-import { getErrorMsg } from 'src/utils/errors'
+import { schema } from '@/app/(protected)/decodificador/schema';
+import { TextArea, type TextAreaProps } from '@/components/TextArea';
+import { decodeBase64 } from '@/services/decoder/base64';
+import { isBase64 } from '@/utils/base64';
+import { useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Button } from 'src/components/Button';
+import { copyString } from 'src/utils/clipboard';
+import { getErrorMsg } from 'src/utils/errors';
 
 export function EncodedTextArea({
   label,
@@ -12,41 +14,40 @@ export function EncodedTextArea({
   defaultValue,
   ...rest
 }: TextAreaProps) {
-  const valueToCheck = value || defaultValue
+  const valueToCheck = value || defaultValue;
 
-  const [decodedValue, setDecodedValue] = useState<string | null>(null)
+  const [decodedValue, setDecodedValue] = useState<string | null>(null);
+  const [isLoading, setLoading] = useState(false);
 
   const isValueBase64 = useMemo(
     () => (typeof valueToCheck === 'string' ? isBase64(valueToCheck) : false),
     [valueToCheck],
-  )
+  );
 
   const onDecode = async () => {
-    if (typeof valueToCheck !== 'string') {
-      toast.error('O texto deve estar no formato base64 para ser decodificado')
-      return
-    }
-
     try {
-      const decoded = await gunzipBase64(sanitizeBase64(valueToCheck), {
-        prettify: true,
-      })
+      setLoading(true);
 
-      setDecodedValue(decoded)
+      const { encodedValue } = schema.parse({ encodedValue: valueToCheck });
+      const decoded = await decodeBase64(encodedValue);
+
+      setDecodedValue(decoded);
     } catch (error) {
-      toast.error(getErrorMsg(error))
+      toast.error(getErrorMsg(error));
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
-  const onEncode = () => setDecodedValue(null)
+  const onEncode = () => setDecodedValue(null);
 
   const handleCopyDecodedValue = () =>
     copyString(decodedValue ?? '', {
       successMsg: 'Texto decodificado copiado com sucesso!',
-    })
+    });
 
   const renderButtons = () => {
-    if (!isValueBase64) return
+    if (!isValueBase64) return;
 
     if (decodedValue) {
       return (
@@ -68,7 +69,7 @@ export function EncodedTextArea({
             Copiar
           </Button>
         </div>
-      )
+      );
     }
 
     return (
@@ -76,12 +77,13 @@ export function EncodedTextArea({
         theme="primary"
         size="xsStrong"
         className="min-w-28"
+        loading={isLoading}
         onClick={onDecode}
       >
         Decodificar
       </Button>
-    )
-  }
+    );
+  };
 
   return (
     <TextArea
@@ -90,5 +92,5 @@ export function EncodedTextArea({
       value={decodedValue ?? valueToCheck}
       labelRightElement={renderButtons()}
     />
-  )
+  );
 }

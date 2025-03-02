@@ -1,4 +1,4 @@
-import { SvgIconProps } from 'src/types/svg'
+import type { SvgIconProps } from '@/types/svg';
 
 export function TrashIcon({ className }: SvgIconProps) {
   return (
@@ -13,5 +13,5 @@ export function TrashIcon({ className }: SvgIconProps) {
         fill="currentFill"
       />
     </svg>
-  )
+  );
 }

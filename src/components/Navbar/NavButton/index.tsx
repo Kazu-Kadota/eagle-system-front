@@ -1,10 +1,13 @@
+import { Spinner } from '@/components/Spinner';
+
 export interface NavButtonProps {
-  icon: React.ReactNode
-  label: string
-  onClick: () => void
+  icon: React.ReactNode;
+  label: string;
+  loading?: boolean;
+  onClick: () => void;
 }
 
-export function NavButton({ icon, label, onClick }: NavButtonProps) {
+export function NavButton({ icon, label, loading, onClick }: NavButtonProps) {
   return (
     <button
       onClick={onClick}
@@ -13,6 +16,7 @@ export function NavButton({ icon, label, onClick }: NavButtonProps) {
     >
       {icon}
       {label}
+      {loading && <Spinner className="w-5 fill-light" />}
     </button>
-  )
+  );
 }

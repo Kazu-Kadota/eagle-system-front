@@ -1,6 +1,10 @@
-import ApiError from './ApiError'
-import { constructHeaders, constructUrl, prepareBody } from './helpers'
-import { Method, RequestOptions } from './types'
+import ApiError from '@/utils/request/ApiError';
+import {
+  constructHeaders,
+  constructUrl,
+  prepareBody,
+} from '@/utils/request/helpers';
+import type { Method, RequestOptions } from '@/utils/request/types';
 
 const requestCreator =
   (method: Method) =>
@@ -13,15 +17,15 @@ const requestCreator =
       method,
       body: prepareBody(options),
       headers: constructHeaders(options),
-    })
+    });
 
-    const data = await res.json()
+    const data = await res.json();
 
     if (res.ok) {
-      return { data: data as T, status: res.status }
+      return { data: data as T, status: res.status };
     }
 
-    throw new ApiError(data)
-  }
+    throw new ApiError(data);
+  };
 
-export default requestCreator
+export default requestCreator;

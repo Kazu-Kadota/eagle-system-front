@@ -1,4 +1,4 @@
-import { SvgIconProps } from 'src/types/svg'
+import type { SvgIconProps } from '@/types/svg';
 
 export function EditIcon({ className }: SvgIconProps) {
   return (
@@ -23,5 +23,5 @@ export function EditIcon({ className }: SvgIconProps) {
         strokeLinejoin="round"
       />
     </svg>
-  )
+  );
 }
