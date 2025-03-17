@@ -6,6 +6,7 @@ import {
 } from '@/app/(protected)/analises/veiculos/consultar/schema';
 import { SearchVehicleAnalysisUI } from '@/app/(protected)/analises/veiculos/consultar/ui';
 import { useCompanies } from '@/hooks/useCompanies';
+import { useVehicleAnalysisDetail } from '@/hooks/useVehicleAnalysisDetail';
 import { UserType, type VehicleAnalysis } from '@/models';
 import { searchVehicleAnalysis } from '@/services/analysis/search';
 import { useSessionUserType } from '@/store/session';
@@ -30,6 +31,11 @@ export const SearchVehicleAnalysisClient = () => {
   const [selectedItem, setSelectedItem] = useState<VehicleAnalysis | null>(
     null,
   );
+
+  const { vehicle, isLoading: isVehicleLoading } = useVehicleAnalysisDetail({
+    id: selectedItem?.request_id ?? '',
+    vehicleId: selectedItem?.vehicle_id ?? '',
+  });
 
   const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
     enabled: hasUserType(userType, UserType.ADMIN, UserType.OPERATOR),
@@ -56,13 +62,14 @@ export const SearchVehicleAnalysisClient = () => {
 
   return (
     <SearchVehicleAnalysisUI
+      isVehicleLoading={isVehicleLoading}
       control={control}
       isLoading={isPending}
       userType={userType}
       companiesSelectItems={companiesSelectItems}
       companiesLoading={companiesLoading}
       items={items}
-      selectedItem={selectedItem}
+      selectedItem={vehicle}
       setSelectedItem={setSelectedItem}
       onSearchSubmit={handleSubmit((data) => onSubmit(data))}
     />

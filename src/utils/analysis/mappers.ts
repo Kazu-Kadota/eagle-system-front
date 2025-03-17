@@ -8,6 +8,7 @@ import {
   type VehicleAnalysis,
   VehicleAnalysisType,
 } from '@/models';
+import { decodeBase64Worker } from '@/utils/workers';
 
 export const analysisStatus: { [key in AnalysisStatus]: string } = {
   [AnalysisStatus.PROCESSING]: 'Processando',
@@ -81,9 +82,9 @@ export const getAnalysisTypeColor = (analysis: PersonAnalysis) => {
   }[analysis.person_analysis_type];
 };
 
-export const preparePersonDataFromApi = (
+export const preparePersonDataFromApi = async (
   person: PersonAnalysis,
-): PersonAnalysis => ({
+): Promise<PersonAnalysis> => ({
   ...person,
   birth_date: person.birth_date
     ? customDayJs(person.birth_date).format('YYYY-MM-DD')
@@ -91,6 +92,9 @@ export const preparePersonDataFromApi = (
   expire_at_cnh: person.expire_at_cnh
     ? customDayJs(person.expire_at_cnh).format('YYYY-MM-DD')
     : '',
+  analysis_info: person.analysis_info
+    ? await decodeBase64Worker(person.analysis_info)
+    : person.analysis_info,
 });
 
 export const getVehicleAnalysisType = (analysis: VehicleAnalysis) =>

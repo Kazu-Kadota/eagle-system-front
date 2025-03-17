@@ -7,6 +7,7 @@ import { Button } from '@/components/Button';
 import { ControlledInput } from '@/components/ControlledInput';
 import { Input } from '@/components/Input';
 import { InputRow } from '@/components/InputRow';
+import { LoadingContainer } from '@/components/LoadingContainer';
 import { SelectGroup } from '@/components/SelectGroup';
 import { TextArea } from '@/components/TextArea';
 import { customDayJs } from '@/config/dayjs';
@@ -32,6 +33,7 @@ import type { Control } from 'react-hook-form';
 
 interface SearchPersonAnalysisUIProps {
   userType?: UserType;
+  isPersonLoading: boolean;
   isLoading: boolean;
   control: Control<AnalysisPersonSearchSchema>;
   companiesSelectItems: SelectItem[];
@@ -45,6 +47,7 @@ interface SearchPersonAnalysisUIProps {
 export function SearchPersonAnalysisUI({
   control,
   isLoading,
+  isPersonLoading,
   userType,
   companiesSelectItems,
   companiesLoading,
@@ -53,6 +56,278 @@ export function SearchPersonAnalysisUI({
   setSelectedItem,
   onSearchSubmit,
 }: SearchPersonAnalysisUIProps) {
+  const renderPerson = () => {
+    if (isPersonLoading) {
+      return <LoadingContainer />;
+    }
+
+    if (!selectedItem || Object.keys(selectedItem).length === 0) return null;
+
+    return (
+      <Box
+        spacing="sm"
+        key={selectedItem.request_id}
+        containerClassName="mt-3"
+        className="flex flex-col gap-3 sm:gap-4"
+      >
+        <div className="mb-2 flex flex-col-reverse items-center gap-3 sm:mb-0 sm:flex-row">
+          {!!selectedItem.finished_at && (
+            <Button theme="purple" size="xxs" disabled shadow="base">
+              Respondida em{' '}
+              {customDayJs(selectedItem.finished_at).format(
+                'DD/MM/YYYY [às] HH:mm:ss',
+              )}
+            </Button>
+          )}
+          <Button theme="opaque" size="xxs" disabled shadow="base">
+            Solicitada em{' '}
+            {customDayJs(selectedItem?.created_at).format(
+              'DD/MM/YYYY [às] HH:mm:ss',
+            )}
+          </Button>
+          <Button
+            theme={
+              personRegionTypeButtonTheme[
+                selectedItem.region_type ?? selectedItem.person_analysis_type
+              ]
+            }
+            size="xxs"
+            disabled
+            shadow="base"
+          >
+            Análise {getAnalysisTypeString(selectedItem)}
+          </Button>
+        </div>
+
+        <InputRow>
+          <Input
+            label="ID da solicitação:"
+            placeholder="ID da solicitação"
+            name="request_id"
+            value={selectedItem.request_id}
+            disabled
+            required
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-1"
+          />
+          <Input
+            label="ID da pessoa:"
+            placeholder="ID da pessoa"
+            name="person_id"
+            value={selectedItem.person_id}
+            disabled
+            required
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-1"
+          />
+        </InputRow>
+
+        <Input
+          label="Nome:"
+          placeholder="Nome"
+          name="name"
+          value={selectedItem.name}
+          disabled
+          required
+          inputVariants={{ size: 'sm' }}
+          labelVariants={{ size: 'sm' }}
+          containerVariants={{ layout: 'row' }}
+        />
+
+        <InputRow>
+          <Input
+            label="CPF:"
+            placeholder="XXX.XXX.XXX-XX"
+            name="document"
+            disabled
+            required
+            value={selectedItem?.document}
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-1"
+          />
+          <Input
+            label="Data de Nascimento:"
+            name="birth_date"
+            placeholder="dd/mm/aaaa"
+            type="date"
+            disabled
+            required
+            value={
+              selectedItem?.birth_date
+                ? customDayJs(selectedItem.birth_date).format('DD/MM/YYYY')
+                : ''
+            }
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-1"
+          />
+          <Input
+            label="RG:"
+            placeholder="XXXXXXXXX"
+            name="rg"
+            disabled
+            required
+            value={selectedItem?.rg}
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-1"
+          />
+        </InputRow>
+
+        <InputRow>
+          <Input
+            label="Estado de Emissão:"
+            name="state_rg"
+            items={estadosSelectItems}
+            disabled
+            required
+            value={selectedItem?.state_rg}
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-[0_0_auto] sm:min-w-[20rem]"
+          />
+          <Input
+            label="Nome da mãe:"
+            placeholder="Nome"
+            name="mother_name"
+            disabled
+            required
+            value={selectedItem?.mother_name}
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-[3]"
+          />
+        </InputRow>
+
+        <InputRow>
+          <Input
+            label="Nome do pai:"
+            placeholder="Nome"
+            name="father_name"
+            disabled
+            value={selectedItem?.father_name}
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-[1.5]"
+          />
+          <Input
+            label="Naturalidade:"
+            placeholder="XXXXXXXXX"
+            name="naturalness"
+            disabled
+            value={selectedItem?.naturalness}
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-1"
+          />
+          <Input
+            label="Número da CNH:"
+            placeholder="XXXXXXXXX"
+            name="cnh"
+            disabled
+            value={selectedItem?.cnh}
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-1"
+          />
+        </InputRow>
+
+        <InputRow>
+          <Input
+            label="Número de segurança da CNH:"
+            placeholder="XXXXXXXXX"
+            name="security_number_cnh"
+            disabled
+            value={selectedItem?.security_number_cnh}
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-1"
+          />
+          <Input
+            label="Categoria da CNH:"
+            name="category_cnh"
+            items={cnhTypesSelectItems}
+            disabled
+            value={selectedItem?.category_cnh}
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-1"
+          />
+          <Input
+            label="Data de validade da CNH:"
+            name="expire_at_cnh"
+            type="date"
+            placeholder="dd/mm/aaaa"
+            disabled
+            value={
+              selectedItem?.expire_at_cnh
+                ? customDayJs(selectedItem.expire_at_cnh).format('DD/MM/YYYY')
+                : ''
+            }
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-1"
+          />
+        </InputRow>
+
+        {selectedItem.status === AnalysisStatus.FINISHED ? (
+          <>
+            <SelectGroup
+              title="Resultado da análise"
+              required
+              disabled
+              layout="row"
+              value={selectedItem.analysis_result}
+              items={analysisResultsSelectItems}
+              containerClassName="mt-2"
+            />
+            <SelectGroup
+              required
+              title="Resposta do Banco de Dados?"
+              items={userApiSelectItems}
+              layout="row"
+              value={toStringBoolean(selectedItem.from_db)}
+              containerClassName="mb-2"
+              disabled
+            />
+            <TextArea
+              label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
+              name="analysis_info"
+              disabled
+              value={selectedItem.analysis_info}
+            />
+          </>
+        ) : (
+          <SelectGroup
+            title="Status"
+            value={selectedItem.status}
+            disabled
+            required
+            layout="row"
+            items={analysisStatusSelectItems}
+            containerClassName="mt-2"
+          />
+        )}
+      </Box>
+    );
+  };
+
   return (
     <>
       <Box title="Consulta de Análise de Pessoa">
@@ -117,269 +392,7 @@ export function SearchPersonAnalysisUI({
         </>
       )}
 
-      {!!selectedItem && (
-        <Box
-          spacing="sm"
-          key={selectedItem.request_id}
-          containerClassName="mt-3"
-          className="flex flex-col gap-3 sm:gap-4"
-        >
-          <div className="mb-2 flex flex-col-reverse items-center gap-3 sm:mb-0 sm:flex-row">
-            {!!selectedItem.finished_at && (
-              <Button theme="purple" size="xxs" disabled shadow="base">
-                Respondida em{' '}
-                {customDayJs(selectedItem.finished_at).format(
-                  'DD/MM/YYYY [às] HH:mm:ss',
-                )}
-              </Button>
-            )}
-            <Button theme="opaque" size="xxs" disabled shadow="base">
-              Solicitada em{' '}
-              {customDayJs(selectedItem?.created_at).format(
-                'DD/MM/YYYY [às] HH:mm:ss',
-              )}
-            </Button>
-            <Button
-              theme={
-                personRegionTypeButtonTheme[
-                  selectedItem.region_type ?? selectedItem.person_analysis_type
-                ]
-              }
-              size="xxs"
-              disabled
-              shadow="base"
-            >
-              Análise {getAnalysisTypeString(selectedItem)}
-            </Button>
-          </div>
-
-          <InputRow>
-            <Input
-              label="ID da solicitação:"
-              placeholder="ID da solicitação"
-              name="request_id"
-              value={selectedItem.request_id}
-              disabled
-              required
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-            <Input
-              label="ID da pessoa:"
-              placeholder="ID da pessoa"
-              name="person_id"
-              value={selectedItem.person_id}
-              disabled
-              required
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-          </InputRow>
-
-          <Input
-            label="Nome:"
-            placeholder="Nome"
-            name="name"
-            value={selectedItem.name}
-            disabled
-            required
-            inputVariants={{ size: 'sm' }}
-            labelVariants={{ size: 'sm' }}
-            containerVariants={{ layout: 'row' }}
-          />
-
-          <InputRow>
-            <Input
-              label="CPF:"
-              placeholder="XXX.XXX.XXX-XX"
-              name="document"
-              disabled
-              required
-              value={selectedItem?.document}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-            <Input
-              label="Data de Nascimento:"
-              name="birth_date"
-              placeholder="dd/mm/aaaa"
-              type="date"
-              disabled
-              required
-              value={
-                selectedItem?.birth_date
-                  ? customDayJs(selectedItem.birth_date).format('DD/MM/YYYY')
-                  : ''
-              }
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-            <Input
-              label="RG:"
-              placeholder="XXXXXXXXX"
-              name="rg"
-              disabled
-              required
-              value={selectedItem?.rg}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-          </InputRow>
-
-          <InputRow>
-            <Input
-              label="Estado de Emissão:"
-              name="state_rg"
-              items={estadosSelectItems}
-              disabled
-              required
-              value={selectedItem?.state_rg}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-[0_0_auto] sm:min-w-[20rem]"
-            />
-            <Input
-              label="Nome da mãe:"
-              placeholder="Nome"
-              name="mother_name"
-              disabled
-              required
-              value={selectedItem?.mother_name}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-[3]"
-            />
-          </InputRow>
-
-          <InputRow>
-            <Input
-              label="Nome do pai:"
-              placeholder="Nome"
-              name="father_name"
-              disabled
-              value={selectedItem?.father_name}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-[1.5]"
-            />
-            <Input
-              label="Naturalidade:"
-              placeholder="XXXXXXXXX"
-              name="naturalness"
-              disabled
-              value={selectedItem?.naturalness}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-            <Input
-              label="Número da CNH:"
-              placeholder="XXXXXXXXX"
-              name="cnh"
-              disabled
-              value={selectedItem?.cnh}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-          </InputRow>
-
-          <InputRow>
-            <Input
-              label="Número de segurança da CNH:"
-              placeholder="XXXXXXXXX"
-              name="security_number_cnh"
-              disabled
-              value={selectedItem?.security_number_cnh}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-            <Input
-              label="Categoria da CNH:"
-              name="category_cnh"
-              items={cnhTypesSelectItems}
-              disabled
-              value={selectedItem?.category_cnh}
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-            <Input
-              label="Data de validade da CNH:"
-              name="expire_at_cnh"
-              type="date"
-              placeholder="dd/mm/aaaa"
-              disabled
-              value={
-                selectedItem?.expire_at_cnh
-                  ? customDayJs(selectedItem.expire_at_cnh).format('DD/MM/YYYY')
-                  : ''
-              }
-              inputVariants={{ size: 'sm' }}
-              labelVariants={{ size: 'sm' }}
-              containerVariants={{ layout: 'row' }}
-              containerClassName="flex-1"
-            />
-          </InputRow>
-
-          {selectedItem.status === AnalysisStatus.FINISHED ? (
-            <>
-              <SelectGroup
-                title="Resultado da análise"
-                required
-                disabled
-                layout="row"
-                value={selectedItem.analysis_result}
-                items={analysisResultsSelectItems}
-                containerClassName="mt-2"
-              />
-              <SelectGroup
-                required
-                title="Resposta do Banco de Dados?"
-                items={userApiSelectItems}
-                layout="row"
-                value={toStringBoolean(selectedItem.from_db)}
-                containerClassName="mb-2"
-                disabled
-              />
-              <TextArea
-                label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
-                name="analysis_info"
-                disabled
-                value={selectedItem.analysis_info}
-              />
-            </>
-          ) : (
-            <SelectGroup
-              title="Status"
-              value={selectedItem.status}
-              disabled
-              required
-              layout="row"
-              items={analysisStatusSelectItems}
-              containerClassName="mt-2"
-            />
-          )}
-        </Box>
-      )}
+      {renderPerson()}
     </>
   );
 }

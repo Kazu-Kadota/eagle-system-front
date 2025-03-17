@@ -14,6 +14,7 @@ import {
   type AnalysisPersonSearchSchema,
 } from './schema';
 import { SearchPersonAnalysisUI } from './ui';
+import { usePersonAnalysisDetail } from '@/hooks/usePersonAnalysisDetail';
 
 export const SearchPersonAnalysisClient = () => {
   const userType = useSessionUserType();
@@ -25,6 +26,11 @@ export const SearchPersonAnalysisClient = () => {
 
   const [items, setItems] = useState<PersonAnalysis[] | null>(null);
   const [selectedItem, setSelectedItem] = useState<PersonAnalysis | null>(null);
+
+  const { person, isLoading: isPersonLoading } = usePersonAnalysisDetail({
+    id: selectedItem?.request_id ?? '',
+    personId: selectedItem?.person_id ?? '',
+  });
 
   const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
     enabled: hasUserType(userType, UserType.ADMIN, UserType.OPERATOR),
@@ -47,12 +53,13 @@ export const SearchPersonAnalysisClient = () => {
   return (
     <SearchPersonAnalysisUI
       control={control}
+      isPersonLoading={isPersonLoading}
       isLoading={isPending}
       userType={userType}
       companiesSelectItems={companiesSelectItems}
       companiesLoading={companiesLoading}
       items={items}
-      selectedItem={selectedItem}
+      selectedItem={person}
       setSelectedItem={setSelectedItem}
       onSearchSubmit={handleSubmit((data) => onSubmit(data))}
     />
