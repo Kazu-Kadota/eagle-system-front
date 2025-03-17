@@ -37,6 +37,6 @@ export const getPersonDetailAnalysis = async ({
 
   return {
     ...data,
-    person: preparePersonDataFromApi(data.person),
+    person: await preparePersonDataFromApi(data.person),
   };
 };

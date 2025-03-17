@@ -17,6 +17,7 @@ export const useVehicleAnalysisDetail = ({
 
   const { data, isLoading, refetch } = useQuery({
     queryKey,
+    enabled: Boolean(id && vehicleId),
     queryFn: () =>
       getVehiclesDetailAnalysis({ request_id: id, vehicle_id: vehicleId }),
   });

@@ -20,6 +20,7 @@
     "dayjs": "^1.11.13",
     "next": "15.1.7",
     "next-auth": "5.0.0-beta.25",
+    "pako": "^2.1.0",
     "query-string": "^9.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -49,5 +50,5 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },
-  "packageManager": "pnpm@10.3.0+sha256.24dd5c65d86c7d0710aba16699fbc46d74fc9acf2b419f4945207f2de9e57e23"
+  "packageManager": "pnpm@10.6.3"
 }

@@ -1,6 +1,7 @@
 import { env } from '@/env';
 import type { VehicleAnalysis } from '@/models';
 import { requestAuth } from '@/utils/request';
+import { decodeBase64Worker } from '@/utils/workers';
 
 interface VehicleAnalysisResponse {
   vehicles: VehicleAnalysis[];
@@ -34,5 +35,13 @@ export const getVehiclesDetailAnalysis = async ({
     { query: { request_id } },
   );
 
-  return data;
+  return {
+    ...data,
+    vehicle: {
+      ...data.vehicle,
+      analysis_info: data.vehicle.analysis_info
+        ? await decodeBase64Worker(data.vehicle.analysis_info)
+        : data.vehicle.analysis_info,
+    },
+  };
 };

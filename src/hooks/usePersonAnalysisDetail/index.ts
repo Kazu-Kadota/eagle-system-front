@@ -17,6 +17,7 @@ export const usePersonAnalysisDetail = ({
 
   const { data, isLoading, refetch } = useQuery({
     queryKey,
+    enabled: Boolean(id && personId),
     queryFn: () =>
       getPersonDetailAnalysis({ request_id: id, person_id: personId }),
   });
