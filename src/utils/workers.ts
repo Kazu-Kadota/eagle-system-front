@@ -7,12 +7,12 @@ export function decodeBase64Worker(message: string): Promise<string> {
       },
     );
 
-    worker.onmessage = event => {
+    worker.onmessage = (event) => {
       resolve(event.data);
       worker.terminate();
     };
 
-    worker.onerror = error => {
+    worker.onerror = (error) => {
       reject(new Error(`Worker error: ${error.message}`));
       worker.terminate();
     };
