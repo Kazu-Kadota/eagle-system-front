@@ -61,7 +61,7 @@ export function SearchVehicleAnalysisUI({
       return <LoadingContainer />;
     }
 
-    if (!selectedItem) return null;
+    if (!selectedItem || Object.keys(selectedItem).length === 0) return null;
 
     return (
       <Box
