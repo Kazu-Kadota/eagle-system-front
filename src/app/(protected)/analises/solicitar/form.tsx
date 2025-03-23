@@ -115,7 +115,11 @@ export function RequestAnalysisForm() {
     handleSubmit: handleSubmitBasicFormVehicle,
   } = useForm<BasicVehicleFormSchema>({
     resolver: zodResolver(basicVehicleFormSchema),
-    values: { ...defaultBasicForm, ...formValuesOnlyForValidation },
+    values: {
+      ...defaultBasicForm,
+      ...formValuesOnlyForValidation,
+      vehicleAnalysisType,
+    },
   });
 
   const handleClear = () => {
@@ -228,6 +232,7 @@ export function RequestAnalysisForm() {
           company_name: data.company_name,
           owner_document: data.owner_document,
           owner_name: data.owner_name,
+          region: data.region || undefined,
         },
         vehicleAnalysisType,
       ),

@@ -1,4 +1,4 @@
-import { AnalysisType, UserType } from '@/models';
+import { AnalysisType, UserType, VehicleAnalysisType } from '@/models';
 import { hasUserType } from '@/utils/userType';
 import { cnhValidator } from '@/utils/zod/document';
 import { requiredValidator } from '@/utils/zod/required';
@@ -69,10 +69,12 @@ export const basicVehicleFormSchema = z
     company_name: z.string().optional(),
     plate_state: requiredValidator,
     plate: requiredValidator.min(7, 'Placa precisa ter no mínimo 7 caracteres'),
+    region: z.string().optional(),
     owner_name: requiredValidator,
     owner_document: requiredValidator,
     userType: z.nativeEnum(UserType).optional(),
     analysisType: z.nativeEnum(AnalysisType).optional(),
+    vehicleAnalysisType: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (
@@ -83,7 +85,18 @@ export const basicVehicleFormSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['company_name'],
-        message: 'Campo não deve ser preenchido',
+        message: 'Campo deve ser preenchido',
+      });
+    }
+
+    if (
+      data.vehicleAnalysisType === VehicleAnalysisType.VEHICLE_PLATE_HISTORY &&
+      !data.region
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['region'],
+        message: 'Campo deve ser preenchido',
       });
     }
   });
