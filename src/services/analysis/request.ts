@@ -41,6 +41,7 @@ type RequestAnalysisBasicVehicleBody = {
   plate: string;
   owner_name: string;
   owner_document: string;
+  region?: string;
 };
 
 type RequestAnalysisComboBody = {

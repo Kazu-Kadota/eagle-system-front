@@ -254,6 +254,19 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
               containerClassName="flex-1"
             />
           )}
+        {vehicleAnalysisType === VehicleAnalysisType.VEHICLE_PLATE_HISTORY && (
+          <ControlledInput
+            control={controlBasicFormVehicle}
+            label="Estado da Análise"
+            name="region"
+            required
+            items={estadosVehiclesSelectItems}
+            inputVariants={{ size: 'sm' }}
+            labelVariants={{ size: 'sm' }}
+            containerVariants={{ layout: 'row' }}
+            containerClassName="flex-1"
+          />
+        )}
         <ControlledInput
           control={controlBasicFormVehicle}
           label="Nome do Proprietário"
@@ -263,7 +276,7 @@ export const VehiclesForm: React.FC<VehiclesFormProps> = ({
           inputVariants={{ size: 'sm' }}
           labelVariants={{ size: 'sm' }}
           containerVariants={{ layout: 'row' }}
-          containerClassName="flex-[3]"
+          containerClassName="flex-[2]"
         />
       </InputRow>
 
