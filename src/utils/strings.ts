@@ -1,7 +1,12 @@
 export function prettifyString(str: string): string {
   try {
-    const json = JSON.parse(str);
-    return JSON.stringify(json, null, 2);
+    const parsedValue = JSON.parse(str);
+
+    if (typeof parsedValue === 'string') {
+      return parsedValue;
+    }
+
+    return JSON.stringify(parsedValue, null, 2);
   } catch {
     return str;
   }
