@@ -1,11 +1,12 @@
 'use client';
 
-import { AnalysisTable } from '@/components/AnalysisTable';
 import type { ButtonProps } from '@/components/Button';
 import { LoadingContainer } from '@/components/LoadingContainer';
+import { Table } from '@/components/Table';
 import { RoutePaths } from '@/constants/paths';
 import { useVehicleAnalysis } from '@/hooks/useVehicleAnalysis';
 import { AnalysisType, UserType } from '@/models';
+import { ConfigType } from '@/store/config';
 import { useSessionUserType } from '@/store/session';
 import { hasUserType } from '@/utils/userType';
 import {
@@ -60,9 +61,9 @@ export function VehicleAnalysisHomeClient() {
 
   return (
     <div className="flex flex-col gap-10 sm:gap-[3.4rem]">
-      <AnalysisTable
+      <Table
         title="Veículos"
-        analysisType={AnalysisType.VEHICLE}
+        configType={ConfigType.VEHICLE}
         data={vehicleAnalysis}
         columns={
           hasUserType(userType, UserType.ADMIN, UserType.OPERATOR)

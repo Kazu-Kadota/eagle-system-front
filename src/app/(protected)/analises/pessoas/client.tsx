@@ -1,6 +1,6 @@
 'use client';
 
-import { AnalysisTable } from '@/components/AnalysisTable';
+import { Table } from '@/components/Table';
 import type { ButtonProps } from '@/components/Button';
 import { LoadingContainer } from '@/components/LoadingContainer';
 import { RoutePaths } from '@/constants/paths';
@@ -9,6 +9,7 @@ import { AnalysisType, UserType } from '@/models';
 import { useSessionUserType } from '@/store/session';
 import { hasUserType } from '@/utils/userType';
 import { personTableColumns, personTableColumnsAdminOperator } from './columns';
+import { ConfigType } from '@/store/config';
 
 const analysisTypeLabel = {
   [AnalysisType.PERSON]: 'de Pessoa',
@@ -57,9 +58,9 @@ export function PeopleAnalysisHomeClient() {
 
   return (
     <div className="flex flex-col gap-10 sm:gap-[3.4rem]">
-      <AnalysisTable
+      <Table
         title="Pessoas"
-        analysisType={AnalysisType.PERSON}
+        configType={ConfigType.PERSON}
         data={personAnalysis}
         columns={
           hasUserType(userType, UserType.ADMIN, UserType.OPERATOR)

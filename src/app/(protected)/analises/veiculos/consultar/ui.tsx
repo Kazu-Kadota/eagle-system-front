@@ -1,7 +1,6 @@
 import { columns } from '@/app/(protected)/analises/veiculos/consultar/columns';
 import type { AnalysisVehicleSearchSchema } from '@/app/(protected)/analises/veiculos/consultar/schema';
 import { SearchIcon } from '@/assets/icons/SearchIcon';
-import { AnalysisTable } from '@/components/AnalysisTable';
 import { Box } from '@/components/Box';
 import { Button } from '@/components/Button';
 import { ControlledInput } from '@/components/ControlledInput';
@@ -9,6 +8,7 @@ import { Input } from '@/components/Input';
 import { InputRow } from '@/components/InputRow';
 import { LoadingContainer } from '@/components/LoadingContainer';
 import { SelectGroup } from '@/components/SelectGroup';
+import { Table } from '@/components/Table';
 import { TextArea } from '@/components/TextArea';
 import { customDayJs } from '@/config/dayjs';
 import {
@@ -20,12 +20,8 @@ import {
 } from '@/constants/analysis';
 import { userApiSelectItems } from '@/constants/auth';
 import { estadosVehiclesSelectItems } from '@/constants/estados';
-import {
-  AnalysisStatus,
-  AnalysisType,
-  UserType,
-  type VehicleAnalysis,
-} from '@/models';
+import { AnalysisStatus, UserType, type VehicleAnalysis } from '@/models';
+import { ConfigType } from '@/store/config';
 import type { SelectItem } from '@/types/select';
 import { toStringBoolean } from '@/utils/boolean';
 import { hasUserType } from '@/utils/userType';
@@ -329,9 +325,9 @@ export function SearchVehicleAnalysisUI({
               : 'Não foi encontrado nenhum resultado para essa busca'}
           </h4>
           {items.length > 0 && (
-            <AnalysisTable
+            <Table
               columns={columns}
-              analysisType={AnalysisType.VEHICLE}
+              configType={ConfigType.VEHICLE}
               data={items}
               onClick={setSelectedItem}
               pageCount={5}

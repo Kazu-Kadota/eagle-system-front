@@ -1,7 +1,6 @@
 import { columns } from '@/app/(protected)/analises/pessoas/consultar/columns';
 import type { AnalysisPersonSearchSchema } from '@/app/(protected)/analises/pessoas/consultar/schema';
 import { SearchIcon } from '@/assets/icons/SearchIcon';
-import { AnalysisTable } from '@/components/AnalysisTable';
 import { Box } from '@/components/Box';
 import { Button } from '@/components/Button';
 import { ControlledInput } from '@/components/ControlledInput';
@@ -9,6 +8,7 @@ import { Input } from '@/components/Input';
 import { InputRow } from '@/components/InputRow';
 import { LoadingContainer } from '@/components/LoadingContainer';
 import { SelectGroup } from '@/components/SelectGroup';
+import { Table } from '@/components/Table';
 import { TextArea } from '@/components/TextArea';
 import { customDayJs } from '@/config/dayjs';
 import {
@@ -19,12 +19,8 @@ import {
 import { userApiSelectItems } from '@/constants/auth';
 import { cnhTypesSelectItems } from '@/constants/cnh';
 import { estadosSelectItems } from '@/constants/estados';
-import {
-  AnalysisStatus,
-  AnalysisType,
-  UserType,
-  type PersonAnalysis,
-} from '@/models';
+import { AnalysisStatus, UserType, type PersonAnalysis } from '@/models';
+import { ConfigType } from '@/store/config';
 import type { SelectItem } from '@/types/select';
 import { getAnalysisTypeString } from '@/utils/analysis/mappers';
 import { toStringBoolean } from '@/utils/boolean';
@@ -381,9 +377,9 @@ export function SearchPersonAnalysisUI({
               : 'Não foi encontrado nenhum resultado para essa busca'}
           </h4>
           {items.length > 0 && (
-            <AnalysisTable
+            <Table
               columns={columns}
-              analysisType={AnalysisType.PERSON}
+              configType={ConfigType.PERSON}
               data={items}
               onClick={setSelectedItem}
               pageCount={5}
