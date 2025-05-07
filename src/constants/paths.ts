@@ -2,6 +2,7 @@ import type {
   AnalysisType,
   PersonAnalysis,
   PersonRegionType,
+  User,
   VehicleAnalysis,
 } from '@/models';
 import queryString from 'query-string';
@@ -27,6 +28,9 @@ export const RoutePaths = {
   REGISTER_HOME: '/gerenciamento-de-usuarios',
   REGISTER_USER: '/gerenciamento-de-usuarios/cadastrar-usuario',
   REGISTER_COMPANY: '/gerenciamento-de-usuarios/cadastrar-empresa',
+  MANAGE_OPERATORS: '/gerenciamento-de-usuarios/operadores',
+  operatorDetail: (userId: string) =>
+    `/gerenciamento-de-usuarios/operadores/${userId}`,
   ACCOUNT_HOME: '/minha-conta',
   ACCESS_DENIED: '/acesso-negado',
   login: (query?: LoginParams) =>
