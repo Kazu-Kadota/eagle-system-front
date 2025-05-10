@@ -1,16 +1,44 @@
 'use client';
 
-import { operatorColumns } from '@/app/(protected)/gerenciamento-de-usuarios/operadores/columns';
+import { useCallback, useMemo } from 'react';
+
+import { createOperatorColumns } from '@/app/(protected)/gerenciamento-de-usuarios/operadores/columns';
+import { DeleteOperatorModal } from '@/components/DeleteOperatorModal';
 import { LoadingContainer } from '@/components/LoadingContainer';
 import { Table } from '@/components/Table';
 import { useUsers } from '@/hooks/useUsers';
-import { UserType } from '@/models';
+import { UserType, type User } from '@/models';
 import { ConfigType } from '@/store/config';
+import { useModal } from '@/store/modal/store';
 
 export default function OperatorsPage() {
-  const { users: operators, isLoading } = useUsers({
+  const modal = useModal();
+  const {
+    users: operators,
+    isLoading,
+    refetch: refetchUsers,
+  } = useUsers({
     user_type_filter: UserType.OPERATOR,
   });
+
+  const handleDelete = useCallback(
+    (user: User) => {
+      modal.open({
+        content: (
+          <DeleteOperatorModal
+            operator={user}
+            onSuccess={() => refetchUsers()}
+          />
+        ),
+      });
+    },
+    [refetchUsers],
+  );
+
+  const columns = useMemo(
+    () => createOperatorColumns({ onDelete: handleDelete }),
+    [handleDelete],
+  );
 
   if (isLoading) {
     return <LoadingContainer />;
@@ -22,7 +50,7 @@ export default function OperatorsPage() {
         title="Operadores"
         configType={ConfigType.OPERATOR}
         data={operators}
-        columns={operatorColumns}
+        columns={columns}
         actions={[]}
       />
     </div>

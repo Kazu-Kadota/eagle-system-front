@@ -11,6 +11,10 @@ type GetUsersListResponse = {
   users: User[];
 };
 
+type DeleteUsersBody = {
+  user_ids: string[];
+};
+
 export const getUsersList = async (params: GetUsersListParams) => {
   const { data } = await requestAuth.get<GetUsersListResponse>(
     env.NEXT_PUBLIC_API_USER_URL,
@@ -19,4 +23,10 @@ export const getUsersList = async (params: GetUsersListParams) => {
   );
 
   return data.users;
+};
+
+export const deleteUsers = async (body: DeleteUsersBody) => {
+  await requestAuth.post(env.NEXT_PUBLIC_API_USER_URL, '/users/delete-users', {
+    body,
+  });
 };

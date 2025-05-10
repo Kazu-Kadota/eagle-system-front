@@ -4,7 +4,13 @@ import type { User } from '@/models';
 import { TableLink } from '@/components/TableLink';
 import { OperatorTableActions } from '@/app/(protected)/gerenciamento-de-usuarios/operadores/tableActions';
 
-export const operatorColumns: ColumnDef<User, string>[] = [
+type Actions = {
+  onDelete: (user: User) => void;
+};
+
+export const createOperatorColumns = (
+  actions: Actions,
+): ColumnDef<User, string>[] => [
   {
     id: 'user_id',
     accessorKey: 'user_id',
@@ -41,7 +47,12 @@ export const operatorColumns: ColumnDef<User, string>[] = [
     id: 'actions',
     enableSorting: false,
     header: 'Ações',
-    cell: ({ row }) => <OperatorTableActions user={row.original} />,
+    cell: ({ row }) => (
+      <OperatorTableActions
+        user={row.original}
+        onDeleteAction={actions.onDelete}
+      />
+    ),
     meta: {
       className: 'max-w-20 ',
     },

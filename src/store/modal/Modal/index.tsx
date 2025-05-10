@@ -52,14 +52,14 @@ export const Modal = memo(() => {
     >
       <div
         className="fixed inset-0 bg-dark/80"
-        onClick={!disableOverlayClose ? actions.close : undefined}
+        onClick={!disableOverlayClose ? () => actions.close() : undefined}
       />
       <div className="relative flex min-h-[14.25rem] w-full flex-col justify-center gap-11 bg-light pb-1 sm:w-[31.625rem]">
         {content || renderDefaultContent()}
         {showCloseIcon && (
           <Clickable
             className="absolute right-0 top-1 z-20 self-end p-2"
-            onClick={actions.close}
+            onClick={() => actions.close()}
           >
             <TimesIcon className="z-10 w-4 fill-dark" />
           </Clickable>

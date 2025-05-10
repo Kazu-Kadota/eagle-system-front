@@ -7,15 +7,14 @@ import type { User } from '@/models';
 
 type Props = {
   user: User;
+  onDeleteAction: (user: User) => void;
 };
 
-export function OperatorTableActions({ user }: Props) {
-  const handleDelete = () => {};
-
+export function OperatorTableActions({ user, onDeleteAction }: Props) {
   return (
     <span className="flex flex-row items-center justify-center gap-4">
-      <Clickable onClick={handleDelete} title="Excluir">
-        <TrashIcon className="w-5 stroke-primary" />
+      <Clickable onClick={() => onDeleteAction(user)} title="Excluir">
+        <TrashIcon className="w-[1.16rem] stroke-primary" />
       </Clickable>
 
       <Link
