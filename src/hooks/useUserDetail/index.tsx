@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { useUsers } from '@/hooks/useUsers';
-import type { User, UserType } from '@/models';
-import { getUserCompaniesAccess } from '@/services/users';
 import { EMPTY_ARRAY } from '@/constants/primitives';
+import type { UserType } from '@/models';
+import { getUserCompaniesAccess, getUsersList } from '@/services/users';
 
 export function useUserDetails(userId: string, userType: UserType) {
   const { data: companiesAccess, isLoading: isCompaniesAccessLoading } =
@@ -14,15 +13,20 @@ export function useUserDetails(userId: string, userType: UserType) {
       queryFn: () => getUserCompaniesAccess(userId),
     });
 
-  const { users, isLoading: isUsersLoading } = useUsers({
-    user_type_filter: userType,
+  const { data: usersList, isLoading: isUsersLoading } = useQuery({
+    queryKey: ['users', userType],
+    queryFn: () => getUsersList({ user_type_filter: userType }),
+    staleTime: Infinity,
   });
 
-  const user = useMemo(() => users.find((u) => u.user_id === userId), [users]);
+  const user = useMemo(
+    () => usersList?.find((u) => u.user_id === userId),
+    [usersList],
+  );
 
   return {
+    user,
     companies: companiesAccess?.companies ?? EMPTY_ARRAY,
-    user: user ?? ({} as User),
     isLoading: isCompaniesAccessLoading || isUsersLoading,
   };
 }

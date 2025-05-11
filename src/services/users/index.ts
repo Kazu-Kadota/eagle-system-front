@@ -20,6 +20,13 @@ type DeleteUsersBody = {
   user_ids: string[];
 };
 
+type GetUsersCompaniesAccess = {
+  message: string;
+  operator_companies_access: {
+    result: OperatorCompaniesAccess[];
+  };
+};
+
 export const getUsersList = async (params: GetUsersListParams) => {
   const { data } = await requestAuth.get<GetUsersListResponse>(
     env.NEXT_PUBLIC_API_USER_URL,
@@ -45,7 +52,7 @@ export const getUserCompaniesAccess = async (userId: string) => {
     { query: { user_id: userId } },
   );
 
-  return data.operator_companies_access;
+  return data.operator_companies_access ?? ({} as OperatorCompaniesAccess);
 };
 
 export const registerCompaniesAccess = async (
@@ -72,4 +79,21 @@ export const deleteCompaniesAccess = async (
   );
 
   return data;
+};
+
+export const getUsersCompanyAccess = async () => {
+  const { data } = await requestAuth.get<GetUsersCompaniesAccess>(
+    env.NEXT_PUBLIC_API_USER_URL,
+    '/operator-companies-access/list',
+  );
+
+  const companiesAccessList = data.operator_companies_access?.result ?? [];
+
+  return companiesAccessList.reduce(
+    (obj, item) => {
+      obj[item.user_id] = item;
+      return obj;
+    },
+    {} as Record<string, OperatorCompaniesAccess>,
+  );
 };

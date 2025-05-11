@@ -15,6 +15,7 @@ interface MultiSelectProps {
   value: MultiSelectItem;
   id?: string;
   isMulti?: boolean;
+  loading?: boolean;
   onChange: (values: MultiSelectItem) => void;
 }
 
@@ -37,6 +38,7 @@ const classNames: ClassNamesConfig<
 export function MultiSelect({
   id,
   isMulti = true,
+  loading,
   onChange,
   ...rest
 }: MultiSelectProps) {
@@ -47,6 +49,7 @@ export function MultiSelect({
       inputId={id}
       unstyled
       classNames={classNames}
+      isLoading={loading}
       onChange={(values) => onChange(Array.isArray(values) ? values : [values])}
     />
   );

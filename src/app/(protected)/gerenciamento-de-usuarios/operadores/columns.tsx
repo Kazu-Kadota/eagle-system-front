@@ -28,10 +28,8 @@ export const createOperatorColumns = (
   },
   {
     id: 'user_first_name',
-    accessorKey: 'user_first_name',
+    accessorFn: (item) => `${item.user_first_name} ${item.user_last_name}`,
     header: 'Nome',
-    cell: ({ row }) =>
-      `${row.original.user_first_name} ${row.original.user_last_name}`,
   },
   {
     id: 'email',
@@ -39,9 +37,18 @@ export const createOperatorColumns = (
     header: 'E-mail',
   },
   {
-    id: 'company_name',
-    accessorKey: 'company_name',
-    header: 'Empresa',
+    id: 'companiesAccess',
+    accessorFn: (item) => item.companiesAccess?.companies?.join(',') ?? '-',
+    header: 'Empresas',
+    cell: (row) =>
+      row
+        .getValue()
+        .split(',')
+        .map((item) => (
+          <span key={item} className="block">
+            {item}
+          </span>
+        )),
   },
   {
     id: 'actions',

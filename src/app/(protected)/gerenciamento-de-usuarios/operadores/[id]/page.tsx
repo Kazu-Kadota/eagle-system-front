@@ -86,55 +86,57 @@ export default function OperatorDetailPage() {
 
   return (
     <div className="grid gap-4">
-      <Box
-        title="Detalhes do Operador"
-        className="flex flex-col gap-3 sm:gap-4"
-      >
-        <InputRow>
-          <Input
-            label="Nome:"
-            name="first_name"
-            type="text"
+      {!!user && (
+        <Box
+          title="Detalhes do Operador"
+          className="flex flex-col gap-3 sm:gap-4"
+        >
+          <InputRow>
+            <Input
+              label="Nome:"
+              name="first_name"
+              type="text"
+              disabled
+              value={user.user_first_name}
+              inputVariants={{ size: 'sm' }}
+              labelVariants={{ size: 'sm' }}
+              containerVariants={{ layout: 'row' }}
+              containerClassName="flex-1"
+            />
+            <Input
+              label="Sobrenome:"
+              name="last_name"
+              type="text"
+              disabled
+              value={user.user_last_name}
+              inputVariants={{ size: 'sm' }}
+              labelVariants={{ size: 'sm' }}
+              containerVariants={{ layout: 'row' }}
+              containerClassName="flex-1"
+            />
+          </InputRow>
+          <InputRow>
+            <Input
+              label="E-mail"
+              name="email"
+              type="text"
+              disabled
+              value={user.email}
+              inputVariants={{ size: 'sm' }}
+              labelVariants={{ size: 'sm' }}
+              containerVariants={{ layout: 'row' }}
+              containerClassName="flex-1"
+            />
+          </InputRow>
+          <SelectGroup
+            title="Irá utilizar a API?"
+            items={userApiSelectItems}
+            layout="row"
             disabled
-            value={user?.user_first_name ?? ''}
-            inputVariants={{ size: 'sm' }}
-            labelVariants={{ size: 'sm' }}
-            containerVariants={{ layout: 'row' }}
-            containerClassName="flex-1"
+            value={user.api ? 'true' : 'false'}
           />
-          <Input
-            label="Sobrenome:"
-            name="last_name"
-            type="text"
-            disabled
-            value={user?.user_last_name ?? ''}
-            inputVariants={{ size: 'sm' }}
-            labelVariants={{ size: 'sm' }}
-            containerVariants={{ layout: 'row' }}
-            containerClassName="flex-1"
-          />
-        </InputRow>
-        <InputRow>
-          <Input
-            label="E-mail"
-            name="email"
-            type="text"
-            disabled
-            value={user?.email ?? ''}
-            inputVariants={{ size: 'sm' }}
-            labelVariants={{ size: 'sm' }}
-            containerVariants={{ layout: 'row' }}
-            containerClassName="flex-1"
-          />
-        </InputRow>
-        <SelectGroup
-          title="Irá utilizar a API?"
-          items={userApiSelectItems}
-          layout="row"
-          disabled
-          value={user?.api ? 'true' : 'false'}
-        />
-      </Box>
+        </Box>
+      )}
 
       <Box title="Atribuir Empresas">
         <div>
@@ -149,6 +151,7 @@ export default function OperatorDetailPage() {
                 placeholder="Selecione as empresas"
                 options={companiesSelectItems}
                 value={selectedCompaniesList}
+                loading={isCompaniesLoading}
                 onChange={setSelectedCompaniesList}
               />
             </div>

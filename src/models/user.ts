@@ -15,6 +15,7 @@ export interface User {
   api: boolean;
   created_at: string;
   updated_at: string;
+  companiesAccess?: OperatorCompaniesAccess;
 }
 
 export interface AuthResponse {
