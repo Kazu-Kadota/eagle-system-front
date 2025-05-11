@@ -22,3 +22,10 @@ export interface AuthResponse {
   jwtToken: string;
   expires_date: string;
 }
+
+export interface OperatorCompaniesAccess {
+  updated_at: string;
+  companies: string[];
+  user_id: string;
+  created_at: string;
+}

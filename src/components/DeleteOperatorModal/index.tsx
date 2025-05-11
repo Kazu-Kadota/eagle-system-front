@@ -16,8 +16,7 @@ export function DeleteOperatorModal({ operator, onSuccess }: Props) {
 
   const { isPending, mutate: onDeleteClick } = useMutation({
     onMutate: () => modal.update({ preventClosing: true }),
-    mutationFn: () =>
-      deleteUsers({ user_ids: [operator.user_id] }).catch((err) => {}),
+    mutationFn: () => deleteUsers({ user_ids: [operator.user_id] }),
     onSuccess: () => {
       modal.close({ force: true });
       toast.success('Limitações removidas com sucesso');

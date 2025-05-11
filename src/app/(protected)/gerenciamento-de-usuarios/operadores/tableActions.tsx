@@ -13,13 +13,15 @@ type Props = {
 export function OperatorTableActions({ user, onDeleteAction }: Props) {
   return (
     <span className="flex flex-row items-center justify-center gap-4">
-      <Clickable onClick={() => onDeleteAction(user)} title="Excluir">
+      <Clickable
+        onClick={() => onDeleteAction(user)}
+        title="Excluir limitações"
+      >
         <TrashIcon className="w-[1.16rem] stroke-primary" />
       </Clickable>
 
       <Link
         href={RoutePaths.operatorDetail(user.user_id)}
-        target="_blank"
         title="Atribuir empresas"
       >
         <EditIcon className="w-5 stroke-primary" />
