@@ -202,10 +202,10 @@ export function RequestAnalysisForm() {
         ]);
 
         if (!personData || !vehiclesData) {
-          return;
+          return { ok: false };
         }
 
-        return requestAnalysisCombo({
+        await requestAnalysisCombo({
           combo_number: vehiclesData.vehicles.length,
           person: preparePersonData(personData),
           person_analysis: preparePersonAnalysis(
@@ -216,8 +216,12 @@ export function RequestAnalysisForm() {
             prepareVehicleData(data, personData),
           ),
         });
+
+        return { ok: true };
       },
-      onSuccess: () => onSuccessRequestAnalysis(AnalysisType.COMBO),
+      onSuccess: ({ ok }) => {
+        if (ok) onSuccessRequestAnalysis(AnalysisType.COMBO);
+      },
     });
 
   const {
