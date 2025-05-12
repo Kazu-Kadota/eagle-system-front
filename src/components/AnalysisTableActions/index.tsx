@@ -60,7 +60,7 @@ export const AnalysisTableActions: React.FC<AnalysisTableActionsProps> = ({
       {onDeleteAnalysis && (
         <Clickable
           onClick={() => onDeleteAnalysis(item, type as AnalysisCategory)}
-          title="Excluir limitações"
+          title="Excluir análise"
         >
           <TrashIcon className="w-[1.16rem] stroke-primary" />
         </Clickable>
