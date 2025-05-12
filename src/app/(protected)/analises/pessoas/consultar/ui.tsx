@@ -193,9 +193,15 @@ export function SearchPersonAnalysisUI({
               )}
             </Button>
           )}
+          <Button theme="placeholder" size="xxs" disabled shadow="base">
+            Atualizada em{' '}
+            {customDayJs(selectedItem.updated_at).format(
+              'DD/MM/YYYY [às] HH:mm:ss',
+            )}
+          </Button>
           <Button theme="opaque" size="xxs" disabled shadow="base">
             Solicitada em{' '}
-            {customDayJs(selectedItem?.created_at).format(
+            {customDayJs(selectedItem.created_at).format(
               'DD/MM/YYYY [às] HH:mm:ss',
             )}
           </Button>
