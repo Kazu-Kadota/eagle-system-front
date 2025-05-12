@@ -2,7 +2,6 @@ import type {
   AnalysisType,
   PersonAnalysis,
   PersonRegionType,
-  User,
   VehicleAnalysis,
 } from '@/models';
 import queryString from 'query-string';

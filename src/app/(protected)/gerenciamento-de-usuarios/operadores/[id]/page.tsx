@@ -17,7 +17,7 @@ import {
 } from '@/services/users';
 import { getErrorMsg } from '@/utils/errors';
 import { useParams } from 'next/navigation';
-import { useEffect, useMemo, useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { toast } from 'react-toastify';
 
 type Params = {

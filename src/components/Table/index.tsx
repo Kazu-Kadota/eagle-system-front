@@ -2,11 +2,10 @@ import { PageArrowLeftIcon } from '@/assets/icons/PageArrowLeftIcon';
 import { PageArrowRightIcon } from '@/assets/icons/PageArrowRightIcon';
 import { SortArrowDownIcon } from '@/assets/icons/SortArrowDownIcon';
 import { SortArrowUpIcon } from '@/assets/icons/SortArrowUpIcon';
-import { fuzzyFilter } from '@/components/Table/utils';
 import { Button, type ButtonProps } from '@/components/Button';
 import { Input } from '@/components/Input';
+import { fuzzyFilter } from '@/components/Table/utils';
 import { listNumOfItemsPerPage } from '@/constants/table';
-import type { Analysis, AnalysisType } from '@/models';
 import { ConfigType, useConfigStoreActions } from '@/store/config';
 import { cn } from '@/utils/classNames';
 import {
