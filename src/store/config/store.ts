@@ -4,12 +4,14 @@ export enum ConfigType {
   PERSON = 'person',
   VEHICLE = 'vehicle',
   OPERATOR = 'operator',
+  COMPANIES = 'companies',
 }
 
 interface ConfigState {
   numOfItemsPerPagePeople: number;
   numOfItemsPerPageVehicles: number;
   numOfItemsPerPageOperators: number;
+  numOfItemsPerPageCompanies: number;
 }
 
 export interface ConfigStore extends ConfigState {
@@ -21,6 +23,7 @@ const initialState: ConfigState = {
   numOfItemsPerPagePeople: 25,
   numOfItemsPerPageVehicles: 25,
   numOfItemsPerPageOperators: 25,
+  numOfItemsPerPageCompanies: 25,
 };
 
 export const useConfigStore = createPersist<ConfigStore>(
@@ -35,6 +38,8 @@ export const useConfigStore = createPersist<ConfigStore>(
           return get().numOfItemsPerPageVehicles;
         case ConfigType.OPERATOR:
           return get().numOfItemsPerPageOperators;
+        case ConfigType.COMPANIES:
+          return get().numOfItemsPerPageCompanies;
       }
     },
 
@@ -46,6 +51,8 @@ export const useConfigStore = createPersist<ConfigStore>(
           return set({ numOfItemsPerPageVehicles: value });
         case ConfigType.OPERATOR:
           return set({ numOfItemsPerPageOperators: value });
+        case ConfigType.COMPANIES:
+          return set({ numOfItemsPerPageCompanies: value });
       }
     },
   }),

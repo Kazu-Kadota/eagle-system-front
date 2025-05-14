@@ -56,12 +56,13 @@ export const createOperatorColumns = (
     header: 'Ações',
     cell: ({ row }) => (
       <OperatorTableActions
+        key={row.original.user_id}
         user={row.original}
         onDeleteAction={actions.onDelete}
       />
     ),
     meta: {
-      className: 'max-w-20 ',
+      className: 'max-w-20',
     },
   },
 ];

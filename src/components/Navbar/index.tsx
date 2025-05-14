@@ -45,6 +45,11 @@ const navlinks: NavbarLinks[] = [
     path: RoutePaths.REGISTER_HOME,
     userTypes: [UserType.ADMIN],
   },
+  {
+    label: 'Gerenciamento\nde Empresas',
+    path: RoutePaths.MANAGE_COMPANIES,
+    userTypes: [UserType.ADMIN],
+  },
   { label: 'Minha Conta', path: RoutePaths.ACCOUNT_HOME },
 ];
 

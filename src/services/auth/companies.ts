@@ -1,5 +1,5 @@
 import { env } from '@/env';
-import type { Company } from '@/models';
+import type { Company, MyCompany } from '@/models';
 import { requestAuth } from '@/utils/request';
 
 export interface CompaniesResponse {
@@ -17,7 +17,7 @@ export const getCompanies = async () => {
 };
 
 export const getMyCompany = async () => {
-  const { data } = await requestAuth.get<Company>(
+  const { data } = await requestAuth.get<MyCompany>(
     env.NEXT_PUBLIC_API_USER_URL,
     '/my-company',
   );

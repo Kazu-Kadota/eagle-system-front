@@ -8,7 +8,7 @@ import { LoadingContainer } from '@/components/LoadingContainer';
 import { MultiSelect, type MultiSelectItem } from '@/components/MultiSelect';
 import { SelectGroup } from '@/components/SelectGroup';
 import { userApiSelectItems } from '@/constants/auth';
-import { useCompanies } from '@/hooks/useCompanies';
+import { useCompaniesSelectItems } from '@/hooks/useCompanies';
 import { useUserDetails } from '@/hooks/useUserDetail';
 import { UserType } from '@/models';
 import {
@@ -33,9 +33,10 @@ export default function OperatorDetailPage() {
     isLoading: isUserLoading,
   } = useUserDetails(params.id, UserType.OPERATOR);
 
-  const { companiesSelectItems, isLoading: isCompaniesLoading } = useCompanies({
-    enabled: true,
-  });
+  const { companiesSelectItems, isLoading: isCompaniesLoading } =
+    useCompaniesSelectItems({
+      enabled: true,
+    });
 
   const [isSubmitPending, startSubmitTransition] = useTransition();
 

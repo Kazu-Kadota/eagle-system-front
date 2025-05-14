@@ -14,9 +14,14 @@ export enum FeatureFlag {
   ACCESS_PERSON_ANALYSIS_REGION_TYPE_NATIONAL_STATE = 'access_person_analysis_region_type_national_state',
 }
 
+export type FeatureFlagObj = {
+  feature_flag: FeatureFlag;
+  enabled: boolean;
+};
+
 export type FeatureFlags = Record<FeatureFlag, boolean>;
 
-export interface Company {
+export interface MyCompany {
   company_id: string;
   updated_at: string;
   cnpj: string;
@@ -24,4 +29,10 @@ export interface Company {
   name: string;
   type: CompanyType;
   feature_flag: FeatureFlag[];
+}
+
+export interface Company {
+  company_id: string;
+  name: string;
+  feature_flag?: FeatureFlagObj[];
 }

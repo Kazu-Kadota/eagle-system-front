@@ -4,7 +4,7 @@ import {
   analysisAnswerSchema,
   type AnalysisAnswerSchema,
 } from '@/app/(protected)/analises/pessoas/[id]/schema';
-import { useCompanies } from '@/hooks/useCompanies';
+import { useCompaniesSelectItems } from '@/hooks/useCompanies';
 import { usePersonAnalysisDetail } from '@/hooks/usePersonAnalysisDetail';
 import { useToggle } from '@/hooks/useToggle';
 import { AnalysisResult, UserType, type PersonAnalysis } from '@/models';
@@ -45,9 +45,10 @@ export const SearchPersonAnalysisClient = () => {
     personId: selectedItem?.person_id ?? '',
   });
 
-  const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
-    enabled: hasUserType(userType, UserType.ADMIN, UserType.OPERATOR),
-  });
+  const { companiesSelectItems, isLoading: companiesLoading } =
+    useCompaniesSelectItems({
+      enabled: hasUserType(userType, UserType.ADMIN, UserType.OPERATOR),
+    });
 
   const {
     control: controlEditAnswer,

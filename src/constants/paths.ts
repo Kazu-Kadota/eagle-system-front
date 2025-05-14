@@ -31,6 +31,10 @@ export const RoutePaths = {
   operatorDetail: (userId: string) =>
     `/gerenciamento-de-usuarios/operadores/${userId}`,
   ACCOUNT_HOME: '/minha-conta',
+  MANAGE_COMPANIES: '/gerenciamento-de-empresas',
+  MANAGE_PRODUCTS: '/gerenciamento-de-empresas/gerenciar-produto',
+  productDetails: (companyId: string) =>
+    `/gerenciamento-de-empresas/gerenciar-produto/empresa/${companyId}`,
   ACCESS_DENIED: '/acesso-negado',
   login: (query?: LoginParams) =>
     queryString.stringifyUrl({ url: '/login', query }),

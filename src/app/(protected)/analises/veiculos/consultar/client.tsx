@@ -9,7 +9,7 @@ import {
   type AnalysisVehicleSearchSchema,
 } from '@/app/(protected)/analises/veiculos/consultar/schema';
 import { SearchVehicleAnalysisUI } from '@/app/(protected)/analises/veiculos/consultar/ui';
-import { useCompanies } from '@/hooks/useCompanies';
+import { useCompaniesSelectItems } from '@/hooks/useCompanies';
 import { useToggle } from '@/hooks/useToggle';
 import { useVehicleAnalysisDetail } from '@/hooks/useVehicleAnalysisDetail';
 import { AnalysisResult, UserType, type VehicleAnalysis } from '@/models';
@@ -50,9 +50,10 @@ export const SearchVehicleAnalysisClient = () => {
     vehicleId: selectedItem?.vehicle_id ?? '',
   });
 
-  const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
-    enabled: hasUserType(userType, UserType.ADMIN, UserType.OPERATOR),
-  });
+  const { companiesSelectItems, isLoading: companiesLoading } =
+    useCompaniesSelectItems({
+      enabled: hasUserType(userType, UserType.ADMIN, UserType.OPERATOR),
+    });
 
   const {
     control: controlEditAnswer,

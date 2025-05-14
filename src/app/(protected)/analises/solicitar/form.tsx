@@ -19,7 +19,7 @@ import {
   validatePersonAnalysis,
 } from '@/app/(protected)/analises/solicitar/utils';
 import { RoutePaths } from '@/constants/paths';
-import { useCompanies } from '@/hooks/useCompanies';
+import { useCompaniesSelectItems } from '@/hooks/useCompanies';
 import { useMyCompany } from '@/hooks/useMyCompany';
 import {
   AnalysisType,
@@ -76,9 +76,10 @@ export function RequestAnalysisForm() {
     isAdmin,
   });
 
-  const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
-    enabled: isAdmin,
-  });
+  const { companiesSelectItems, isLoading: companiesLoading } =
+    useCompaniesSelectItems({
+      enabled: isAdmin,
+    });
 
   const {
     control: controlPerson,
