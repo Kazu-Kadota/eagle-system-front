@@ -6,12 +6,15 @@ import type { UserType } from '@/models';
 import { getUserCompaniesAccess, getUsersList } from '@/services/users';
 
 export function useUserDetails(userId: string, userType: UserType) {
-  const { data: companiesAccess, isLoading: isCompaniesAccessLoading } =
-    useQuery({
-      queryKey: ['users', userId],
-      refetchOnWindowFocus: false,
-      queryFn: () => getUserCompaniesAccess(userId),
-    });
+  const {
+    data: companiesAccess,
+    isLoading: isCompaniesAccessLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['users', userId],
+    refetchOnWindowFocus: false,
+    queryFn: () => getUserCompaniesAccess(userId),
+  });
 
   const { data: usersList, isLoading: isUsersLoading } = useQuery({
     queryKey: ['users', userType],
@@ -28,5 +31,6 @@ export function useUserDetails(userId: string, userType: UserType) {
     user,
     companies: companiesAccess?.companies ?? EMPTY_ARRAY,
     isLoading: isCompaniesAccessLoading || isUsersLoading,
+    refetch,
   };
 }
