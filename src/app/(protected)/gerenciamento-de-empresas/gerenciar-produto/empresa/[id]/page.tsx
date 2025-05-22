@@ -58,6 +58,7 @@ export default function ManageCompanyFeatureFlagsPage() {
         return {
           selected: !!selectedFlag,
           flag: flag.featureFlag,
+          label: flag.label,
           fields:
             flag.config?.fields?.map((field) => ({
               label: field.label,
@@ -139,7 +140,7 @@ export default function ManageCompanyFeatureFlagsPage() {
               <div key={flag.feature_flag} className="flex items-center gap-2">
                 <span className="h-4 w-4 bg-link" />
                 <span className="text-sm font-medium text-placeholder">
-                  {flag.feature_flag}
+                  {flag.label}
                   {!!flag.config &&
                     ` (${Object.entries(flag.config)
                       .map(
@@ -224,7 +225,7 @@ export default function ManageCompanyFeatureFlagsPage() {
                       <span className="h-4 w-4 border border-placeholder" />
                     )}
                     <span className="text-sm font-medium text-placeholder">
-                      {value.flag}
+                      {value.label}
                     </span>
                   </button>
 

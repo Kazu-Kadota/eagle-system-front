@@ -15,9 +15,24 @@ export enum FeatureFlag {
   SYNTHESIS_INFORMATION_ACCESS = 'synthesis_information_access',
 }
 
+export const featureFlagLabel = {
+  [FeatureFlag.ACCESS_PERSON_ANALYSIS_REGION_TYPE_NATIONAL_STATE]:
+    'Nacional Histórico + SP',
+  [FeatureFlag.SYNTHESIS_INFORMATION_ACCESS]: 'Síntese',
+  [FeatureFlag.DATABASE_ACCESS_CONSULT]: 'Base de Dados',
+  [FeatureFlag.INFORMATION_ACCESS_PERSON_CNH_BASIC]: 'CNH básico',
+  [FeatureFlag.INFORMATION_ACCESS_PERSON_CNH_STATUS]: 'Status CNH',
+  [FeatureFlag.INFORMATION_ACCESS_PERSON_PROCESS]: 'Processos',
+  [FeatureFlag.INFORMATION_ACCESS_PERSON_BASIC_DATA]: 'Dados Básicos de Pessoa',
+  [FeatureFlag.INFORMATION_ACCESS_VEHICLE_ANTT]: 'ANTT',
+  [FeatureFlag.INFORMATION_ACCESS_VEHICLE_BASIC_DATA]:
+    'Dados Básicos do Veículo',
+};
+
 export type FeatureFlagObj = {
   feature_flag: FeatureFlag;
   enabled: boolean;
+  label: string;
   config?: Record<string, unknown>;
 };
 

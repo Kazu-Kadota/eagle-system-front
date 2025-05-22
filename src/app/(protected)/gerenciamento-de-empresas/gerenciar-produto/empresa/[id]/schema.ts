@@ -9,6 +9,7 @@ export const schema = z.object({
     z
       .object({
         flag: z.string(),
+        label: z.string(),
         selected: z.boolean(),
         fields: z.array(
           z.object({

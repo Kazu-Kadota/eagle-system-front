@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { FeatureFlag } from '@/models';
+import { FeatureFlag, featureFlagLabel } from '@/models';
 import { getFeatureFlagsBff } from '@/services/auth/companies';
 
 export const useFeatureFlagsBff = () => {
@@ -19,6 +19,7 @@ export const useFeatureFlagsBff = () => {
           const config = data?.find((item) => item.feature_flag === flag);
 
           return {
+            label: featureFlagLabel[flag] ?? flag,
             config,
             featureFlag: flag,
           };

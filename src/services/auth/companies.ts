@@ -1,6 +1,11 @@
 import type { InputType } from '@/components/Input';
 import { env } from '@/env';
-import type { Company, FeatureFlag, MyCompany } from '@/models';
+import {
+  featureFlagLabel,
+  type Company,
+  type FeatureFlag,
+  type MyCompany,
+} from '@/models';
 import { requestAuth } from '@/utils/request';
 
 export interface CompaniesResponse {
@@ -39,7 +44,12 @@ export const getCompanies = async () => {
   );
 
   return data.companies.map((company) => {
-    const flags = company.feature_flag?.filter((flag) => flag.enabled);
+    const flags = company.feature_flag
+      ?.filter((flag) => flag.enabled)
+      ?.map((flag) => ({
+        ...flag,
+        label: featureFlagLabel[flag.feature_flag] ?? flag.feature_flag,
+      }));
 
     return {
       ...company,

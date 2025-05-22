@@ -30,7 +30,7 @@ export const createCompaniesColumns = (): ColumnDef<Company, string>[] => [
     accessorFn: (item) =>
       item.feature_flag
         ?.filter((flag) => flag.enabled)
-        ?.map((flag) => flag.feature_flag)
+        ?.map((flag) => flag.label)
         ?.join(',') ?? '-',
     header: 'Produtos',
     cell: (row) => (
