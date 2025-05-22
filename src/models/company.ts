@@ -12,11 +12,13 @@ export enum FeatureFlag {
   INFORMATION_ACCESS_VEHICLE_ANTT = 'information_access_vehicle_antt',
   INFORMATION_ACCESS_VEHICLE_BASIC_DATA = 'information_access_vehicle_basic_data',
   ACCESS_PERSON_ANALYSIS_REGION_TYPE_NATIONAL_STATE = 'access_person_analysis_region_type_national_state',
+  SYNTHESIS_INFORMATION_ACCESS = 'synthesis_information_access',
 }
 
 export type FeatureFlagObj = {
   feature_flag: FeatureFlag;
   enabled: boolean;
+  config?: Record<string, unknown>;
 };
 
 export type FeatureFlags = Record<FeatureFlag, boolean>;
@@ -34,5 +36,6 @@ export interface MyCompany {
 export interface Company {
   company_id: string;
   name: string;
+  enabled: boolean;
   feature_flag?: FeatureFlagObj[];
 }

@@ -32,7 +32,7 @@ export const createCompaniesColumns = (): ColumnDef<Company, string>[] => [
         ?.filter((flag) => flag.enabled)
         ?.map((flag) => flag.feature_flag)
         ?.join(',') ?? '-',
-    header: 'Feature Flags',
+    header: 'Produtos',
     cell: (row) => (
       <span className="flex flex-col items-center justify-center gap-2 py-2">
         {row

@@ -13,7 +13,7 @@ export const useCompanies = ({
   enabled,
   refetchOnWindowFocus = false,
 }: UseCompaniesOptions) => {
-  const { data, isFetching, refetch } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryFn: () => getCompanies(),
     queryKey: ['companies'],
     enabled,
@@ -21,11 +21,11 @@ export const useCompanies = ({
     staleTime: Infinity,
   });
 
-  const companies = data?.companies ?? EMPTY_ARRAY;
+  const companies = data ?? EMPTY_ARRAY;
 
   return {
     companies,
-    isLoading: isFetching,
+    isLoading,
     refetch,
   };
 };

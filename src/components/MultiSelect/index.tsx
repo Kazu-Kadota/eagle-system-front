@@ -1,8 +1,4 @@
-import ReactSelect, {
-  type ClassNamesConfig,
-  type GroupBase,
-  type MultiValue,
-} from 'react-select';
+import ReactSelect, { type MultiValue } from 'react-select';
 
 import { type SelectItem } from '@/types/select';
 import { cn } from '@/utils/classNames';
