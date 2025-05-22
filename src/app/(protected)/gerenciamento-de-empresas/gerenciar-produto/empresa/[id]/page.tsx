@@ -135,7 +135,7 @@ export default function ManageCompanyFeatureFlagsPage() {
           <h2 className="mb-3 text-sm font-bold text-dark">
             Produtos já atribuídos:
           </h2>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col gap-3">
             {company.feature_flag.map((flag) => (
               <div key={flag.feature_flag} className="flex items-center gap-2">
                 <span className="h-4 w-4 bg-link" />
