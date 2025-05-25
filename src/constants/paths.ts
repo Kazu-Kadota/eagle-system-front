@@ -46,4 +46,9 @@ export const RoutePaths = {
       url: `/analises/veiculos/${item?.request_id}`,
       query: { vehicleId: item?.vehicle_id },
     }),
+  personProcessDetail: (
+    requestId: string,
+    personId: string,
+    processId: string,
+  ) => `/analises/${requestId}/pessoas/${personId}/processos/${processId}`,
 };

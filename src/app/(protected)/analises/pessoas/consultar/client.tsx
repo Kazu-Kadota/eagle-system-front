@@ -19,10 +19,11 @@ import { usePersonAnalysisDetail } from '@/hooks/usePersonAnalysisDetail';
 export const SearchPersonAnalysisClient = () => {
   const userType = useSessionUserType();
 
-  const { control, handleSubmit } = useForm<AnalysisPersonSearchSchema>({
-    resolver: zodResolver(analysisPersonSearchSchema),
-    defaultValues: { searchDocument: '', companyNameSearch: '' },
-  });
+  const { control, getValues, handleSubmit } =
+    useForm<AnalysisPersonSearchSchema>({
+      resolver: zodResolver(analysisPersonSearchSchema),
+      defaultValues: { searchDocument: '', companyNameSearch: '' },
+    });
 
   const [items, setItems] = useState<PersonAnalysis[] | null>(null);
   const [selectedItem, setSelectedItem] = useState<PersonAnalysis | null>(null);
@@ -60,6 +61,7 @@ export const SearchPersonAnalysisClient = () => {
       companiesLoading={companiesLoading}
       items={items}
       selectedItem={person}
+      document={getValues().searchDocument}
       setSelectedItem={setSelectedItem}
       onSearchSubmit={handleSubmit((data) => onSubmit(data))}
     />

@@ -1,4 +1,5 @@
 import { columns } from '@/app/(protected)/analises/pessoas/consultar/columns';
+import { ProcessFinished } from '@/app/(protected)/analises/pessoas/consultar/process';
 import type { AnalysisPersonSearchSchema } from '@/app/(protected)/analises/pessoas/consultar/schema';
 import { SearchIcon } from '@/assets/icons/SearchIcon';
 import { AnalysisTable } from '@/components/AnalysisTable';
@@ -22,6 +23,7 @@ import { estadosSelectItems } from '@/constants/estados';
 import {
   AnalysisStatus,
   AnalysisType,
+  PersonAnalysisType,
   UserType,
   type PersonAnalysis,
 } from '@/models';
@@ -35,6 +37,7 @@ interface SearchPersonAnalysisUIProps {
   userType?: UserType;
   isPersonLoading: boolean;
   isLoading: boolean;
+  document: string;
   control: Control<AnalysisPersonSearchSchema>;
   companiesSelectItems: SelectItem[];
   companiesLoading: boolean;
@@ -52,10 +55,48 @@ export function SearchPersonAnalysisUI({
   companiesSelectItems,
   companiesLoading,
   items,
+  document,
   selectedItem,
   setSelectedItem,
   onSearchSubmit,
 }: SearchPersonAnalysisUIProps) {
+  const renderFinished = () => {
+    if (!selectedItem) return null;
+
+    if (selectedItem.person_analysis_type === PersonAnalysisType.PROCESS) {
+      return null;
+    }
+
+    return (
+      <>
+        <SelectGroup
+          title="Resultado da análise"
+          required
+          disabled
+          layout="row"
+          value={selectedItem.analysis_result}
+          items={analysisResultsSelectItems}
+          containerClassName="mt-2"
+        />
+        <SelectGroup
+          required
+          title="Resposta do Banco de Dados?"
+          items={userApiSelectItems}
+          layout="row"
+          value={toStringBoolean(selectedItem.from_db)}
+          containerClassName="mb-2"
+          disabled
+        />
+        <TextArea
+          label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
+          name="analysis_info"
+          disabled
+          value={selectedItem.analysis_info}
+        />
+      </>
+    );
+  };
+
   const renderPerson = () => {
     if (isPersonLoading) {
       return <LoadingContainer />;
@@ -287,32 +328,7 @@ export function SearchPersonAnalysisUI({
         </InputRow>
 
         {selectedItem.status === AnalysisStatus.FINISHED ? (
-          <>
-            <SelectGroup
-              title="Resultado da análise"
-              required
-              disabled
-              layout="row"
-              value={selectedItem.analysis_result}
-              items={analysisResultsSelectItems}
-              containerClassName="mt-2"
-            />
-            <SelectGroup
-              required
-              title="Resposta do Banco de Dados?"
-              items={userApiSelectItems}
-              layout="row"
-              value={toStringBoolean(selectedItem.from_db)}
-              containerClassName="mb-2"
-              disabled
-            />
-            <TextArea
-              label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
-              name="analysis_info"
-              disabled
-              value={selectedItem.analysis_info}
-            />
-          </>
+          renderFinished()
         ) : (
           <SelectGroup
             title="Status"
@@ -393,6 +409,16 @@ export function SearchPersonAnalysisUI({
       )}
 
       {renderPerson()}
+
+      {selectedItem?.status === AnalysisStatus.FINISHED &&
+        selectedItem.person_analysis_type === PersonAnalysisType.PROCESS && (
+          <ProcessFinished
+            analysis_info={selectedItem.analysis_info}
+            requestId={selectedItem.request_id}
+            personId={selectedItem.person_id}
+            document={document}
+          />
+        )}
     </>
   );
 }
