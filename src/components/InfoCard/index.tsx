@@ -1,4 +1,4 @@
-import { twJoin, twMerge } from 'tailwind-merge';
+import { twJoin } from 'tailwind-merge';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 type InfoProps = {

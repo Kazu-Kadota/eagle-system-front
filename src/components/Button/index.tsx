@@ -1,4 +1,4 @@
-import Link, { type LinkProps } from 'next/link';
+import Link from 'next/link';
 import { type VariantProps, tv } from 'tailwind-variants';
 
 import { Spinner } from '@/components/Spinner';
@@ -44,6 +44,7 @@ export type ButtonProps = VariantProps<typeof style> &
   React.ComponentProps<'button'> &
   Partial<React.ComponentProps<'a'>> & {
     loading?: boolean;
+    replace?: boolean;
   };
 
 export function Button({
@@ -57,6 +58,7 @@ export function Button({
   disabled,
   children,
   target,
+  replace,
   ...rest
 }: ButtonProps) {
   const commonProps = {
@@ -66,7 +68,9 @@ export function Button({
   };
 
   if (href) {
-    return <Link {...commonProps} target={target} href={href} />;
+    return (
+      <Link {...commonProps} replace={replace} target={target} href={href} />
+    );
   }
 
   return <button {...commonProps} {...rest} type={type ?? 'button'} />;
