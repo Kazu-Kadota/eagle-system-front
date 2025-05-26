@@ -4,7 +4,7 @@ import { Box } from '@/components/Box';
 import { Button } from '@/components/Button';
 import { Info, InfoRow } from '@/components/InfoCard';
 import { ProcessPolarityItem } from '@/components/ProcessPolarityItem';
-import type { Polarity, Process, ProcessResponse } from '@/models/process';
+import type { Process, ProcessPart, ProcessResponse } from '@/models/process';
 import { useModal } from '@/store/modal/store';
 import { unmask } from '@/utils/masks';
 import dayjs from 'dayjs';
@@ -18,13 +18,13 @@ type Props = {
 type CardProps = {
   process: Process;
   document: string;
-  onDetailClick: (process: Process, polarity: Polarity | undefined) => void;
+  onDetailClick: (process: Process, part?: ProcessPart) => void;
 };
 
 function Card({ process, document, onDetailClick }: CardProps) {
-  const polarity = process.partes.find(
+  const part = process.partes.find(
     (part) => unmask(part.documento ?? '') === unmask(document),
-  )?.polaridade;
+  );
 
   return (
     <li className="flex flex-col justify-between gap-5 rounded-[0.1875rem] bg-card p-4 shadow-processCard sm:m-4">
@@ -36,7 +36,7 @@ function Card({ process, document, onDetailClick }: CardProps) {
           </p>
         </div>
 
-        <ProcessPolarityItem className="mt-0.5" polarity={polarity} />
+        <ProcessPolarityItem className="mt-0.5" part={part} />
 
         <InfoRow>
           <Info label="Tipo" value={process.tipo} />
@@ -70,7 +70,7 @@ function Card({ process, document, onDetailClick }: CardProps) {
         size="xsStrong"
         theme="primaryLight"
         className="self-end"
-        onClick={() => onDetailClick(process, polarity)}
+        onClick={() => onDetailClick(process, part)}
       >
         Ver + detalhes
       </Button>
@@ -97,9 +97,9 @@ export function ProcessFinished({ analysis_info, document }: Props) {
   }, [analysis_info]);
 
   const handleDetails = useCallback(
-    (process: Process, polarity: Polarity | undefined) => {
+    (process: Process, part: ProcessPart | undefined) => {
       modal.open({
-        content: <ProcessDetailsModal process={process} polarity={polarity} />,
+        content: <ProcessDetailsModal process={process} part={part} />,
         fullScreen: true,
       });
     },

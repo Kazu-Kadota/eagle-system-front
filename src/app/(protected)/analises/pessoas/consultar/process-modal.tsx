@@ -18,7 +18,7 @@ import {
 import { ProcessPolarityItem } from '@/components/ProcessPolarityItem';
 import { Tab } from '@/components/Tab';
 import { Table } from '@/components/Table';
-import type { Polarity, Process, ProcessPart } from '@/models/process';
+import type { Process, ProcessPart } from '@/models/process';
 import { useModal } from '@/store/modal/store';
 import { formatCurrency } from '@/utils/currency';
 import { maskCpfOrCnpj } from '@/utils/masks';
@@ -27,8 +27,70 @@ import dayjs from 'dayjs';
 
 type Props = {
   process: Process;
-  polarity: Polarity | undefined;
+  part?: ProcessPart;
 };
+
+export function getPartInfo(tipoEspecifico: string) {
+  const tipo = tipoEspecifico.toUpperCase();
+
+  const poloAtivo = [
+    'AUTOR',
+    'RECLAMANTE',
+    'IMPETRANTE',
+    'EXEQUENTE',
+    'AGRAVANTE',
+    'APELANTE',
+    'EMBARGANTE',
+    'DENUNCIANTE LIDE',
+    'OPOENTE',
+    'DEPRECANTE',
+    'QUERELANTE',
+    'CREDOR',
+    'REPRESENTANTE DO MP',
+  ];
+
+  const poloPassivo = [
+    'RÉU',
+    'RECLAMADO',
+    'IMPETRADO',
+    'EXECUTADO',
+    'AGRAVADO',
+    'APELADO',
+    'EMBARGADO',
+    'DENUNCIADO LIDE',
+    'OPOSITOR',
+    'DEPRECADO',
+    'INDICIADO',
+    'INVESTIGADO',
+    'ACUSADO',
+    'DENUNCIADO',
+    'AUTOR DO FATO',
+    'QUERELADO',
+    'DEVEDOR',
+    'SOCIEDADE EMPRESÁRIA',
+  ];
+
+  const neutros = [
+    'TERCEIRO INTERESSADO',
+    'ASSISTENTE SIMPLES',
+    'ASSISTENTE LITISCONSORCIAL',
+    'AMICUS CURIAE',
+    'TESTEMUNHA',
+    'VÍTIMA',
+    'ADVOGADO',
+    'SUCESSOR',
+  ];
+
+  if (poloAtivo.includes(tipo)) {
+    return { polo: 'Ativo' as const, papel: 'Autor' as const };
+  } else if (poloPassivo.includes(tipo)) {
+    return { polo: 'Passivo' as const, papel: 'Réu' as const };
+  } else if (neutros.includes(tipo)) {
+    return { polo: 'Neutro' as const, papel: 'Neutro' as const };
+  } else {
+    return { polo: 'Desconhecido' as const, papel: 'Desconhecido' as const };
+  }
+}
 
 const partsColumns: ColumnDef<ProcessPart>[] = [
   {
@@ -45,19 +107,19 @@ const partsColumns: ColumnDef<ProcessPart>[] = [
   },
   {
     header: 'Tipo',
-    accessorFn: (row) => row.detalhes_partes.tipo_especifico,
+    accessorFn: (row) => getPartInfo(row.detalhes_partes.tipo_especifico).papel,
     meta: {
       className: 'sm:w-20 break-all',
     },
   },
   {
     header: 'Polaridade',
-    accessorKey: 'polaridade',
-    cell: ({ row }) => (
+    accessorFn: (row) => getPartInfo(row.detalhes_partes.tipo_especifico).polo,
+    cell: (value) => (
       <span
-        className={`min-w-[4.5rem] rounded-md px-2 py-1 text-center text-sm font-bold capitalize text-card ${{ ativo: 'bg-successLight', passivo: 'bg-errorLight', neutro: 'bg-warningLight' }[row.original.polaridade] ?? 'bg-placeholder'}`}
+        className={`min-w-[4.5rem] rounded-md px-2 py-1 text-center text-sm font-bold text-card ${{ Ativo: 'bg-successLight', Passivo: 'bg-errorLight', Neutro: 'bg-warningLight' }[value.getValue() as string] ?? 'bg-placeholder'}`}
       >
-        {row.original.polaridade}
+        {value.getValue() as string}
       </span>
     ),
     meta: {
@@ -73,7 +135,7 @@ const partsColumns: ColumnDef<ProcessPart>[] = [
   },
 ];
 
-export default function ProcessDetailsModal({ process, polarity }: Props) {
+export default function ProcessDetailsModal({ process, part }: Props) {
   const modal = useModal();
 
   const renderAgeCircle = () => (
@@ -297,11 +359,7 @@ export default function ProcessDetailsModal({ process, polarity }: Props) {
           </span>
 
           <div className="flex gap-6">
-            <ProcessPolarityItem
-              className="mt-0.5"
-              polarity={polarity}
-              size="xl"
-            />
+            <ProcessPolarityItem className="mt-0.5" part={part} size="xl" />
 
             <Clickable
               onClick={() => modal.close()}

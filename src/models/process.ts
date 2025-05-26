@@ -1,10 +1,8 @@
-export type Polarity = 'ativo' | 'passivo' | 'neutro';
-
 export interface ProcessPart {
   documento: string | null;
   parte_ativa: boolean;
   nome: string;
-  polaridade: Polarity;
+  polaridade: string;
   detalhes_partes: {
     tipo_especifico: string;
   };

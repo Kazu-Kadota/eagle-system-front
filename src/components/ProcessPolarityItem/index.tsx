@@ -1,15 +1,12 @@
+import { getPartInfo } from '@/app/(protected)/analises/pessoas/consultar/process-modal';
 import { PersonIcon } from '@/assets/icons/PersonIcon';
-import type { Polarity } from '@/models/process';
+import type { ProcessPart } from '@/models/process';
+import { useMemo } from 'react';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 type Props = {
+  part?: ProcessPart;
   className?: string;
-};
-
-const polarityLabel: Record<Polarity, string> = {
-  ativo: 'Autor',
-  passivo: 'Réu',
-  neutro: 'Neutro',
 };
 
 const styles = tv({
@@ -32,14 +29,17 @@ const styles = tv({
       },
     },
     polarity: {
-      ativo: {
+      Ativo: {
         container: 'text-dark-purple',
       },
-      passivo: {
+      Passivo: {
         container: 'text-error',
       },
-      neutro: {
+      Neutro: {
         container: 'text-primary',
+      },
+      Desconhecido: {
+        container: 'text-placeholder',
       },
     },
   },
@@ -49,18 +49,20 @@ const styles = tv({
 });
 
 export function ProcessPolarityItem({
-  polarity,
+  part,
   size,
   className,
 }: Props & VariantProps<typeof styles>) {
-  const classNames = styles({ polarity, size });
+  const { polo, papel } = useMemo(
+    () => getPartInfo(part?.detalhes_partes?.tipo_especifico ?? ''),
+    [part],
+  );
+  const classNames = styles({ polarity: polo, size });
 
   return (
     <div className={classNames.container({ className })}>
       <PersonIcon className={classNames.icon()} />
-      <p className={classNames.text()}>
-        {polarity ? polarityLabel[polarity] : ''}
-      </p>
+      <p className={classNames.text()}>{papel}</p>
     </div>
   );
 }
