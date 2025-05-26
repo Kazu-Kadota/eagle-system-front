@@ -1,28 +1,27 @@
+import ProcessDetailsModal from '@/app/(protected)/analises/pessoas/consultar/process-modal';
 import { ProcessIcon } from '@/assets/icons/ProcessIcon';
 import { Box } from '@/components/Box';
 import { Button } from '@/components/Button';
 import { Info, InfoRow } from '@/components/InfoCard';
 import { ProcessPolarityItem } from '@/components/ProcessPolarityItem';
-import { RoutePaths } from '@/constants/paths';
-import type { Process, ProcessResponse } from '@/models/process';
+import type { Polarity, Process, ProcessResponse } from '@/models/process';
+import { useModal } from '@/store/modal/store';
 import { unmask } from '@/utils/masks';
 import dayjs from 'dayjs';
-import { memo, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 
 type Props = {
   analysis_info: string;
-  requestId: string;
-  personId: string;
   document: string;
 };
 
 type CardProps = {
   process: Process;
   document: string;
-  detailRoute: string;
+  onDetailClick: (process: Process, polarity: Polarity | undefined) => void;
 };
 
-function Card({ process, document, detailRoute }: CardProps) {
+function Card({ process, document, onDetailClick }: CardProps) {
   const polarity = process.partes.find(
     (part) => unmask(part.documento ?? '') === unmask(document),
   )?.polaridade;
@@ -68,11 +67,10 @@ function Card({ process, document, detailRoute }: CardProps) {
       </div>
 
       <Button
-        href={detailRoute}
         size="xsStrong"
         theme="primaryLight"
         className="self-end"
-        target="_blank"
+        onClick={() => onDetailClick(process, polarity)}
       >
         Ver + detalhes
       </Button>
@@ -82,38 +80,41 @@ function Card({ process, document, detailRoute }: CardProps) {
 
 const MemoizedCard = memo(Card);
 
-export function ProcessFinished({
-  analysis_info,
-  requestId,
-  personId,
-  document,
-}: Props) {
+export function ProcessFinished({ analysis_info, document }: Props) {
+  const modal = useModal();
+
   const processList = useMemo(() => {
     try {
       const response = JSON.parse(analysis_info) as ProcessResponse;
 
-      return (
-        response?.data?.processos_judiciais_administrativos?.processos ?? []
-      );
+      console.log(JSON.stringify(response, null, 2));
+
+      return response?.processos_judiciais_administrativos?.processos ?? [];
     } catch (error) {
       console.error("Couldn't parse process analysis info", error);
       return [];
     }
   }, [analysis_info]);
 
+  const handleDetails = useCallback(
+    (process: Process, polarity: Polarity | undefined) => {
+      modal.open({
+        content: <ProcessDetailsModal process={process} polarity={polarity} />,
+        fullScreen: true,
+      });
+    },
+    [],
+  );
+
   return (
     <Box title="Informações de Processos" containerClassName="mt-4">
       <ul className="grid grid-cols-1 justify-between gap-x-14 gap-y-4 px-2 pb-3 sm:grid-cols-[repeat(auto-fill,minmax(26rem,1fr))]">
         {processList.map((process) => (
           <MemoizedCard
-            key={process.numero}
+            key={process.numero + process.data_notificacao}
             process={process}
             document={document}
-            detailRoute={RoutePaths.personProcessDetail(
-              requestId,
-              personId,
-              process.numero,
-            )}
+            onDetailClick={handleDetails}
           />
         ))}
       </ul>

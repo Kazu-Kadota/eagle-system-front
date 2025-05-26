@@ -9,6 +9,7 @@ type Props = {
 const polarityLabel: Record<Polarity, string> = {
   ativo: 'Autor',
   passivo: 'Réu',
+  neutro: 'Neutro',
 };
 
 const styles = tv({
@@ -36,6 +37,9 @@ const styles = tv({
       },
       passivo: {
         container: 'text-error',
+      },
+      neutro: {
+        container: 'text-primary',
       },
     },
   },

@@ -8,6 +8,7 @@ interface ModalState {
   preventClosing?: boolean;
   content?: React.ReactNode;
   showCloseIcon?: boolean;
+  fullScreen?: boolean;
 }
 
 interface ModalActions {
@@ -28,6 +29,7 @@ const initialState: ModalState = {
   content: null,
   showCloseIcon: false,
   preventClosing: false,
+  fullScreen: false,
 };
 
 export const useModalStore = create<ModalStore>((set, get) => ({

@@ -501,8 +501,6 @@ export function SearchPersonAnalysisUI({
         selectedItem.person_analysis_type === PersonAnalysisType.PROCESS && (
           <ProcessFinished
             analysis_info={selectedItem.analysis_info}
-            requestId={selectedItem.request_id}
-            personId={selectedItem.person_id}
             document={document}
           />
         )}

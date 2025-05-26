@@ -25,7 +25,7 @@ const style = tv({
 
 type BoxProps = Omit<React.ComponentProps<'div'>, 'title'> &
   VariantProps<typeof style> & {
-    title: string | React.ReactNode;
+    title?: string | React.ReactNode;
     containerClassName?: string;
     titleClassName?: string;
   };

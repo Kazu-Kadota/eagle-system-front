@@ -1,5 +1,6 @@
 'use client';
 
+import dayjs from 'dayjs';
 import { LawHammerIcon } from '@/assets/icons/LawHammerIcon';
 import { PartiesIcon } from '@/assets/icons/PartiesIcon';
 import { RoundInfoIcon } from '@/assets/icons/RoundInfoIcon';
@@ -13,57 +14,21 @@ import {
   InfoRow,
   InfoTitle,
 } from '@/components/InfoCard';
-import { LoadingContainer } from '@/components/LoadingContainer';
 import { ProcessPolarityItem } from '@/components/ProcessPolarityItem';
 import { Tab } from '@/components/Tab';
-import { usePersonAnalysisDetail } from '@/hooks/usePersonAnalysisDetail';
-import type { ProcessResponse } from '@/models/process';
+import type { Polarity, Process } from '@/models/process';
 import { formatCurrency } from '@/utils/currency';
-import { unmask } from '@/utils/masks';
-import dayjs from 'dayjs';
-import { useParams } from 'next/navigation';
-import { useMemo } from 'react';
+import { TimesIcon } from '@/assets/icons/TimesIcon';
+import { Clickable } from '@/components/Clickable';
+import { useModal } from '@/store/modal/store';
 
-type Params = {
-  requestId: string;
-  personId: string;
-  processId: string;
+type Props = {
+  process: Process;
+  polarity: Polarity | undefined;
 };
 
-export default function ProcessDetailsPage() {
-  const params = useParams() as Params;
-
-  const { person, isLoading } = usePersonAnalysisDetail({
-    id: params.requestId,
-    personId: params.personId,
-  });
-
-  const process = useMemo(() => {
-    if (!person.analysis_info) return null;
-
-    try {
-      const response = JSON.parse(person.analysis_info) as ProcessResponse;
-      const processList =
-        response.data.processos_judiciais_administrativos.processos;
-
-      return processList.find((proc) => proc.numero === params.processId);
-    } catch (error) {
-      console.error("Couldn't parse process analysis info", error);
-      return null;
-    }
-  }, [person.analysis_info]);
-
-  const polarity = useMemo(
-    () =>
-      process?.partes?.find(
-        (part) => unmask(part.documento ?? '') === unmask(person.document),
-      )?.polaridade,
-    [process, person.document],
-  );
-
-  if (isLoading) return <LoadingContainer />;
-
-  if (!process) return null;
+export default function ProcessDetailsModal({ process, polarity }: Props) {
+  const modal = useModal();
 
   const renderAgeCircle = () => (
     <div className="shadow-infoCard flex size-36 flex-col items-center justify-center rounded-full border-[1.45px] border-primary text-center text-primary">
@@ -100,6 +65,55 @@ export default function ProcessDetailsPage() {
         <InfoContent className="flex-1 items-center justify-center">
           {content}
         </InfoContent>
+      </InfoCard>
+    );
+  };
+
+  const renderSubjectsCard = () => {
+    const subjects = [
+      { label: 'Assunto principal', value: process.assunto_principal },
+      { label: 'Assunto CNJ Inferido', value: process.assunto_cnj_inferido },
+      {
+        label: 'Assunto CNJ Amplo Inferido',
+        value: process.assunto_cnj_amplo_inferido,
+      },
+      { label: 'Outros assuntos', value: process.outros_assuntos },
+    ].filter((subject) =>
+      Array.isArray(subject.value) ? subject.value.length > 0 : !!subject.value,
+    );
+
+    let content;
+
+    if (subjects.length === 0) {
+      content = (
+        <InfoContent className="flex flex-col items-center">
+          <LawHammerIcon className="text-empty w-10" />
+          <p className="text-empty text-center text-lg font-bold">
+            Nenhum assunto registrado.
+          </p>
+        </InfoContent>
+      );
+    } else {
+      content = (
+        <InfoContent className="grid grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] gap-6">
+          {subjects.map((subject) => (
+            <InfoCard key={subject.label} variant="accent">
+              <InfoTitle variant="accent">{subject.label}</InfoTitle>
+              <InfoContent variant="accent">
+                {Array.isArray(subject.value)
+                  ? subject.value.map((text) => <span key={text}>{text}</span>)
+                  : subject.value}
+              </InfoContent>
+            </InfoCard>
+          ))}
+        </InfoContent>
+      );
+    }
+
+    return (
+      <InfoCard>
+        <InfoTitle>Assuntos</InfoTitle>
+        {content}
       </InfoCard>
     );
   };
@@ -205,48 +219,7 @@ export default function ProcessDetailsPage() {
           </InfoContent>
         </InfoCard>
 
-        <InfoCard>
-          <InfoTitle>Assuntos</InfoTitle>
-          <InfoContent className="grid grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] gap-6">
-            {!!process.assunto_principal && (
-              <InfoCard variant="accent">
-                <InfoTitle variant="accent">Assunto Principal</InfoTitle>
-                <InfoContent variant="accent">
-                  {process.assunto_principal}
-                </InfoContent>
-              </InfoCard>
-            )}
-            {!!process.assunto_cnj_inferido && (
-              <InfoCard variant="accent">
-                <InfoTitle variant="accent">Assunto CNJ Inferido</InfoTitle>
-                <InfoContent variant="accent">
-                  {process.assunto_cnj_inferido}
-                </InfoContent>
-              </InfoCard>
-            )}
-            {!!process.assunto_cnj_amplo_inferido && (
-              <InfoCard variant="accent">
-                <InfoTitle variant="accent">
-                  Assunto CNJ Amplo Inferido
-                </InfoTitle>
-                <InfoContent variant="accent">
-                  {process.assunto_cnj_amplo_inferido}
-                </InfoContent>
-              </InfoCard>
-            )}
-            {!!process.outros_assuntos &&
-              process.outros_assuntos.length > 0 && (
-                <InfoCard variant="accent">
-                  <InfoTitle variant="accent">Outros assuntos</InfoTitle>
-                  <InfoContent variant="accent" className="whitespace-pre-line">
-                    {process.outros_assuntos.map((text) => (
-                      <span key={text}>{text}</span>
-                    ))}
-                  </InfoContent>
-                </InfoCard>
-              )}
-          </InfoContent>
-        </InfoCard>
+        {renderSubjectsCard()}
 
         {renderDecisionsCard()}
       </div>
@@ -257,20 +230,30 @@ export default function ProcessDetailsPage() {
 
   return (
     <Box
+      containerClassName="h-full"
       title={
         <>
-          <span className="flex flex-col items-center gap-1 text-center sm:flex-row sm:gap-3 sm:text-left">
+          <span className="mt-3 flex flex-col items-center gap-1 text-center sm:mt-0 sm:flex-row sm:gap-3 sm:text-left">
             <ScaleIcon className="min-w-[2rem] max-w-[2rem] text-dark" />
             <span className="max-sm:break-all">
               Detalhes do Processo nº {process.numero}
             </span>
           </span>
 
-          <ProcessPolarityItem
-            className="mt-0.5"
-            polarity={polarity}
-            size="xl"
-          />
+          <div className="flex gap-6">
+            <ProcessPolarityItem
+              className="mt-0.5"
+              polarity={polarity}
+              size="xl"
+            />
+
+            <Clickable
+              onClick={() => modal.close()}
+              className="absolute right-1 top-4 px-2 sm:static"
+            >
+              <TimesIcon className="w-5" />
+            </Clickable>
+          </div>
         </>
       }
       titleClassName="flex max-sm:text-lg sm:flex-row items-center justify-center gap-2 flex-col sm:justify-between py-4"

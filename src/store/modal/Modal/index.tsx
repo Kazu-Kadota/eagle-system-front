@@ -6,6 +6,7 @@ import { Clickable } from '@/components/Clickable';
 import { Fade } from '@/components/Fade';
 import { useModalStore } from '@/store/modal/store';
 import { memo } from 'react';
+import { twJoin } from 'tailwind-merge';
 
 export const Modal = memo(() => {
   const {
@@ -16,6 +17,7 @@ export const Modal = memo(() => {
     content,
     showCloseIcon,
     actions,
+    fullScreen,
   } = useModalStore();
 
   const renderDefaultContent = () => (
@@ -48,13 +50,23 @@ export const Modal = memo(() => {
   return (
     <Fade
       isVisible={isOpen}
-      className="fixed inset-0 z-30 flex items-center justify-center px-3 pb-[20vh]"
+      className={twJoin(
+        'fixed inset-0 z-30 flex items-center justify-center px-4 sm:px-10',
+        fullScreen ? '' : 'pb-[20vh]',
+      )}
     >
       <div
         className="fixed inset-0 bg-dark/80"
         onClick={!disableOverlayClose ? () => actions.close() : undefined}
       />
-      <div className="relative flex min-h-[14.25rem] w-full flex-col justify-center gap-11 bg-light pb-1 sm:w-[31.625rem]">
+      <div
+        className={twJoin(
+          'no-scrollbar relative flex w-full flex-col gap-11 overflow-y-auto rounded-md bg-light pb-1',
+          fullScreen
+            ? 'h-[90svh] min-h-[75svh] sm:h-auto'
+            : 'min-h-[14.25rem] sm:w-[31.625rem]',
+        )}
+      >
         {content || renderDefaultContent()}
         {showCloseIcon && (
           <Clickable

@@ -20,7 +20,7 @@ export function Tab({ items }: Props) {
   );
 
   return (
-    <>
+    <div>
       <div className="relative flex gap-4">
         {items.map((item) => (
           <button
@@ -41,6 +41,6 @@ export function Tab({ items }: Props) {
       {selectedItem && (
         <div className="py-4">{selectedItem.renderContent()}</div>
       )}
-    </>
+    </div>
   );
 }

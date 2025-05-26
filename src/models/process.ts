@@ -1,4 +1,4 @@
-export type Polarity = 'ativo' | 'passivo';
+export type Polarity = 'ativo' | 'passivo' | 'neutro';
 
 export interface ProcessPart {
   documento: string | null;
@@ -37,9 +37,9 @@ export interface Process {
   dispositivo_legal: string;
   glossario: string;
   tipo_processo_cnj_inferido: string;
-  numero_tipo_processo_cnj_inferido: null;
-  assunto_cnj_amplo_inferido: null;
-  numero_assunto_cnj_amplo_inferido: null;
+  numero_tipo_processo_cnj_inferido: string | null;
+  assunto_cnj_amplo_inferido: string | null;
+  numero_assunto_cnj_amplo_inferido: string | null;
   outros_assuntos: string[];
   numero_volumes: null;
   numero_paginas: null;
@@ -64,11 +64,7 @@ export interface Process {
 }
 
 export interface ProcessResponse {
-  code: number;
-  message: string;
-  data: {
-    processos_judiciais_administrativos: {
-      processos: Process[];
-    };
+  processos_judiciais_administrativos: {
+    processos: Process[];
   };
 }
