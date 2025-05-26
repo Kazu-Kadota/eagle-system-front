@@ -21,7 +21,7 @@ import { useMemo } from 'react';
 import ReactPaginate from 'react-paginate';
 
 export interface TableProps<T extends object> {
-  configType: ConfigType;
+  configType?: ConfigType;
   title?: string;
   data: T[];
   columns: ColumnDef<T, string>[];
@@ -45,7 +45,7 @@ export const Table = <T extends object>({
     useConfigStoreActions();
 
   const initialPageSize = useMemo(
-    () => pageCount || getNumOfItemsPerPage(configType) || 25,
+    () => pageCount || (configType && getNumOfItemsPerPage(configType)) || 25,
     [pageCount, configType, getNumOfItemsPerPage],
   );
 
@@ -76,7 +76,7 @@ export const Table = <T extends object>({
 
     table.setPageSize(newPageSize);
 
-    if (!pageCount) {
+    if (!pageCount && configType) {
       savePageSize(configType, newPageSize);
     }
   };
@@ -190,46 +190,48 @@ export const Table = <T extends object>({
         )}
       </div>
 
-      <div className="flex flex-col-reverse items-center justify-between gap-5 rounded-b-[3px] bg-light px-4 pb-3 pt-4 sm:flex-row sm:gap-6 sm:py-2">
-        <p className="flex-1 text-xs font-bold text-primary">
-          Mostrando {numOfItemsSeen} de {rowCount} solicitações
-        </p>
+      {configType && (
+        <div className="flex flex-col-reverse items-center justify-between gap-5 rounded-b-[3px] bg-light px-4 pb-3 pt-4 sm:flex-row sm:gap-6 sm:py-2">
+          <p className="flex-1 text-xs font-bold text-primary">
+            Mostrando {numOfItemsSeen} de {rowCount} solicitações
+          </p>
 
-        <Input
-          label="Exibir:"
-          name="itemsPerPage"
-          value={pageSize.toString()}
-          items={listNumOfItemsPerPage}
-          inputVariants={{ size: 'xs' }}
-          labelVariants={{ size: 'xs' }}
-          containerVariants={{ layout: 'row' }}
-          showEmptyValue={false}
-          onChange={handleOnChangePageSize}
-        />
-
-        {currentPageCount > 0 && (
-          <ReactPaginate
-            breakLabel="..."
-            onPageChange={({ selected }) => table.setPageIndex(selected)}
-            pageRangeDisplayed={7}
-            forcePage={pageIndex}
-            pageCount={currentPageCount}
-            marginPagesDisplayed={1}
-            previousLabel={
-              <PageArrowLeftIcon className="-mb-[0.05rem] w-3 stroke-primary" />
-            }
-            nextLabel={
-              <PageArrowRightIcon className="-mb-[0.05rem] w-3 stroke-primary" />
-            }
-            pageClassName="text-primary leading-none px-[0.08rem]"
-            pageLinkClassName="text-sm font-semibold underline"
-            activeLinkClassName="no-underline"
-            previousClassName="px-1"
-            nextClassName="px-1"
-            containerClassName="flex items-center"
+          <Input
+            label="Exibir:"
+            name="itemsPerPage"
+            value={pageSize.toString()}
+            items={listNumOfItemsPerPage}
+            inputVariants={{ size: 'xs' }}
+            labelVariants={{ size: 'xs' }}
+            containerVariants={{ layout: 'row' }}
+            showEmptyValue={false}
+            onChange={handleOnChangePageSize}
           />
-        )}
-      </div>
+
+          {currentPageCount > 0 && (
+            <ReactPaginate
+              breakLabel="..."
+              onPageChange={({ selected }) => table.setPageIndex(selected)}
+              pageRangeDisplayed={7}
+              forcePage={pageIndex}
+              pageCount={currentPageCount}
+              marginPagesDisplayed={1}
+              previousLabel={
+                <PageArrowLeftIcon className="-mb-[0.05rem] w-3 stroke-primary" />
+              }
+              nextLabel={
+                <PageArrowRightIcon className="-mb-[0.05rem] w-3 stroke-primary" />
+              }
+              pageClassName="text-primary leading-none px-[0.08rem]"
+              pageLinkClassName="text-sm font-semibold underline"
+              activeLinkClassName="no-underline"
+              previousClassName="px-1"
+              nextClassName="px-1"
+              containerClassName="flex items-center"
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,11 +1,12 @@
 'use client';
 
-import dayjs from 'dayjs';
 import { LawHammerIcon } from '@/assets/icons/LawHammerIcon';
 import { PartiesIcon } from '@/assets/icons/PartiesIcon';
 import { RoundInfoIcon } from '@/assets/icons/RoundInfoIcon';
 import { ScaleIcon } from '@/assets/icons/ScaleIcon';
+import { TimesIcon } from '@/assets/icons/TimesIcon';
 import { Box } from '@/components/Box';
+import { Clickable } from '@/components/Clickable';
 import {
   Info,
   InfoCard,
@@ -16,16 +17,61 @@ import {
 } from '@/components/InfoCard';
 import { ProcessPolarityItem } from '@/components/ProcessPolarityItem';
 import { Tab } from '@/components/Tab';
-import type { Polarity, Process } from '@/models/process';
-import { formatCurrency } from '@/utils/currency';
-import { TimesIcon } from '@/assets/icons/TimesIcon';
-import { Clickable } from '@/components/Clickable';
+import { Table } from '@/components/Table';
+import type { Polarity, Process, ProcessPart } from '@/models/process';
 import { useModal } from '@/store/modal/store';
+import { formatCurrency } from '@/utils/currency';
+import { maskCpfOrCnpj } from '@/utils/masks';
+import type { ColumnDef } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 
 type Props = {
   process: Process;
   polarity: Polarity | undefined;
 };
+
+const partsColumns: ColumnDef<ProcessPart>[] = [
+  {
+    header: 'Nome',
+    accessorKey: 'nome',
+  },
+  {
+    header: 'Documento',
+    accessorFn: (row) =>
+      row.documento ? maskCpfOrCnpj(row.documento) : 'Não informado',
+    meta: {
+      className: 'sm:w-20 break-all',
+    },
+  },
+  {
+    header: 'Tipo',
+    accessorFn: (row) => row.detalhes_partes.tipo_especifico,
+    meta: {
+      className: 'sm:w-20 break-all',
+    },
+  },
+  {
+    header: 'Polaridade',
+    accessorKey: 'polaridade',
+    cell: ({ row }) => (
+      <span
+        className={`min-w-[4.5rem] rounded-md px-2 py-1 text-center text-sm font-bold capitalize text-card ${{ ativo: 'bg-successLight', passivo: 'bg-errorLight', neutro: 'bg-warningLight' }[row.original.polaridade] ?? 'bg-placeholder'}`}
+      >
+        {row.original.polaridade}
+      </span>
+    ),
+    meta: {
+      className: 'sm:w-16',
+    },
+  },
+  {
+    header: 'Parte ativa',
+    accessorFn: (row) => (row.parte_ativa ? 'Sim' : 'Não'),
+    meta: {
+      className: 'sm:w-16',
+    },
+  },
+];
 
 export default function ProcessDetailsModal({ process, polarity }: Props) {
   const modal = useModal();
@@ -226,7 +272,17 @@ export default function ProcessDetailsModal({ process, polarity }: Props) {
     </>
   );
 
-  const renderParts = () => <></>;
+  const renderParts = () => (
+    <>
+      <div>
+        <InfoCard>
+          <InfoContent className="pb-6 max-sm:p-0">
+            <Table columns={partsColumns} data={process.partes} />
+          </InfoContent>
+        </InfoCard>
+      </div>
+    </>
+  );
 
   return (
     <Box
