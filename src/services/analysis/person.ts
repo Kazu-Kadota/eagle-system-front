@@ -11,10 +11,10 @@ interface PersonAnalysisDetailResponse {
   person: PersonAnalysis;
 }
 
-interface PersonAnalysisDetailQuery {
+type PersonAnalysisDetailQuery = {
   person_id: string;
   request_id: string;
-}
+};
 
 export const getPersonAnalysis = async () => {
   const { data } = await requestAuth.get<PersonAnalysisResponse>(
@@ -39,4 +39,14 @@ export const getPersonDetailAnalysis = async ({
     ...data,
     person: await preparePersonDataFromApi(data.person),
   };
+};
+
+export const deletePersonAnalysis = async (
+  params: PersonAnalysisDetailQuery,
+) => {
+  await requestAuth.post(
+    env.NEXT_PUBLIC_API_REQUEST_URL,
+    '/analysis/person/delete-waiting',
+    { body: params },
+  );
 };

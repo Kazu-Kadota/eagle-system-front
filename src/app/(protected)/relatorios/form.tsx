@@ -8,7 +8,7 @@ import { ControlledInput } from '@/components/ControlledInput';
 import { SelectGroup } from '@/components/SelectGroup';
 import { simpleAnalysisTypesItems } from '@/constants/analysis';
 import { RoutePaths } from '@/constants/paths';
-import { useCompanies } from '@/hooks/useCompanies';
+import { useCompaniesSelectItems } from '@/hooks/useCompanies';
 import {
   downloadPersonAnalysisReport,
   downloadVehicleAnalysisReport,
@@ -30,9 +30,10 @@ export function ReportHomeForm() {
   const router = useRouter();
   const userType = useSessionUserType();
 
-  const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
-    enabled: hasUserType(userType, UserType.ADMIN),
-  });
+  const { companiesSelectItems, isLoading: companiesLoading } =
+    useCompaniesSelectItems({
+      enabled: hasUserType(userType, UserType.ADMIN),
+    });
 
   const { control, reset, handleSubmit } = useForm<ReportSchema>({
     resolver: zodResolver(reportSchema),

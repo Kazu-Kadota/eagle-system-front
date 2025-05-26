@@ -18,7 +18,7 @@ import { UserType } from '@/models';
 import { useSessionUserType } from '@/store/session';
 import { cn } from '@/utils/classNames';
 import { hasUserType } from '@/utils/userType';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
 interface NavbarLinks extends NavbarItemProps {
@@ -45,6 +45,11 @@ const navlinks: NavbarLinks[] = [
     path: RoutePaths.REGISTER_HOME,
     userTypes: [UserType.ADMIN],
   },
+  {
+    label: 'Gerenciamento\nde Empresas',
+    path: RoutePaths.MANAGE_COMPANIES,
+    userTypes: [UserType.ADMIN],
+  },
   { label: 'Minha Conta', path: RoutePaths.ACCOUNT_HOME },
 ];
 
@@ -58,6 +63,7 @@ export const Navbar = memo(() => {
   const pathname = usePathname();
   const router = useRouter();
   const userType = useSessionUserType();
+  const queryClient = useQueryClient();
 
   const [isNavbarOpen, toggleNavbarOpen] = useToggle(false);
 
@@ -67,6 +73,7 @@ export const Navbar = memo(() => {
       if (error) {
         toast.error(error);
       } else {
+        queryClient.clear();
         router.push(RoutePaths.login());
       }
     },

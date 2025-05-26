@@ -72,9 +72,13 @@ export const PersonAnalysisAnswerUI: React.FC<AnalysisAnswerUIProps> = ({
             {customDayJs(person.finished_at).format('DD/MM/YYYY [às] HH:mm:ss')}
           </Button>
         )}
+        <Button theme="placeholder" size="xxs" disabled shadow="base">
+          Atualizada em{' '}
+          {customDayJs(person.updated_at).format('DD/MM/YYYY [às] HH:mm:ss')}
+        </Button>
         <Button theme="opaque" size="xxs" disabled shadow="base">
           Solicitada em{' '}
-          {customDayJs(person?.created_at).format('DD/MM/YYYY [às] HH:mm:ss')}
+          {customDayJs(person.created_at).format('DD/MM/YYYY [às] HH:mm:ss')}
         </Button>
         <Button
           theme={

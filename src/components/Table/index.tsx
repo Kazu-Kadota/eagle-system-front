@@ -2,12 +2,11 @@ import { PageArrowLeftIcon } from '@/assets/icons/PageArrowLeftIcon';
 import { PageArrowRightIcon } from '@/assets/icons/PageArrowRightIcon';
 import { SortArrowDownIcon } from '@/assets/icons/SortArrowDownIcon';
 import { SortArrowUpIcon } from '@/assets/icons/SortArrowUpIcon';
-import { fuzzyFilter } from '@/components/AnalysisTable/utils';
 import { Button, type ButtonProps } from '@/components/Button';
 import { Input } from '@/components/Input';
+import { fuzzyFilter } from '@/components/Table/utils';
 import { listNumOfItemsPerPage } from '@/constants/table';
-import type { Analysis, AnalysisType } from '@/models';
-import { useConfigStoreActions } from '@/store/config';
+import { ConfigType, useConfigStoreActions } from '@/store/config';
 import { cn } from '@/utils/classNames';
 import {
   type ColumnDef,
@@ -21,8 +20,8 @@ import {
 import { useMemo } from 'react';
 import ReactPaginate from 'react-paginate';
 
-export interface TableProps<T> {
-  analysisType: AnalysisType;
+export interface TableProps<T extends object> {
+  configType: ConfigType;
   title?: string;
   data: T[];
   columns: ColumnDef<T, string>[];
@@ -32,13 +31,13 @@ export interface TableProps<T> {
   onClick?: (item: T) => void;
 }
 
-export const AnalysisTable = <T extends Analysis>({
+export const Table = <T extends object>({
   data,
   columns,
   title,
   actions,
   className,
-  analysisType,
+  configType,
   pageCount,
   onClick,
 }: TableProps<T>) => {
@@ -46,8 +45,8 @@ export const AnalysisTable = <T extends Analysis>({
     useConfigStoreActions();
 
   const initialPageSize = useMemo(
-    () => pageCount || getNumOfItemsPerPage(analysisType) || 25,
-    [pageCount, analysisType, getNumOfItemsPerPage],
+    () => pageCount || getNumOfItemsPerPage(configType) || 25,
+    [pageCount, configType, getNumOfItemsPerPage],
   );
 
   const table = useReactTable<T>({
@@ -78,7 +77,7 @@ export const AnalysisTable = <T extends Analysis>({
     table.setPageSize(newPageSize);
 
     if (!pageCount) {
-      savePageSize(analysisType, newPageSize);
+      savePageSize(configType, newPageSize);
     }
   };
 
@@ -163,7 +162,7 @@ export const AnalysisTable = <T extends Analysis>({
             <tbody>
               {table.getRowModel().rows.map((row) => (
                 <tr
-                  key={row.original.request_id}
+                  key={row.id}
                   onClick={onClick ? () => onClick(row.original) : undefined}
                   className={
                     onClick &&
