@@ -32,68 +32,6 @@ type Props = {
   part?: ProcessPart;
 };
 
-export function getPartInfo(tipoEspecifico: string) {
-  const tipo = tipoEspecifico.toUpperCase();
-
-  const poloAtivo = [
-    'AUTOR',
-    'RECLAMANTE',
-    'IMPETRANTE',
-    'EXEQUENTE',
-    'AGRAVANTE',
-    'APELANTE',
-    'EMBARGANTE',
-    'DENUNCIANTE LIDE',
-    'OPOENTE',
-    'DEPRECANTE',
-    'QUERELANTE',
-    'CREDOR',
-    'REPRESENTANTE DO MP',
-  ];
-
-  const poloPassivo = [
-    'RÉU',
-    'RECLAMADO',
-    'IMPETRADO',
-    'EXECUTADO',
-    'AGRAVADO',
-    'APELADO',
-    'EMBARGADO',
-    'DENUNCIADO LIDE',
-    'OPOSITOR',
-    'DEPRECADO',
-    'INDICIADO',
-    'INVESTIGADO',
-    'ACUSADO',
-    'DENUNCIADO',
-    'AUTOR DO FATO',
-    'QUERELADO',
-    'DEVEDOR',
-    'SOCIEDADE EMPRESÁRIA',
-  ];
-
-  const neutros = [
-    'TERCEIRO INTERESSADO',
-    'ASSISTENTE SIMPLES',
-    'ASSISTENTE LITISCONSORCIAL',
-    'AMICUS CURIAE',
-    'TESTEMUNHA',
-    'VÍTIMA',
-    'ADVOGADO',
-    'SUCESSOR',
-  ];
-
-  if (poloAtivo.includes(tipo)) {
-    return { polo: 'Ativo' as const, papel: 'Autor' as const };
-  } else if (poloPassivo.includes(tipo)) {
-    return { polo: 'Passivo' as const, papel: 'Réu' as const };
-  } else if (neutros.includes(tipo)) {
-    return { polo: 'Neutro' as const, papel: 'Neutro' as const };
-  } else {
-    return { polo: 'Desconhecido' as const, papel: 'Desconhecido' as const };
-  }
-}
-
 const partsColumns: ColumnDef<ProcessPart>[] = [
   {
     header: 'Nome',
@@ -109,17 +47,17 @@ const partsColumns: ColumnDef<ProcessPart>[] = [
   },
   {
     header: 'Tipo',
-    accessorFn: (row) => getPartInfo(row.detalhes_partes.tipo_especifico).papel,
+    accessorFn: (row) => row.detalhes_partes.tipo_especifico,
     meta: {
-      className: 'sm:w-20 break-all',
+      className: 'sm:w-20 break-all capitalize',
     },
   },
   {
     header: 'Polaridade',
-    accessorFn: (row) => getPartInfo(row.detalhes_partes.tipo_especifico).polo,
+    accessorFn: (row) => row.polaridade,
     cell: (value) => (
       <span
-        className={`min-w-[4.5rem] rounded-md px-2 py-1 text-center text-sm font-bold text-card ${{ Ativo: 'bg-successLight', Passivo: 'bg-errorLight', Neutro: 'bg-warningLight' }[value.getValue() as string] ?? 'bg-placeholder'}`}
+        className={`min-w-[4.5rem] rounded-md px-2 py-1 text-center text-sm font-bold capitalize text-card ${{ ativo: 'bg-successLight', passivo: 'bg-errorLight', neutro: 'bg-warningLight' }[value.getValue() as string] ?? 'bg-placeholder'}`}
       >
         {value.getValue() as string}
       </span>
