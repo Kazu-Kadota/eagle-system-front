@@ -61,10 +61,10 @@ export const Modal = memo(() => {
       />
       <div
         className={twJoin(
-          'no-scrollbar relative flex w-full flex-col gap-11 overflow-y-auto rounded-md bg-light pb-1',
+          'no-scrollbar relative flex w-full flex-col gap-11 overflow-hidden rounded-md bg-light',
           fullScreen
-            ? 'h-[90svh] min-h-[75svh] sm:h-auto'
-            : 'min-h-[14.25rem] sm:w-[31.625rem]',
+            ? 'h-[95dvh] max-h-full sm:h-[90dvh]'
+            : 'min-h-[14.25rem] pb-1 sm:w-[31.625rem]',
         )}
       >
         {content || renderDefaultContent()}

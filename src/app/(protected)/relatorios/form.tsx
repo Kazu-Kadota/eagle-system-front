@@ -75,7 +75,6 @@ export function ReportHomeForm() {
   };
 
   const { isPending, mutate: onSubmit } = useMutation({
-    onMutate: console.log,
     mutationFn: async (data: ReportSchema) => {
       const query = prepareReportQuery(data);
 

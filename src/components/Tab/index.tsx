@@ -20,26 +20,28 @@ export function Tab({ items }: Props) {
   );
 
   return (
-    <div>
-      <div className="relative flex gap-4">
+    <div className="flex flex-1 flex-col overflow-hidden">
+      <div className="no-scrollbar relative flex flex-col overflow-x-auto px-2 sm:flex-row sm:gap-4">
         {items.map((item) => (
           <button
             key={item.key}
-            className={`flex flex-col items-center justify-center gap-1 rounded-[3px] px-6 py-3 text-dark outline-none transition-colors hover:bg-light-gray max-sm:flex-1 sm:min-w-[15rem] sm:flex-row sm:gap-3 ${item.key === selectedKey ? 'bg-light-gray' : ''}`}
+            className={`flex items-center justify-center gap-3 rounded-[3px] px-6 py-3 text-dark outline-none transition-colors hover:bg-light-gray max-sm:flex-1 lg:min-w-[15rem] ${item.key === selectedKey ? 'bg-light-gray' : ''}`}
             onClick={() => setSelectedKey(item.key)}
           >
             {item.renderIcon({ className: 'w-7 sm:w-8 lg:w-9' })}
-            <span className="text-base font-bold tracking-wider sm:text-lg lg:text-xl">
+            <span className="text-base/tight font-bold tracking-wider sm:text-lg lg:text-xl">
               {item.label}
             </span>
           </button>
         ))}
       </div>
 
-      <div className="-mx-4 border-b border-line-light" />
+      <div className="mx-2 border-b border-line-light" />
 
       {selectedItem && (
-        <div className="py-4">{selectedItem.renderContent()}</div>
+        <div className="no-scrollbar flex flex-1 flex-col overflow-y-auto px-2 py-4">
+          {selectedItem.renderContent()}
+        </div>
       )}
     </div>
   );

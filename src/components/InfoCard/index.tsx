@@ -87,6 +87,14 @@ export function InfoContent({
 export function InfoCard({
   children,
   variant,
-}: React.PropsWithChildren<InfoVariantProps>) {
-  return <div className={card({ variant })}>{children}</div>;
+  className,
+  ...props
+}: React.PropsWithChildren<
+  React.ComponentPropsWithRef<'div'> & InfoVariantProps
+>) {
+  return (
+    <div {...props} className={card({ variant, className })}>
+      {children}
+    </div>
+  );
 }

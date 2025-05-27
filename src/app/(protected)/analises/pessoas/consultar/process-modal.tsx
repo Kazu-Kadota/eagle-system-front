@@ -1,6 +1,7 @@
 'use client';
 
 import { LawHammerIcon } from '@/assets/icons/LawHammerIcon';
+import { MovementIcon } from '@/assets/icons/MovementIcon';
 import { PartiesIcon } from '@/assets/icons/PartiesIcon';
 import { RoundInfoIcon } from '@/assets/icons/RoundInfoIcon';
 import { ScaleIcon } from '@/assets/icons/ScaleIcon';
@@ -18,6 +19,7 @@ import {
 import { ProcessPolarityItem } from '@/components/ProcessPolarityItem';
 import { Tab } from '@/components/Tab';
 import { Table } from '@/components/Table';
+import { Timeline, type TimelineItem } from '@/components/Timeline';
 import type { Process, ProcessPart } from '@/models/process';
 import { useModal } from '@/store/modal/store';
 import { formatCurrency } from '@/utils/currency';
@@ -335,20 +337,39 @@ export default function ProcessDetailsModal({ process, part }: Props) {
   );
 
   const renderParts = () => (
-    <>
-      <div>
-        <InfoCard>
-          <InfoContent className="pb-6 max-sm:p-0">
-            <Table columns={partsColumns} data={process.partes} />
-          </InfoContent>
-        </InfoCard>
-      </div>
-    </>
+    <InfoCard className="mt-4">
+      <InfoContent className="pb-6 max-sm:p-0">
+        <Table columns={partsColumns} data={process.partes} />
+      </InfoContent>
+    </InfoCard>
   );
+
+  const renderMovements = () => {
+    const itemsByDate = process.atualizacoes.reduce(
+      (obj, item) => {
+        obj[item.data_publicacao] = {
+          date: item.data_publicacao,
+          content: (obj[item.data_publicacao]?.content ?? []).concat(
+            item.conteudo,
+          ),
+        } as TimelineItem;
+
+        return obj;
+      },
+      {} as Record<string, TimelineItem>,
+    );
+
+    return (
+      <div className="sm:px-4 sm:pt-4">
+        <Timeline items={Object.values(itemsByDate)} />
+      </div>
+    );
+  };
 
   return (
     <Box
-      containerClassName="h-full"
+      containerClassName="flex-1 overflow-hidden"
+      className="overflow-hidden pb-0"
       title={
         <>
           <span className="mt-3 flex flex-col items-center gap-1 text-center sm:mt-0 sm:flex-row sm:gap-3 sm:text-left">
@@ -385,6 +406,12 @@ export default function ProcessDetailsModal({ process, part }: Props) {
             key: 'partsKey',
             renderIcon: () => <PartiesIcon className="w-10" />,
             renderContent: renderParts,
+          },
+          {
+            label: 'Movimentações',
+            key: 'movimentsKey',
+            renderIcon: (props) => <MovementIcon {...props} />,
+            renderContent: renderMovements,
           },
         ]}
       />

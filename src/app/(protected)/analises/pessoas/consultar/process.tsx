@@ -87,8 +87,6 @@ export function ProcessFinished({ analysis_info, document }: Props) {
     try {
       const response = JSON.parse(analysis_info) as ProcessResponse;
 
-      console.log(JSON.stringify(response, null, 2));
-
       return response?.processos_judiciais_administrativos?.processos ?? [];
     } catch (error) {
       console.error("Couldn't parse process analysis info", error);
