@@ -26,7 +26,7 @@ export function DeleteOperatorModal({ operator, onSuccess }: Props) {
   });
 
   return (
-    <>
+    <div className="flex flex-1 flex-col justify-center gap-8">
       <h2 className="whitespace-pre-line px-2 text-center text-2xl font-semibold leading-tight text-dark">
         Deseja excluir as limitações do operador{' '}
         <strong>
@@ -57,6 +57,6 @@ export function DeleteOperatorModal({ operator, onSuccess }: Props) {
           Sim, excluir
         </Button>
       </div>
-    </>
+    </div>
   );
 }

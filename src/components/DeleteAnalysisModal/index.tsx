@@ -41,7 +41,7 @@ export function DeleteAnalysisModal({ item, category, onSuccess }: Props) {
   });
 
   return (
-    <>
+    <div className="flex flex-1 flex-col justify-center gap-8">
       <h2 className="whitespace-pre-line px-5 text-center text-3xl font-semibold leading-tight text-dark">
         Deseja realmente excluir a análise?
       </h2>
@@ -68,6 +68,6 @@ export function DeleteAnalysisModal({ item, category, onSuccess }: Props) {
           Sim, excluir
         </Button>
       </div>
-    </>
+    </div>
   );
 }

@@ -21,7 +21,7 @@ export const Modal = memo(() => {
   } = useModalStore();
 
   const renderDefaultContent = () => (
-    <>
+    <div className="flex flex-1 flex-col justify-center gap-8">
       <h2 className="whitespace-pre-line text-center text-3xl font-semibold leading-tight text-dark">
         {title}
       </h2>
@@ -44,7 +44,7 @@ export const Modal = memo(() => {
             </Button>
           ))}
       </div>
-    </>
+    </div>
   );
 
   return (

@@ -112,7 +112,7 @@ export const createPersonColumns = (
       />
     ),
     meta: {
-      className: 'max-w-20 pr-2',
+      className: 'max-w-28 sm:max-w-20 pr-2',
     },
   });
 
