@@ -20,10 +20,10 @@ export function Timeline({ items }: Props) {
 
           <div className="shadow-infoCard relative m-2 flex min-h-16 w-36 flex-col items-center justify-center gap-0.5 border-[1.5px] border-card bg-primary text-center text-card">
             <p className="text-base/tight font-extrabold md:text-lg/tight">
-              {dayjs(item.date, 'YYYY-MM-DD HH:MM:SS').format('DD/MM/YYYY')}
+              {dayjs(item.date, 'YYYY-MM-DD hh:mm:ss').format('DD/MM/YYYY')}
             </p>
             <p className="text-sm/tight font-normal uppercase md:text-base/tight">
-              {dayjs(item.date, 'YYYY-MM-DD HH:MM:SS').format('dddd')}
+              {dayjs(item.date, 'YYYY-MM-DD hh:mm:ss').format('dddd')}
             </p>
           </div>
 

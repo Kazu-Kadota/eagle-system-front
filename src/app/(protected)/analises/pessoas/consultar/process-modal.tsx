@@ -274,7 +274,7 @@ export default function ProcessDetailsModal({ process, part }: Props) {
                   process.data_notificacao
                     ? dayjs(
                         process.data_notificacao,
-                        'YYYY-MM-DD HH:MM:SS',
+                        'YYYY-MM-DD hh:mm:ss',
                       ).format('DD/MM/YYYY')
                     : ''
                 }
@@ -285,7 +285,7 @@ export default function ProcessDetailsModal({ process, part }: Props) {
                   process.data_notificacao
                     ? dayjs(
                         process.data_notificacao,
-                        'YYYY-MM-DD HH:MM:SS',
+                        'YYYY-MM-DD hh:mm:ss',
                       ).format('DD/MM/YYYY')
                     : ''
                 }
@@ -296,7 +296,7 @@ export default function ProcessDetailsModal({ process, part }: Props) {
                   process.data_transito_em_julgado
                     ? dayjs(
                         process.data_transito_em_julgado,
-                        'YYYY-MM-DD HH:MM:SS',
+                        'YYYY-MM-DD hh:mm:ss',
                       ).format('DD/MM/YYYY')
                     : ''
                 }
@@ -307,7 +307,7 @@ export default function ProcessDetailsModal({ process, part }: Props) {
                   process.data_redistribuicao
                     ? dayjs(
                         process.data_redistribuicao,
-                        'YYYY-MM-DD HH:MM:SS',
+                        'YYYY-MM-DD hh:mm:ss',
                       ).format('DD/MM/YYYY')
                     : ''
                 }
@@ -318,7 +318,7 @@ export default function ProcessDetailsModal({ process, part }: Props) {
                   process.data_arquivamento
                     ? dayjs(
                         process.data_arquivamento,
-                        'YYYY-MM-DD HH:MM:SS',
+                        'YYYY-MM-DD hh:mm:ss',
                       ).format('DD/MM/YYYY')
                     : ''
                 }
@@ -359,9 +359,13 @@ export default function ProcessDetailsModal({ process, part }: Props) {
       {} as Record<string, TimelineItem>,
     );
 
+    const items = Object.values(itemsByDate).sort((a, b) =>
+      a.date.localeCompare(b.date),
+    );
+
     return (
       <div className="sm:px-4 sm:pt-4">
-        <Timeline items={Object.values(itemsByDate)} />
+        <Timeline items={items} />
       </div>
     );
   };

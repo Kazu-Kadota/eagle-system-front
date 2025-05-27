@@ -55,7 +55,7 @@ function Card({ process, document, onDetailClick }: CardProps) {
             label="Data de Início"
             value={
               process.data_notificacao
-                ? dayjs(process.data_notificacao, 'YYYY-MM-DD HH:MM:SS').format(
+                ? dayjs(process.data_notificacao, 'YYYY-MM-DD hh:mm:ss').format(
                     'DD/MM/YYYY',
                   )
                 : ''
