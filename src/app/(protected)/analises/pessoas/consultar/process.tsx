@@ -106,16 +106,22 @@ export function ProcessFinished({ analysis_info, document }: Props) {
 
   return (
     <Box title="Informações de Processos" containerClassName="mt-4">
-      <ul className="grid grid-cols-1 justify-between gap-x-14 gap-y-4 px-2 pb-3 sm:grid-cols-[repeat(auto-fill,minmax(26rem,1fr))]">
-        {processList.map((process) => (
-          <MemoizedCard
-            key={process.numero + process.data_notificacao}
-            process={process}
-            document={document}
-            onDetailClick={handleDetails}
-          />
-        ))}
-      </ul>
+      {processList.length > 0 ? (
+        <ul className="grid grid-cols-1 justify-between gap-x-14 gap-y-4 px-2 pb-3 sm:grid-cols-[repeat(auto-fill,minmax(26rem,1fr))]">
+          {processList.map((process) => (
+            <MemoizedCard
+              key={process.numero + process.data_notificacao}
+              process={process}
+              document={document}
+              onDetailClick={handleDetails}
+            />
+          ))}
+        </ul>
+      ) : (
+        <p className="mt-1 text-lg font-medium text-primary">
+          Não foram encontradas informações sobre processos.
+        </p>
+      )}
     </Box>
   );
 }
