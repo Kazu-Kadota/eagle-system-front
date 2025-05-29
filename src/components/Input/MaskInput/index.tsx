@@ -21,6 +21,7 @@ const maskFnByType: { [key in InputType]: (value: string) => string } = {
   password: identity,
   text: identity,
   email: identity,
+  number: identity,
 };
 
 export function MaskInput({ onChange, type, ...rest }: MaskInputProps) {
