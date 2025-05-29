@@ -5,13 +5,15 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 const initialCompany: MyCompany = {
-  company_id: '',
-  updated_at: '',
-  cnpj: '',
-  created_at: '',
-  name: '',
-  type: CompanyType.FONT,
-  feature_flag: [],
+  company: { 
+    company_id: '',
+    updated_at: '',
+    cnpj: '',
+    created_at: '',
+    name: '',
+    type: CompanyType.FONT,
+  },
+  feature_flag: []
 };
 
 interface Options {
