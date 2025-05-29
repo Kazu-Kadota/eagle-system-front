@@ -2,7 +2,7 @@ import { getVehicleAnalysis } from '@/services/analysis/vehicle';
 import { useQuery } from '@tanstack/react-query';
 
 export function useVehicleAnalysis() {
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['vehicleAnalysis'],
     queryFn: getVehicleAnalysis,
   });
@@ -10,6 +10,5 @@ export function useVehicleAnalysis() {
   return {
     vehicleAnalysis: data?.vehicles ?? [],
     isLoading,
-    refetch,
   };
 }

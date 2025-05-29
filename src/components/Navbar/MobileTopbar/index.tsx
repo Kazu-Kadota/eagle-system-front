@@ -2,7 +2,8 @@ import Image from 'next/image';
 
 import { MenuIcon } from '@/assets/icons/MenuIcon';
 import logoImg from '@/assets/images/logo.png';
-import { Fade } from '@/components/Fade';
+import { useTransition } from '@/hooks/useTransition';
+import { cn } from '@/utils/classNames';
 import { memo } from 'react';
 
 interface MobileTopbar {
@@ -14,6 +15,11 @@ const transitionDuration = 150;
 
 export const MobileTopbar = memo(
   ({ navbarIsOpen, toggleNavbar }: MobileTopbar) => {
+    const { shouldMount, stage } = useTransition(
+      navbarIsOpen,
+      transitionDuration,
+    );
+
     return (
       <>
         <div className="top fixed z-0 flex h-12 w-full items-center justify-between bg-dark shadow-2xl md:hidden">
@@ -29,12 +35,15 @@ export const MobileTopbar = memo(
           </button>
         </div>
         <div className="h-12 md:hidden" />
-        <Fade
-          isVisible={navbarIsOpen}
-          duration={transitionDuration}
-          className="fixed inset-0 z-10 bg-dark/70 transition-opacity md:hidden"
-          onClick={toggleNavbar}
-        />
+        {shouldMount && (
+          <div
+            className={cn(
+              stage === 'enter' ? 'opacity-30' : 'opacity-0',
+              `fixed inset-0 z-10 bg-dark transition-opacity duration-[${transitionDuration}] md:hidden`,
+            )}
+            onClick={toggleNavbar}
+          />
+        )}
       </>
     );
   },

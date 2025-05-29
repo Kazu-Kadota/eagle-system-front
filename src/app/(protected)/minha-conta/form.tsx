@@ -9,7 +9,7 @@ import {
   registerUserTypeSelectItems,
   userApiSelectItems,
 } from '@/constants/auth';
-import { useCompaniesSelectItems } from '@/hooks/useCompanies';
+import { useCompanies } from '@/hooks/useCompanies';
 import { UserType } from '@/models';
 import { useModal } from '@/store/modal/store';
 import { useSessionUser } from '@/store/session';
@@ -19,10 +19,9 @@ export function AccountHomeForm() {
   const modal = useModal();
   const user = useSessionUser();
 
-  const { companiesSelectItems, isLoading: companiesLoading } =
-    useCompaniesSelectItems({
-      enabled: hasUserType(user?.user_type, UserType.ADMIN),
-    });
+  const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
+    enabled: hasUserType(user?.user_type, UserType.ADMIN),
+  });
 
   const onChangePassword = () => {
     modal.open({

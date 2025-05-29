@@ -6,7 +6,6 @@ import { customDayJs } from '@/config/dayjs';
 import {
   AnalysisType,
   UserType,
-  type AnalysisCategory,
   type AnalysisStatus,
   type PersonAnalysis,
 } from '@/models';
@@ -18,14 +17,7 @@ import {
 import { hasUserType } from '@/utils/userType';
 import type { ColumnDef } from '@tanstack/react-table';
 
-type Callbacks = {
-  onDeleteAnalysis: (item: any, category: AnalysisCategory) => void;
-};
-
-export const createPersonColumns = (
-  userType: UserType,
-  callbacks: Callbacks,
-) => {
+const createPersonColumns = (userType: UserType) => {
   const columns: ColumnDef<PersonAnalysis, string>[] = [
     {
       id: 'request_id',
@@ -102,19 +94,20 @@ export const createPersonColumns = (
     header: 'Ações',
     cell: ({ row }) => (
       <AnalysisTableActions
-        key={row.original.request_id + row.original.person_id}
         id={row.original.request_id}
         item={row.original}
         type={AnalysisType.PERSON}
-        onDeleteAnalysis={
-          userType === UserType.ADMIN ? callbacks.onDeleteAnalysis : undefined
-        }
       />
     ),
     meta: {
-      className: 'max-w-28 sm:max-w-20 pr-2',
+      className: 'max-w-20 pr-3',
     },
   });
 
   return columns;
 };
+
+export const personTableColumns = createPersonColumns(UserType.CLIENT);
+export const personTableColumnsAdminOperator = createPersonColumns(
+  UserType.ADMIN,
+);

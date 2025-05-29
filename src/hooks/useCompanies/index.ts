@@ -1,4 +1,4 @@
-import { EMPTY_ARRAY } from '@/constants/primitives';
+import type { Company } from '@/models';
 import { getCompanies } from '@/services/auth/companies';
 import type { SelectItem } from '@/types/select';
 import { useQuery } from '@tanstack/react-query';
@@ -6,32 +6,20 @@ import { useMemo } from 'react';
 
 export interface UseCompaniesOptions {
   enabled?: boolean;
-  refetchOnWindowFocus?: boolean;
 }
 
-export const useCompanies = ({
-  enabled,
-  refetchOnWindowFocus = false,
-}: UseCompaniesOptions) => {
-  const { data, isLoading, refetch } = useQuery({
+const initialCompanies: Company[] = [];
+
+export const useCompanies = ({ enabled }: UseCompaniesOptions) => {
+  const { data, isFetching, refetch } = useQuery({
     queryFn: () => getCompanies(),
     queryKey: ['companies'],
-    enabled,
-    refetchOnWindowFocus,
+    enabled: enabled,
+    refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
 
-  const companies = data ?? EMPTY_ARRAY;
-
-  return {
-    companies,
-    isLoading,
-    refetch,
-  };
-};
-
-export const useCompaniesSelectItems = (options: UseCompaniesOptions) => {
-  const { companies, isLoading, refetch } = useCompanies(options);
+  const companies = data?.companies ?? initialCompanies;
 
   const companiesSelectItems: SelectItem[] = useMemo(
     () =>
@@ -42,5 +30,10 @@ export const useCompaniesSelectItems = (options: UseCompaniesOptions) => {
     [companies],
   );
 
-  return { companiesSelectItems, isLoading, refetch };
+  return {
+    companies,
+    companiesSelectItems,
+    isLoading: isFetching,
+    refetch,
+  };
 };

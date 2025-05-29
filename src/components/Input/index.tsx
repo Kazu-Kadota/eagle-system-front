@@ -83,7 +83,6 @@ const inputStyleSlots = tv({
 
 export type InputType =
   | 'text'
-  | 'number'
   | 'password'
   | 'email'
   | 'cpf'
@@ -114,7 +113,6 @@ export interface InputProps {
 
 const inputComponentByType: { [key in InputType]: React.ElementType } = {
   text: 'input',
-  number: 'input',
   email: 'input',
   password: PasswordInput,
   cpf: MaskInput,

@@ -15,18 +15,10 @@ export interface User {
   api: boolean;
   created_at: string;
   updated_at: string;
-  companiesAccess?: OperatorCompaniesAccess;
 }
 
 export interface AuthResponse {
   user: User;
   jwtToken: string;
   expires_date: string;
-}
-
-export interface OperatorCompaniesAccess {
-  updated_at: string;
-  companies: string[];
-  user_id: string;
-  created_at: string;
 }

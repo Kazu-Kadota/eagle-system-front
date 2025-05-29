@@ -11,10 +11,10 @@ interface VehicleAnalysisDetailResponse {
   vehicle: VehicleAnalysis;
 }
 
-type VehicleAnalysisDetailQuery = {
+interface VehicleAnalysisDetailQuery {
   vehicle_id: string;
   request_id: string;
-};
+}
 
 export const getVehicleAnalysis = async () => {
   const { data } = await requestAuth.get<VehicleAnalysisResponse>(
@@ -44,14 +44,4 @@ export const getVehiclesDetailAnalysis = async ({
         : data.vehicle.analysis_info,
     },
   };
-};
-
-export const deleteVehicleAnalysis = async (
-  params: VehicleAnalysisDetailQuery,
-) => {
-  await requestAuth.post(
-    env.NEXT_PUBLIC_API_REQUEST_URL,
-    '/analysis/vehicle/delete-waiting',
-    { body: params },
-  );
 };

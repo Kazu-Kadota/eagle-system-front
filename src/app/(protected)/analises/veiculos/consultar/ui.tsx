@@ -1,17 +1,14 @@
-import type { AnalysisAnswerSchema } from '@/app/(protected)/analises/pessoas/[id]/schema';
 import { columns } from '@/app/(protected)/analises/veiculos/consultar/columns';
 import type { AnalysisVehicleSearchSchema } from '@/app/(protected)/analises/veiculos/consultar/schema';
 import { SearchIcon } from '@/assets/icons/SearchIcon';
+import { AnalysisTable } from '@/components/AnalysisTable';
 import { Box } from '@/components/Box';
 import { Button } from '@/components/Button';
 import { ControlledInput } from '@/components/ControlledInput';
-import { ControlledSelectGroup } from '@/components/ControlledSelectGroup';
-import { ControlledTextArea } from '@/components/ControlledTextArea';
 import { Input } from '@/components/Input';
 import { InputRow } from '@/components/InputRow';
 import { LoadingContainer } from '@/components/LoadingContainer';
 import { SelectGroup } from '@/components/SelectGroup';
-import { Table } from '@/components/Table';
 import { TextArea } from '@/components/TextArea';
 import { customDayJs } from '@/config/dayjs';
 import {
@@ -24,152 +21,41 @@ import {
 import { userApiSelectItems } from '@/constants/auth';
 import { estadosVehiclesSelectItems } from '@/constants/estados';
 import {
-  AnalysisResult,
   AnalysisStatus,
+  AnalysisType,
   UserType,
   type VehicleAnalysis,
 } from '@/models';
-import { ConfigType } from '@/store/config';
 import type { SelectItem } from '@/types/select';
-import { onChangeStringBoolean, toStringBoolean } from '@/utils/boolean';
+import { toStringBoolean } from '@/utils/boolean';
 import { hasUserType } from '@/utils/userType';
-import { Controller, type Control } from 'react-hook-form';
+import type { Control } from 'react-hook-form';
 
 interface SearchVehicleAnalysisUIProps {
   userType?: UserType;
   isLoading: boolean;
   isVehicleLoading: boolean;
-  isChangingAnwser: boolean;
-  isChangingAnswerLoading: boolean;
-  changeAnswerResult: AnalysisResult;
-  controlSearch: Control<AnalysisVehicleSearchSchema>;
-  controlChangeAnswer: Control<AnalysisAnswerSchema>;
+  control: Control<AnalysisVehicleSearchSchema>;
   companiesSelectItems: SelectItem[];
   companiesLoading: boolean;
   items?: VehicleAnalysis[] | null;
   selectedItem: VehicleAnalysis | null;
   setSelectedItem: (item: VehicleAnalysis) => void;
   onSearchSubmit: () => void;
-  onChangeAnswerSubmit: () => void;
-  toggleChangeAnswer: () => void;
 }
 
 export function SearchVehicleAnalysisUI({
-  controlSearch,
-  controlChangeAnswer,
+  control,
   isLoading,
-  isChangingAnswerLoading,
-  isChangingAnwser,
   userType,
   isVehicleLoading,
-  changeAnswerResult,
   companiesSelectItems,
   companiesLoading,
   items,
   selectedItem,
   setSelectedItem,
   onSearchSubmit,
-  onChangeAnswerSubmit,
-  toggleChangeAnswer,
 }: SearchVehicleAnalysisUIProps) {
-  const renderFinished = (item: VehicleAnalysis) => {
-    if (isChangingAnwser) {
-      return (
-        <form
-          onSubmit={onChangeAnswerSubmit}
-          className="flex flex-col gap-3 sm:gap-4"
-        >
-          <ControlledSelectGroup
-            title="Selecione o resultado da análise"
-            control={controlChangeAnswer}
-            name="analysis_result"
-            required
-            layout="row"
-            items={analysisResultsSelectItems}
-            containerClassName="mt-2"
-          />
-          <Controller
-            control={controlChangeAnswer}
-            name="from_db"
-            render={({ field, fieldState: { error } }) => (
-              <SelectGroup
-                required
-                title="Resposta do Banco de Dados?"
-                items={userApiSelectItems}
-                layout="row"
-                value={toStringBoolean(field.value)}
-                error={error?.message}
-                containerClassName="mb-2"
-                onChange={onChangeStringBoolean(field.onChange)}
-              />
-            )}
-          />
-          <ControlledTextArea
-            control={controlChangeAnswer}
-            shouldShowDisableStyle
-            disabled={changeAnswerResult === AnalysisResult.APPROVED}
-            label="Nova descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
-            name="analysis_info"
-            labelRightElement={
-              <Button
-                theme="opaque"
-                size="xsStrong"
-                onClick={toggleChangeAnswer}
-              >
-                Fechar edição
-              </Button>
-            }
-          />
-          <Button
-            type="submit"
-            theme="primary"
-            size="sm"
-            className="mb-1 mt-4 min-w-[8rem] self-center md:mt-0 md:self-end"
-            loading={isChangingAnswerLoading}
-          >
-            Enviar
-          </Button>
-        </form>
-      );
-    }
-
-    return (
-      <>
-        <SelectGroup
-          title="Resultado da análise"
-          required
-          disabled
-          layout="row"
-          value={item.analysis_result}
-          items={analysisResultsSelectItems}
-          containerClassName="mt-2"
-        />
-        <SelectGroup
-          required
-          title="Resposta do Banco de Dados?"
-          items={userApiSelectItems}
-          layout="row"
-          value={toStringBoolean(item.from_db)}
-          containerClassName="mb-2"
-          disabled
-        />
-        <TextArea
-          label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
-          name="analysis_info"
-          disabled
-          value={item.analysis_info}
-          labelRightElement={
-            userType === UserType.ADMIN ? (
-              <Button theme="blue" size="xsStrong" onClick={toggleChangeAnswer}>
-                Alterar resultado
-              </Button>
-            ) : undefined
-          }
-        />
-      </>
-    );
-  };
-
   const renderVehicle = () => {
     if (isVehicleLoading) {
       return <LoadingContainer />;
@@ -193,15 +79,9 @@ export function SearchVehicleAnalysisUI({
               )}
             </Button>
           )}
-          <Button theme="placeholder" size="xxs" disabled shadow="base">
-            Atualizada em{' '}
-            {customDayJs(selectedItem.updated_at).format(
-              'DD/MM/YYYY [às] HH:mm:ss',
-            )}
-          </Button>
           <Button theme="opaque" size="xxs" disabled shadow="base">
             Solicitada em{' '}
-            {customDayJs(selectedItem.created_at).format(
+            {customDayJs(selectedItem?.created_at).format(
               'DD/MM/YYYY [às] HH:mm:ss',
             )}
           </Button>
@@ -347,7 +227,32 @@ export function SearchVehicleAnalysisUI({
         </InputRow>
 
         {selectedItem.status === AnalysisStatus.FINISHED ? (
-          renderFinished(selectedItem)
+          <>
+            <SelectGroup
+              title="Resultado da análise"
+              required
+              disabled
+              layout="row"
+              value={selectedItem.analysis_result}
+              items={analysisResultsSelectItems}
+              containerClassName="mt-2"
+            />
+            <SelectGroup
+              required
+              title="Resposta do Banco de Dados?"
+              items={userApiSelectItems}
+              layout="row"
+              value={toStringBoolean(selectedItem.from_db)}
+              containerClassName="mb-2"
+              disabled
+            />
+            <TextArea
+              label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
+              name="analysis_info"
+              disabled
+              value={selectedItem.analysis_info}
+            />
+          </>
         ) : (
           <SelectGroup
             title="Status"
@@ -379,7 +284,7 @@ export function SearchVehicleAnalysisUI({
               placeholder="Placa"
               name="plateSearch"
               type="plate"
-              control={controlSearch}
+              control={control}
               inputVariants={{ size: 'md' }}
               labelVariants={{ size: 'sm' }}
             />
@@ -387,13 +292,13 @@ export function SearchVehicleAnalysisUI({
               placeholder="Selecione um estado"
               name="plateStateSearch"
               items={estadosVehiclesSelectItems}
-              control={controlSearch}
+              control={control}
               inputVariants={{ size: 'md' }}
               labelVariants={{ size: 'sm' }}
             />
             {hasUserType(userType, UserType.ADMIN, UserType.OPERATOR) && (
               <ControlledInput
-                control={controlSearch}
+                control={control}
                 placeholder="Selecione uma empresa"
                 name="companyNameSearch"
                 items={companiesSelectItems}
@@ -424,9 +329,9 @@ export function SearchVehicleAnalysisUI({
               : 'Não foi encontrado nenhum resultado para essa busca'}
           </h4>
           {items.length > 0 && (
-            <Table
+            <AnalysisTable
               columns={columns}
-              configType={ConfigType.VEHICLE}
+              analysisType={AnalysisType.VEHICLE}
               data={items}
               onClick={setSelectedItem}
               pageCount={5}

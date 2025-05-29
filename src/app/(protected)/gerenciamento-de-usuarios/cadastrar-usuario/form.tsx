@@ -12,7 +12,7 @@ import {
   registerUserTypeSelectItems,
   userApiSelectItems,
 } from '@/constants/auth';
-import { useCompaniesSelectItems } from '@/hooks/useCompanies';
+import { useCompanies } from '@/hooks/useCompanies';
 import { UserType } from '@/models';
 import { registerUser } from '@/services/auth/register';
 import { useModal } from '@/store/modal/store';
@@ -43,10 +43,9 @@ export const RegisterUserForm = () => {
     },
   });
 
-  const { companiesSelectItems, isLoading: companiesLoading } =
-    useCompaniesSelectItems({
-      enabled: hasUserType(userType, UserType.ADMIN),
-    });
+  const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
+    enabled: hasUserType(userType, UserType.ADMIN),
+  });
 
   const { mutate: onSubmit, isPending } = useMutation({
     mutationFn: (data: RegisterUserSchema) =>
