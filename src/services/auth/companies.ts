@@ -62,6 +62,11 @@ export const getMyCompany = async () => {
   const { data } = await requestAuth.get<MyCompany>(
     env.NEXT_PUBLIC_API_USER_URL,
     '/my-company',
+    {
+      query: {
+        feature_flag: true
+      }
+    }
   );
 
   return data;

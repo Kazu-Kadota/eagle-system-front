@@ -38,14 +38,18 @@ export type FeatureFlagObj = {
 
 export type FeatureFlags = Record<FeatureFlag, boolean>;
 
-export interface MyCompany {
+export interface MyCompanyCompany {
   company_id: string;
   updated_at: string;
   cnpj: string;
   created_at: string;
   name: string;
   type: CompanyType;
-  feature_flag: FeatureFlag[];
+}
+
+export interface MyCompany {
+  company: MyCompanyCompany
+  feature_flag: Array<FeatureFlag>
 }
 
 export interface Company {
