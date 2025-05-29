@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link, { type LinkProps } from 'next/link';
 import { type VariantProps, tv } from 'tailwind-variants';
 
 import { Spinner } from '@/components/Spinner';
@@ -8,7 +8,6 @@ const style = tv({
   variants: {
     theme: {
       primary: 'bg-primary',
-      primaryLight: 'bg-primaryLight',
       dark: 'bg-dark',
       placeholder: 'bg-placeholder',
       success: 'bg-success',
@@ -42,9 +41,8 @@ const style = tv({
 
 export type ButtonProps = VariantProps<typeof style> &
   React.ComponentProps<'button'> &
-  Partial<React.ComponentProps<'a'>> & {
+  Partial<LinkProps> & {
     loading?: boolean;
-    replace?: boolean;
   };
 
 export function Button({
@@ -57,8 +55,6 @@ export function Button({
   loading,
   disabled,
   children,
-  target,
-  replace,
   ...rest
 }: ButtonProps) {
   const commonProps = {
@@ -68,9 +64,7 @@ export function Button({
   };
 
   if (href) {
-    return (
-      <Link {...commonProps} replace={replace} target={target} href={href} />
-    );
+    return <Link {...commonProps} href={href} />;
   }
 
   return <button {...commonProps} {...rest} type={type ?? 'button'} />;

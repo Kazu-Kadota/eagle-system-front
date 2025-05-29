@@ -2,7 +2,7 @@ import { getPersonAnalysis } from '@/services/analysis/person';
 import { useQuery } from '@tanstack/react-query';
 
 export function usePersonAnalysis() {
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['personAnalysis'],
     queryFn: getPersonAnalysis,
   });
@@ -10,6 +10,5 @@ export function usePersonAnalysis() {
   return {
     personAnalysis: data?.people ?? [],
     isLoading,
-    refetch,
   };
 }

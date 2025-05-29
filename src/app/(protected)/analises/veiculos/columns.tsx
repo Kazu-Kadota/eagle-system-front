@@ -1,5 +1,3 @@
-import type { ColumnDef } from '@tanstack/react-table';
-
 import { AnalysisResponseTimer } from '@/components/AnalysisResponseTimer';
 import { getInitialStateAndFormat } from '@/components/AnalysisResponseTimer/utils';
 import { AnalysisTableActions } from '@/components/AnalysisTableActions';
@@ -8,7 +6,6 @@ import { customDayJs } from '@/config/dayjs';
 import {
   AnalysisType,
   UserType,
-  type AnalysisCategory,
   type AnalysisStatus,
   type VehicleAnalysis,
 } from '@/models';
@@ -17,15 +14,9 @@ import {
   getVehicleAnalysisType,
 } from '@/utils/analysis/mappers';
 import { hasUserType } from '@/utils/userType';
+import type { ColumnDef } from '@tanstack/react-table';
 
-type Callbacks = {
-  onDeleteAnalysis: (item: any, category: AnalysisCategory) => void;
-};
-
-export const createVehicleColumns = (
-  userType: UserType,
-  callbacks: Callbacks,
-) => {
+const createVehicleColumns = (userType: UserType) => {
   const columns: ColumnDef<VehicleAnalysis, string>[] = [
     {
       id: 'request_id',
@@ -100,13 +91,9 @@ export const createVehicleColumns = (
     header: 'Ações',
     cell: ({ row }) => (
       <AnalysisTableActions
-        key={row.original.request_id + row.original.vehicle_id}
         id={row.original.request_id}
         item={row.original as never}
         type={AnalysisType.VEHICLE}
-        onDeleteAnalysis={
-          userType === UserType.ADMIN ? callbacks.onDeleteAnalysis : undefined
-        }
       />
     ),
     meta: {
@@ -116,3 +103,8 @@ export const createVehicleColumns = (
 
   return columns;
 };
+
+export const vehicleTableColumns = createVehicleColumns(UserType.CLIENT);
+export const vehicleTableColumnsAdminOperator = createVehicleColumns(
+  UserType.ADMIN,
+);

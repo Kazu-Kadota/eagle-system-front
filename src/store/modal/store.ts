@@ -5,16 +5,14 @@ interface ModalState {
   title?: string;
   buttons?: Omit<ButtonProps, 'to'>[];
   disableOverlayClose?: boolean;
-  preventClosing?: boolean;
   content?: React.ReactNode;
   showCloseIcon?: boolean;
-  fullScreen?: boolean;
 }
 
 interface ModalActions {
   open: (state: ModalState) => void;
   update: (state: ModalState) => void;
-  close: (params?: { force?: boolean }) => void;
+  close: () => void;
 }
 
 interface ModalStore extends ModalState {
@@ -28,20 +26,15 @@ const initialState: ModalState = {
   disableOverlayClose: false,
   content: null,
   showCloseIcon: false,
-  preventClosing: false,
-  fullScreen: false,
 };
 
-export const useModalStore = create<ModalStore>((set, get) => ({
+export const useModalStore = create<ModalStore>((set) => ({
   ...initialState,
   isOpen: false,
   actions: {
     open: (state) => set({ ...initialState, ...state, isOpen: true }),
     update: (state) => set(state),
-    close: ({ force } = {}) => {
-      if (!force && get().preventClosing) return;
-      set({ isOpen: false });
-    },
+    close: () => set({ isOpen: false }),
   },
 }));
 

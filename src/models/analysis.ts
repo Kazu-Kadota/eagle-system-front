@@ -111,5 +111,3 @@ export interface BackRegionPersonAnalysis {
   type: PersonAnalysisType;
   regions?: State[];
 }
-
-export type AnalysisCategory = 'person' | 'vehicle';

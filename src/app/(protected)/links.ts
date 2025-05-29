@@ -68,8 +68,4 @@ export const linksRegister: LinkBoxItem[] = [
     label: 'Cadastrar Empresas',
     path: RoutePaths.REGISTER_COMPANY,
   },
-  {
-    label: 'Gerenciar Operadores',
-    path: RoutePaths.MANAGE_OPERATORS,
-  },
 ];

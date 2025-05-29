@@ -1,23 +1,17 @@
 'use client';
 
+import { AnalysisTable } from '@/components/AnalysisTable';
 import type { ButtonProps } from '@/components/Button';
-import { DeleteAnalysisModal } from '@/components/DeleteAnalysisModal';
 import { LoadingContainer } from '@/components/LoadingContainer';
-import { Table } from '@/components/Table';
 import { RoutePaths } from '@/constants/paths';
 import { useVehicleAnalysis } from '@/hooks/useVehicleAnalysis';
-import {
-  AnalysisType,
-  UserType,
-  type AnalysisCategory,
-  type VehicleAnalysis,
-} from '@/models';
-import { ConfigType } from '@/store/config';
-import { useModal } from '@/store/modal/store';
+import { AnalysisType, UserType } from '@/models';
 import { useSessionUserType } from '@/store/session';
 import { hasUserType } from '@/utils/userType';
-import { useCallback, useMemo } from 'react';
-import { createVehicleColumns } from './columns';
+import {
+  vehicleTableColumns,
+  vehicleTableColumnsAdminOperator,
+} from './columns';
 
 const analysisTypeLabel = {
   [AnalysisType.PERSON]: 'de Pessoa',
@@ -56,35 +50,9 @@ function getTableActions(analysisType: AnalysisType, userType?: UserType) {
 }
 
 export function VehicleAnalysisHomeClient() {
-  const modal = useModal();
   const userType = useSessionUserType();
 
-  const { vehicleAnalysis, isLoading, refetch } = useVehicleAnalysis();
-
-  const handleDeleteAnalysis = useCallback(
-    (item: VehicleAnalysis, category: AnalysisCategory) => {
-      modal.open({
-        content: (
-          <DeleteAnalysisModal
-            item={item}
-            category={category}
-            onSuccess={() => refetch()}
-          />
-        ),
-      });
-    },
-    [refetch],
-  );
-
-  const columns = useMemo(
-    () =>
-      userType
-        ? createVehicleColumns(userType, {
-            onDeleteAnalysis: handleDeleteAnalysis,
-          })
-        : [],
-    [handleDeleteAnalysis],
-  );
+  const { vehicleAnalysis, isLoading } = useVehicleAnalysis();
 
   if (isLoading) {
     return <LoadingContainer />;
@@ -92,11 +60,15 @@ export function VehicleAnalysisHomeClient() {
 
   return (
     <div className="flex flex-col gap-10 sm:gap-[3.4rem]">
-      <Table
+      <AnalysisTable
         title="Veículos"
-        configType={ConfigType.VEHICLE}
+        analysisType={AnalysisType.VEHICLE}
         data={vehicleAnalysis}
-        columns={columns}
+        columns={
+          hasUserType(userType, UserType.ADMIN, UserType.OPERATOR)
+            ? vehicleTableColumnsAdminOperator
+            : vehicleTableColumns
+        }
         actions={getTableActions(AnalysisType.VEHICLE, userType)}
       />
     </div>

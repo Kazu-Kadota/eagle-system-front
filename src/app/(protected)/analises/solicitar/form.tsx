@@ -19,7 +19,7 @@ import {
   validatePersonAnalysis,
 } from '@/app/(protected)/analises/solicitar/utils';
 import { RoutePaths } from '@/constants/paths';
-import { useCompaniesSelectItems } from '@/hooks/useCompanies';
+import { useCompanies } from '@/hooks/useCompanies';
 import { useMyCompany } from '@/hooks/useMyCompany';
 import {
   AnalysisType,
@@ -76,10 +76,9 @@ export function RequestAnalysisForm() {
     isAdmin,
   });
 
-  const { companiesSelectItems, isLoading: companiesLoading } =
-    useCompaniesSelectItems({
-      enabled: isAdmin,
-    });
+  const { companiesSelectItems, isLoading: companiesLoading } = useCompanies({
+    enabled: isAdmin,
+  });
 
   const {
     control: controlPerson,
@@ -203,10 +202,10 @@ export function RequestAnalysisForm() {
         ]);
 
         if (!personData || !vehiclesData) {
-          return { ok: false };
+          return;
         }
 
-        await requestAnalysisCombo({
+        return requestAnalysisCombo({
           combo_number: vehiclesData.vehicles.length,
           person: preparePersonData(personData),
           person_analysis: preparePersonAnalysis(
@@ -217,12 +216,8 @@ export function RequestAnalysisForm() {
             prepareVehicleData(data, personData),
           ),
         });
-
-        return { ok: true };
       },
-      onSuccess: ({ ok }) => {
-        if (ok) onSuccessRequestAnalysis(AnalysisType.COMBO);
-      },
+      onSuccess: () => onSuccessRequestAnalysis(AnalysisType.COMBO),
     });
 
   const {

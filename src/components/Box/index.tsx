@@ -2,10 +2,10 @@ import { type VariantProps, tv } from 'tailwind-variants';
 
 const style = tv({
   slots: {
-    container: 'flex w-full flex-col bg-light',
-    box: 'flex flex-1 flex-col',
+    container: 'w-full bg-light',
+    box: 'flex flex-col',
     title:
-      'border-b border-b-line-light bg-light-gray px-4 py-2 text-2xl font-extrabold text-dark xl:text-3xl',
+      'border-b border-b-line-light bg-light-gray px-4 py-2 text-2xl font-extrabold text-dark sm:text-3xl',
   },
   variants: {
     radius: {
@@ -23,11 +23,9 @@ const style = tv({
   },
 });
 
-type BoxProps = Omit<React.ComponentProps<'div'>, 'title'> &
+type BoxProps = React.ComponentProps<'div'> &
   VariantProps<typeof style> & {
-    title?: string | React.ReactNode;
     containerClassName?: string;
-    titleClassName?: string;
   };
 
 export function Box({
@@ -37,7 +35,6 @@ export function Box({
   children,
   title,
   spacing,
-  titleClassName,
   ...rest
 }: BoxProps) {
   const {
@@ -56,9 +53,7 @@ export function Box({
         className={containerStyle({ className: containerClassName })}
         {...rest}
       >
-        {!!title && (
-          <h2 className={titleStyle({ className: titleClassName })}>{title}</h2>
-        )}
+        {!!title && <h2 className={titleStyle()}>{title}</h2>}
         <div className={boxStyle({ className })}>{children}</div>
       </div>
     </>
