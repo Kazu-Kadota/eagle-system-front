@@ -1,10 +1,10 @@
-import { CompanyType, type Company } from '@/models';
+import { CompanyType, type MyCompany } from '@/models';
 import { getMyCompany } from '@/services/auth/companies';
 import { parseFeatureFlags } from '@/utils/featureFlags';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-const initialCompany: Company = {
+const initialCompany: MyCompany = {
   company_id: '',
   updated_at: '',
   cnpj: '',

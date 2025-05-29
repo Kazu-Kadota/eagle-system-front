@@ -1,19 +1,29 @@
-import { AnalysisType } from '@/models';
 import { createPersist } from '@/utils/zustand';
+
+export enum ConfigType {
+  PERSON = 'person',
+  VEHICLE = 'vehicle',
+  OPERATOR = 'operator',
+  COMPANIES = 'companies',
+}
 
 interface ConfigState {
   numOfItemsPerPagePeople: number;
   numOfItemsPerPageVehicles: number;
+  numOfItemsPerPageOperators: number;
+  numOfItemsPerPageCompanies: number;
 }
 
 export interface ConfigStore extends ConfigState {
-  getNumOfItemsPerPage: (type: AnalysisType) => number;
-  setNumOfItemsPerPage: (type: AnalysisType, value: number) => void;
+  getNumOfItemsPerPage: (type: ConfigType) => number;
+  setNumOfItemsPerPage: (type: ConfigType, value: number) => void;
 }
 
 const initialState: ConfigState = {
   numOfItemsPerPagePeople: 25,
   numOfItemsPerPageVehicles: 25,
+  numOfItemsPerPageOperators: 25,
+  numOfItemsPerPageCompanies: 25,
 };
 
 export const useConfigStore = createPersist<ConfigStore>(
@@ -22,21 +32,27 @@ export const useConfigStore = createPersist<ConfigStore>(
 
     getNumOfItemsPerPage: (type) => {
       switch (type) {
-        case AnalysisType.PERSON:
-        case AnalysisType.COMBO:
+        case ConfigType.PERSON:
           return get().numOfItemsPerPagePeople;
-        case AnalysisType.VEHICLE:
+        case ConfigType.VEHICLE:
           return get().numOfItemsPerPageVehicles;
+        case ConfigType.OPERATOR:
+          return get().numOfItemsPerPageOperators;
+        case ConfigType.COMPANIES:
+          return get().numOfItemsPerPageCompanies;
       }
     },
 
     setNumOfItemsPerPage: (type, value) => {
       switch (type) {
-        case AnalysisType.PERSON:
-        case AnalysisType.COMBO:
+        case ConfigType.PERSON:
           return set({ numOfItemsPerPagePeople: value });
-        case AnalysisType.VEHICLE:
+        case ConfigType.VEHICLE:
           return set({ numOfItemsPerPageVehicles: value });
+        case ConfigType.OPERATOR:
+          return set({ numOfItemsPerPageOperators: value });
+        case ConfigType.COMPANIES:
+          return set({ numOfItemsPerPageCompanies: value });
       }
     },
   }),

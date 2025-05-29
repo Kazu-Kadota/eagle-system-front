@@ -1,14 +1,24 @@
 'use client';
 
-import { AnalysisTable } from '@/components/AnalysisTable';
+import { useCallback, useMemo } from 'react';
+
+import { createPersonColumns } from '@/app/(protected)/analises/pessoas/columns';
 import type { ButtonProps } from '@/components/Button';
+import { DeleteAnalysisModal } from '@/components/DeleteAnalysisModal';
 import { LoadingContainer } from '@/components/LoadingContainer';
+import { Table } from '@/components/Table';
 import { RoutePaths } from '@/constants/paths';
 import { usePersonAnalysis } from '@/hooks/usePersonAnalysis';
-import { AnalysisType, UserType } from '@/models';
+import {
+  AnalysisType,
+  UserType,
+  type AnalysisCategory,
+  type PersonAnalysis,
+} from '@/models';
+import { ConfigType } from '@/store/config';
+import { useModal } from '@/store/modal/store';
 import { useSessionUserType } from '@/store/session';
 import { hasUserType } from '@/utils/userType';
-import { personTableColumns, personTableColumnsAdminOperator } from './columns';
 
 const analysisTypeLabel = {
   [AnalysisType.PERSON]: 'de Pessoa',
@@ -48,8 +58,34 @@ function getTableActions(analysisType: AnalysisType, userType?: UserType) {
 
 export function PeopleAnalysisHomeClient() {
   const userType = useSessionUserType();
+  const modal = useModal();
 
-  const { personAnalysis, isLoading } = usePersonAnalysis();
+  const { personAnalysis, isLoading, refetch } = usePersonAnalysis();
+
+  const handleDeleteAnalysis = useCallback(
+    (item: PersonAnalysis, category: AnalysisCategory) => {
+      modal.open({
+        content: (
+          <DeleteAnalysisModal
+            item={item}
+            category={category}
+            onSuccess={() => refetch()}
+          />
+        ),
+      });
+    },
+    [refetch],
+  );
+
+  const columns = useMemo(
+    () =>
+      userType
+        ? createPersonColumns(userType, {
+            onDeleteAnalysis: handleDeleteAnalysis,
+          })
+        : [],
+    [handleDeleteAnalysis],
+  );
 
   if (isLoading) {
     return <LoadingContainer />;
@@ -57,15 +93,11 @@ export function PeopleAnalysisHomeClient() {
 
   return (
     <div className="flex flex-col gap-10 sm:gap-[3.4rem]">
-      <AnalysisTable
+      <Table
         title="Pessoas"
-        analysisType={AnalysisType.PERSON}
+        configType={ConfigType.PERSON}
         data={personAnalysis}
-        columns={
-          hasUserType(userType, UserType.ADMIN, UserType.OPERATOR)
-            ? personTableColumnsAdminOperator
-            : personTableColumns
-        }
+        columns={columns}
         actions={getTableActions(AnalysisType.PERSON, userType)}
       />
     </div>
