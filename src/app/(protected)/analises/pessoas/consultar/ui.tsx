@@ -1,14 +1,18 @@
+import type { AnalysisAnswerSchema } from '@/app/(protected)/analises/pessoas/[id]/schema';
 import { columns } from '@/app/(protected)/analises/pessoas/consultar/columns';
+import { ProcessFinished } from '@/app/(protected)/analises/pessoas/consultar/process';
 import type { AnalysisPersonSearchSchema } from '@/app/(protected)/analises/pessoas/consultar/schema';
 import { SearchIcon } from '@/assets/icons/SearchIcon';
-import { AnalysisTable } from '@/components/AnalysisTable';
 import { Box } from '@/components/Box';
 import { Button } from '@/components/Button';
 import { ControlledInput } from '@/components/ControlledInput';
+import { ControlledSelectGroup } from '@/components/ControlledSelectGroup';
+import { ControlledTextArea } from '@/components/ControlledTextArea';
 import { Input } from '@/components/Input';
 import { InputRow } from '@/components/InputRow';
 import { LoadingContainer } from '@/components/LoadingContainer';
 import { SelectGroup } from '@/components/SelectGroup';
+import { Table } from '@/components/Table';
 import { TextArea } from '@/components/TextArea';
 import { customDayJs } from '@/config/dayjs';
 import {
@@ -20,42 +24,160 @@ import { userApiSelectItems } from '@/constants/auth';
 import { cnhTypesSelectItems } from '@/constants/cnh';
 import { estadosSelectItems } from '@/constants/estados';
 import {
+  AnalysisResult,
   AnalysisStatus,
-  AnalysisType,
+  PersonAnalysisType,
   UserType,
   type PersonAnalysis,
 } from '@/models';
+import { ConfigType } from '@/store/config';
 import type { SelectItem } from '@/types/select';
 import { getAnalysisTypeString } from '@/utils/analysis/mappers';
-import { toStringBoolean } from '@/utils/boolean';
+import { onChangeStringBoolean, toStringBoolean } from '@/utils/boolean';
 import { hasUserType } from '@/utils/userType';
-import type { Control } from 'react-hook-form';
+import { Controller, type Control } from 'react-hook-form';
 
 interface SearchPersonAnalysisUIProps {
   userType?: UserType;
   isPersonLoading: boolean;
   isLoading: boolean;
-  control: Control<AnalysisPersonSearchSchema>;
+  document: string;
+  isChangingAnwser: boolean;
+  isChangingAnswerLoading: boolean;
+  changeAnswerResult: AnalysisResult;
+  controlSearch: Control<AnalysisPersonSearchSchema>;
+  controlChangeAnswer: Control<AnalysisAnswerSchema>;
   companiesSelectItems: SelectItem[];
   companiesLoading: boolean;
   items: PersonAnalysis[] | null;
   selectedItem: PersonAnalysis | null;
   setSelectedItem: (item: PersonAnalysis) => void;
   onSearchSubmit: () => void;
+  onChangeAnswerSubmit: () => void;
+  toggleChangeAnswer: () => void;
 }
 
 export function SearchPersonAnalysisUI({
-  control,
+  controlSearch,
+  controlChangeAnswer,
   isLoading,
+  isChangingAnswerLoading,
+  isChangingAnwser,
   isPersonLoading,
+  changeAnswerResult,
   userType,
   companiesSelectItems,
   companiesLoading,
   items,
+  document,
   selectedItem,
   setSelectedItem,
   onSearchSubmit,
+  onChangeAnswerSubmit,
+  toggleChangeAnswer,
 }: SearchPersonAnalysisUIProps) {
+  const renderFinished = (item: PersonAnalysis) => {
+    if (item.person_analysis_type === PersonAnalysisType.PROCESS) {
+      return null;
+    }
+
+    if (isChangingAnwser) {
+      return (
+        <form
+          onSubmit={onChangeAnswerSubmit}
+          className="flex flex-col gap-3 sm:gap-4"
+        >
+          <ControlledSelectGroup
+            title="Selecione o novo resultado da análise"
+            control={controlChangeAnswer}
+            name="analysis_result"
+            required
+            layout="row"
+            items={analysisResultsSelectItems}
+            containerClassName="mt-2"
+          />
+          <Controller
+            control={controlChangeAnswer}
+            name="from_db"
+            render={({ field, fieldState: { error } }) => (
+              <SelectGroup
+                required
+                title="Resposta do Banco de Dados?"
+                items={userApiSelectItems}
+                layout="row"
+                value={toStringBoolean(field.value)}
+                error={error?.message}
+                containerClassName="mb-2"
+                onChange={onChangeStringBoolean(field.onChange)}
+              />
+            )}
+          />
+          <ControlledTextArea
+            control={controlChangeAnswer}
+            shouldShowDisableStyle
+            disabled={changeAnswerResult === AnalysisResult.APPROVED}
+            label="Nova descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
+            name="analysis_info"
+            labelRightElement={
+              <Button
+                theme="opaque"
+                size="xsStrong"
+                onClick={toggleChangeAnswer}
+              >
+                Fechar edição
+              </Button>
+            }
+          />
+          <Button
+            type="submit"
+            theme="primary"
+            size="sm"
+            className="mb-1 mt-4 min-w-[8rem] self-center md:mt-0 md:self-end"
+            loading={isChangingAnswerLoading}
+          >
+            Enviar
+          </Button>
+        </form>
+      );
+    }
+
+    return (
+      <>
+        <SelectGroup
+          title="Resultado da análise"
+          required
+          disabled
+          layout="row"
+          value={item.analysis_result}
+          items={analysisResultsSelectItems}
+          containerClassName="mt-2"
+        />
+        <SelectGroup
+          required
+          title="Resposta do Banco de Dados?"
+          items={userApiSelectItems}
+          layout="row"
+          value={toStringBoolean(item.from_db)}
+          containerClassName="mb-2"
+          disabled
+        />
+        <TextArea
+          label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
+          name="analysis_info"
+          disabled
+          value={item.analysis_info}
+          labelRightElement={
+            userType === UserType.ADMIN ? (
+              <Button theme="blue" size="xsStrong" onClick={toggleChangeAnswer}>
+                Alterar resultado
+              </Button>
+            ) : undefined
+          }
+        />
+      </>
+    );
+  };
+
   const renderPerson = () => {
     if (isPersonLoading) {
       return <LoadingContainer />;
@@ -79,9 +201,15 @@ export function SearchPersonAnalysisUI({
               )}
             </Button>
           )}
+          <Button theme="placeholder" size="xxs" disabled shadow="base">
+            Atualizada em{' '}
+            {customDayJs(selectedItem.updated_at).format(
+              'DD/MM/YYYY [às] HH:mm:ss',
+            )}
+          </Button>
           <Button theme="opaque" size="xxs" disabled shadow="base">
             Solicitada em{' '}
-            {customDayJs(selectedItem?.created_at).format(
+            {customDayJs(selectedItem.created_at).format(
               'DD/MM/YYYY [às] HH:mm:ss',
             )}
           </Button>
@@ -287,32 +415,7 @@ export function SearchPersonAnalysisUI({
         </InputRow>
 
         {selectedItem.status === AnalysisStatus.FINISHED ? (
-          <>
-            <SelectGroup
-              title="Resultado da análise"
-              required
-              disabled
-              layout="row"
-              value={selectedItem.analysis_result}
-              items={analysisResultsSelectItems}
-              containerClassName="mt-2"
-            />
-            <SelectGroup
-              required
-              title="Resposta do Banco de Dados?"
-              items={userApiSelectItems}
-              layout="row"
-              value={toStringBoolean(selectedItem.from_db)}
-              containerClassName="mb-2"
-              disabled
-            />
-            <TextArea
-              label="Descrição da análise (registro de Bos, inquéritos, artigos e termos circunstanciais):"
-              name="analysis_info"
-              disabled
-              value={selectedItem.analysis_info}
-            />
-          </>
+          renderFinished(selectedItem)
         ) : (
           <SelectGroup
             title="Status"
@@ -346,11 +449,11 @@ export function SearchPersonAnalysisUI({
               type="cpf"
               inputVariants={{ size: 'md' }}
               labelVariants={{ size: 'sm' }}
-              control={control}
+              control={controlSearch}
             />
             {hasUserType(userType, UserType.ADMIN, UserType.OPERATOR) && (
               <ControlledInput
-                control={control}
+                control={controlSearch}
                 placeholder="Selecione uma empresa"
                 name="companyNameSearch"
                 items={companiesSelectItems}
@@ -381,9 +484,9 @@ export function SearchPersonAnalysisUI({
               : 'Não foi encontrado nenhum resultado para essa busca'}
           </h4>
           {items.length > 0 && (
-            <AnalysisTable
+            <Table
               columns={columns}
-              analysisType={AnalysisType.PERSON}
+              configType={ConfigType.PERSON}
               data={items}
               onClick={setSelectedItem}
               pageCount={5}
@@ -393,6 +496,14 @@ export function SearchPersonAnalysisUI({
       )}
 
       {renderPerson()}
+
+      {selectedItem?.status === AnalysisStatus.FINISHED &&
+        selectedItem.person_analysis_type === PersonAnalysisType.PROCESS && (
+          <ProcessFinished
+            analysis_info={selectedItem.analysis_info}
+            document={document}
+          />
+        )}
     </>
   );
 }

@@ -2,12 +2,11 @@ import { PageArrowLeftIcon } from '@/assets/icons/PageArrowLeftIcon';
 import { PageArrowRightIcon } from '@/assets/icons/PageArrowRightIcon';
 import { SortArrowDownIcon } from '@/assets/icons/SortArrowDownIcon';
 import { SortArrowUpIcon } from '@/assets/icons/SortArrowUpIcon';
-import { fuzzyFilter } from '@/components/AnalysisTable/utils';
 import { Button, type ButtonProps } from '@/components/Button';
 import { Input } from '@/components/Input';
+import { fuzzyFilter } from '@/components/Table/utils';
 import { listNumOfItemsPerPage } from '@/constants/table';
-import type { Analysis, AnalysisType } from '@/models';
-import { useConfigStoreActions } from '@/store/config';
+import { ConfigType, useConfigStoreActions } from '@/store/config';
 import { cn } from '@/utils/classNames';
 import {
   type ColumnDef,
@@ -21,8 +20,8 @@ import {
 import { useMemo } from 'react';
 import ReactPaginate from 'react-paginate';
 
-export interface TableProps<T> {
-  analysisType: AnalysisType;
+export interface TableProps<T extends object> {
+  configType?: ConfigType;
   title?: string;
   data: T[];
   columns: ColumnDef<T, string>[];
@@ -32,13 +31,13 @@ export interface TableProps<T> {
   onClick?: (item: T) => void;
 }
 
-export const AnalysisTable = <T extends Analysis>({
+export const Table = <T extends object>({
   data,
   columns,
   title,
   actions,
   className,
-  analysisType,
+  configType,
   pageCount,
   onClick,
 }: TableProps<T>) => {
@@ -46,8 +45,8 @@ export const AnalysisTable = <T extends Analysis>({
     useConfigStoreActions();
 
   const initialPageSize = useMemo(
-    () => pageCount || getNumOfItemsPerPage(analysisType) || 25,
-    [pageCount, analysisType, getNumOfItemsPerPage],
+    () => pageCount || (configType && getNumOfItemsPerPage(configType)) || 25,
+    [pageCount, configType, getNumOfItemsPerPage],
   );
 
   const table = useReactTable<T>({
@@ -77,8 +76,8 @@ export const AnalysisTable = <T extends Analysis>({
 
     table.setPageSize(newPageSize);
 
-    if (!pageCount) {
-      savePageSize(analysisType, newPageSize);
+    if (!pageCount && configType) {
+      savePageSize(configType, newPageSize);
     }
   };
 
@@ -163,7 +162,7 @@ export const AnalysisTable = <T extends Analysis>({
             <tbody>
               {table.getRowModel().rows.map((row) => (
                 <tr
-                  key={row.original.request_id}
+                  key={row.id}
                   onClick={onClick ? () => onClick(row.original) : undefined}
                   className={
                     onClick &&
@@ -191,46 +190,48 @@ export const AnalysisTable = <T extends Analysis>({
         )}
       </div>
 
-      <div className="flex flex-col-reverse items-center justify-between gap-5 rounded-b-[3px] bg-light px-4 pb-3 pt-4 sm:flex-row sm:gap-6 sm:py-2">
-        <p className="flex-1 text-xs font-bold text-primary">
-          Mostrando {numOfItemsSeen} de {rowCount} solicitações
-        </p>
+      {configType && (
+        <div className="flex flex-col-reverse items-center justify-between gap-5 rounded-b-[3px] bg-light px-4 pb-3 pt-4 sm:flex-row sm:gap-6 sm:py-2">
+          <p className="flex-1 text-xs font-bold text-primary">
+            Mostrando {numOfItemsSeen} de {rowCount} solicitações
+          </p>
 
-        <Input
-          label="Exibir:"
-          name="itemsPerPage"
-          value={pageSize.toString()}
-          items={listNumOfItemsPerPage}
-          inputVariants={{ size: 'xs' }}
-          labelVariants={{ size: 'xs' }}
-          containerVariants={{ layout: 'row' }}
-          showEmptyValue={false}
-          onChange={handleOnChangePageSize}
-        />
-
-        {currentPageCount > 0 && (
-          <ReactPaginate
-            breakLabel="..."
-            onPageChange={({ selected }) => table.setPageIndex(selected)}
-            pageRangeDisplayed={7}
-            forcePage={pageIndex}
-            pageCount={currentPageCount}
-            marginPagesDisplayed={1}
-            previousLabel={
-              <PageArrowLeftIcon className="-mb-[0.05rem] w-3 stroke-primary" />
-            }
-            nextLabel={
-              <PageArrowRightIcon className="-mb-[0.05rem] w-3 stroke-primary" />
-            }
-            pageClassName="text-primary leading-none px-[0.08rem]"
-            pageLinkClassName="text-sm font-semibold underline"
-            activeLinkClassName="no-underline"
-            previousClassName="px-1"
-            nextClassName="px-1"
-            containerClassName="flex items-center"
+          <Input
+            label="Exibir:"
+            name="itemsPerPage"
+            value={pageSize.toString()}
+            items={listNumOfItemsPerPage}
+            inputVariants={{ size: 'xs' }}
+            labelVariants={{ size: 'xs' }}
+            containerVariants={{ layout: 'row' }}
+            showEmptyValue={false}
+            onChange={handleOnChangePageSize}
           />
-        )}
-      </div>
+
+          {currentPageCount > 0 && (
+            <ReactPaginate
+              breakLabel="..."
+              onPageChange={({ selected }) => table.setPageIndex(selected)}
+              pageRangeDisplayed={7}
+              forcePage={pageIndex}
+              pageCount={currentPageCount}
+              marginPagesDisplayed={1}
+              previousLabel={
+                <PageArrowLeftIcon className="-mb-[0.05rem] w-3 stroke-primary" />
+              }
+              nextLabel={
+                <PageArrowRightIcon className="-mb-[0.05rem] w-3 stroke-primary" />
+              }
+              pageClassName="text-primary leading-none px-[0.08rem]"
+              pageLinkClassName="text-sm font-semibold underline"
+              activeLinkClassName="no-underline"
+              previousClassName="px-1"
+              nextClassName="px-1"
+              containerClassName="flex items-center"
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };
