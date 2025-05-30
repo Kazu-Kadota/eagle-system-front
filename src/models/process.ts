@@ -64,5 +64,15 @@ export interface Process {
 export interface ProcessResponse {
   processos_judiciais_administrativos: {
     processos: Process[];
+    total_processos: number,
+    total_como_autor: number,
+    total_como_reu: number,
+    total_como_outro: number,
+    data_primeiro_processo: string | null,
+    data_ultimo_processo: string | null,
+    ultimos_30_dias: number,
+    ultimos_90_dias: number,
+    ultimos_180_dias: number,
+    ultimos_365_dias: number
   };
 }
