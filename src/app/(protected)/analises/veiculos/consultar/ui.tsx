@@ -429,6 +429,7 @@ export function SearchVehicleAnalysisUI({
               configType={ConfigType.VEHICLE}
               data={items}
               onClick={setSelectedItem}
+              rowIdAcessor={(item) => item.request_id + item.vehicle_id}
               pageCount={5}
             />
           )}

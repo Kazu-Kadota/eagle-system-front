@@ -25,6 +25,7 @@ export default function OperatorsPage() {
       <Table
         title="Empresas"
         configType={ConfigType.COMPANIES}
+        rowIdAcessor={(item) => item.company_id}
         data={companies}
         columns={columns}
         actions={[]}

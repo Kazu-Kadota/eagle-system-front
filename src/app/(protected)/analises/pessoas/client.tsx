@@ -98,6 +98,7 @@ export function PeopleAnalysisHomeClient() {
         configType={ConfigType.PERSON}
         data={personAnalysis}
         columns={columns}
+        rowIdAcessor={(item) => item.request_id + item.person_id}
         actions={getTableActions(AnalysisType.PERSON, userType)}
       />
     </div>
