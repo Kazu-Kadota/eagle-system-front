@@ -97,6 +97,7 @@ export function VehicleAnalysisHomeClient() {
         configType={ConfigType.VEHICLE}
         data={vehicleAnalysis}
         columns={columns}
+        rowIdAcessor={(item) => item.request_id + item.vehicle_id}
         actions={getTableActions(AnalysisType.VEHICLE, userType)}
       />
     </div>

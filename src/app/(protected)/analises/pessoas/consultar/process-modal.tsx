@@ -79,7 +79,7 @@ export default function ProcessDetailsModal({ process, part }: Props) {
   const modal = useModal();
 
   const renderAgeCircle = () => (
-    <div className="shadow-infoCard flex size-36 flex-col items-center justify-center rounded-full border-[1.45px] border-primary text-center text-primary">
+    <div className="flex size-36 flex-col items-center justify-center rounded-full border-[1.45px] border-primary text-center text-primary shadow-infoCard">
       <p className="text-4xl/none font-extrabold">
         {Math.floor(process.idade_processo)}
       </p>
@@ -97,8 +97,8 @@ export default function ProcessDetailsModal({ process, part }: Props) {
     if (process.decisoes.length === 0) {
       content = (
         <>
-          <LawHammerIcon className="text-empty w-10" />
-          <p className="text-empty text-center text-lg font-bold">
+          <LawHammerIcon className="w-10 text-empty" />
+          <p className="text-center text-lg font-bold text-empty">
             Nenhuma decisão registrada.
           </p>
         </>
@@ -135,8 +135,8 @@ export default function ProcessDetailsModal({ process, part }: Props) {
     if (subjects.length === 0) {
       content = (
         <InfoContent className="flex flex-col items-center">
-          <LawHammerIcon className="text-empty w-10" />
-          <p className="text-empty text-center text-lg font-bold">
+          <LawHammerIcon className="w-10 text-empty" />
+          <p className="text-center text-lg font-bold text-empty">
             Nenhum assunto registrado.
           </p>
         </InfoContent>
@@ -277,7 +277,11 @@ export default function ProcessDetailsModal({ process, part }: Props) {
   const renderParts = () => (
     <InfoCard className="mt-4">
       <InfoContent className="pb-6 max-sm:p-0">
-        <Table columns={partsColumns} data={process.partes} />
+        <Table
+          columns={partsColumns}
+          data={process.partes}
+          rowIdAcessor={(item) => item.documento + item.nome}
+        />
       </InfoContent>
     </InfoCard>
   );

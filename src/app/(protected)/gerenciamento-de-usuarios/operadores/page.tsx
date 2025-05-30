@@ -50,6 +50,7 @@ export default function OperatorsPage() {
         title="Operadores"
         configType={ConfigType.OPERATOR}
         data={operators}
+        rowIdAcessor={(item) => item.user_id}
         columns={columns}
         actions={[]}
       />

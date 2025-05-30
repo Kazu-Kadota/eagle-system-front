@@ -489,6 +489,7 @@ export function SearchPersonAnalysisUI({
               configType={ConfigType.PERSON}
               data={items}
               onClick={setSelectedItem}
+              rowIdAcessor={(item) => item.request_id + item.person_id}
               pageCount={5}
             />
           )}

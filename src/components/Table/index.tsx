@@ -25,6 +25,7 @@ export interface TableProps<T extends object> {
   title?: string;
   data: T[];
   columns: ColumnDef<T, string>[];
+  rowIdAcessor: (data: T) => string;
   actions?: ButtonProps[];
   className?: string;
   pageCount?: number;
@@ -37,6 +38,7 @@ export const Table = <T extends object>({
   title,
   actions,
   className,
+  rowIdAcessor,
   configType,
   pageCount,
   onClick,
@@ -162,7 +164,7 @@ export const Table = <T extends object>({
             <tbody>
               {table.getRowModel().rows.map((row) => (
                 <tr
-                  key={row.id}
+                  key={rowIdAcessor(row.original)}
                   onClick={onClick ? () => onClick(row.original) : undefined}
                   className={
                     onClick &&
